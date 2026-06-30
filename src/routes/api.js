@@ -1,0 +1,156 @@
+// All /api/* routes. Public storefront endpoints are CORS-enabled and
+// shop-validated; admin endpoints require a verified App Bridge session token.
+import express from 'express';
+import { publicCors } from '../middleware/cors.js';
+import { discountRateLimit, publicReadRateLimit } from '../middleware/rateLimit.js';
+import { validateShopParam, requireInstalledShop } from '../middleware/validateShop.js';
+import { requireInstalledSession } from '../middleware/sessionToken.js';
+import { generateBundleDiscount } from '../services/discountService.js';
+import { getSettings, saveSettings, publicSettings } from '../services/settingsService.js';
+import { getAnalytics, resolveRange, recordEvent } from '../services/analyticsService.js';
+import {
+  activateBilling,
+  confirmBilling,
+  getUsage,
+  getFeeHistory,
+  getBillingStatus,
+} from '../services/billingService.js';
+import { getShop } from '../services/shopsService.js';
+
+const router = express.Router();
+
+// ── PUBLIC (storefront widget) ────────────────────────────────
+
+// Widget config for a shop.
+router.get(
+  '/settings/:shop',
+  publicCors,
+  publicReadRateLimit,
+  requireInstalledShop,
+  async (req, res, next) => {
+    try {
+      const s = await getSettings(req.shop);
+      res.json({ settings: publicSettings(s) });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// Mint a unique BUNDLE- discount code for a bundle.
+router.post(
+  '/discount/generate',
+  publicCors,
+  discountRateLimit,
+  requireInstalledShop,
+  async (req, res, next) => {
+    try {
+      const result = await generateBundleDiscount(req.shop, req.body || {});
+      res.json(result);
+    } catch (err) {
+      if (err.statusCode) {
+        return res.status(err.statusCode).json({ error: err.message, details: err.details });
+      }
+      next(err);
+    }
+  }
+);
+
+// Funnel events from the widget (impressions etc.).
+router.post('/events', publicCors, publicReadRateLimit, validateShopParam, async (req, res, next) => {
+  try {
+    const { sessionId, eventType, productIds, productCount, bundleValue, discountCode } =
+      req.body || {};
+    if (!['widget_shown', 'add_to_cart'].includes(eventType)) {
+      return res.status(400).json({ error: 'Unknown event type.' });
+    }
+    await recordEvent(req.shop, {
+      sessionId,
+      eventType,
+      productIds,
+      productCount,
+      bundleValue,
+      discountCode,
+    });
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.options('*', publicCors, (req, res) => res.sendStatus(204));
+
+// ── ADMIN (embedded dashboard, session-token protected) ───────
+
+// Full settings (admin view) + setup checklist data.
+router.get('/admin/settings/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const s = await getSettings(req.shop);
+    const shop = await getShop(req.shop);
+    res.json({
+      settings: s,
+      meta: {
+        scriptTagInstalled: Boolean(shop?.script_tag_id),
+        installedAt: shop?.installed_at,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/settings/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const saved = await saveSettings(req.shop, req.body || {});
+    res.json({ settings: saved });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/analytics/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const { range = 'this-month', from, to } = req.query;
+    const window = resolveRange(range, from, to);
+    const data = await getAnalytics(req.shop, window);
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post('/billing/activate', requireInstalledSession, async (req, res, next) => {
+  try {
+    const returnUrl = `${req.protocol}://${req.get('host')}/billing/confirm?shop=${req.shop}`;
+    const result = await activateBilling(req.shop, returnUrl);
+    res.json(result);
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ error: err.message });
+    next(err);
+  }
+});
+
+router.get('/billing/usage/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const [usage, history, status] = await Promise.all([
+      getUsage(req.shop, req.query.range || 'this-month'),
+      getFeeHistory(req.shop),
+      getBillingStatus(req.shop),
+    ]);
+    res.json({ usage, history, status });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Confirm endpoint Shopify redirects back to after the merchant accepts billing.
+router.get('/billing/confirm-callback', requireInstalledSession, async (req, res, next) => {
+  try {
+    const result = await confirmBilling(req.shop, req.query.charge_id);
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
+export default router;

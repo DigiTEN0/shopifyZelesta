@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Zelesta — Bundle Widget Demo</title>
+  <meta name="description" content="Live demo of the bundle widget on a premium bedding store." />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <style>
+    :root{--ink:#14110f;--muted:#7c736b;--line:#ece7e1;--bg:#faf7f3;--accent:#b08968;}
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5;}
+    a{color:inherit;text-decoration:none;}
+    .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+
+    /* Demo ribbon */
+    .ribbon{background:linear-gradient(90deg,#111827,#312e81);color:#fff;font-size:13px;font-weight:600;
+      text-align:center;padding:9px;letter-spacing:.01em;}
+    .ribbon span{opacity:.85;font-weight:500;}
+
+    /* Nav */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--line);}
+    .brand{font-family:"Playfair Display",Georgia,serif;font-size:24px;font-weight:800;letter-spacing:.12em;}
+    .navlinks{display:flex;gap:30px;font-size:14px;color:var(--muted);font-weight:500;}
+    .navlinks a:hover{color:var(--ink);}
+    .navicons{display:flex;gap:18px;font-size:18px;}
+
+    /* Hero */
+    .hero{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:70px 0 50px;}
+    .hero h1{font-family:"Playfair Display",Georgia,serif;font-size:52px;line-height:1.05;margin:0 0 18px;letter-spacing:-.01em;}
+    .hero p{font-size:17px;color:var(--muted);max-width:440px;margin:0 0 28px;}
+    .hero .btn{display:inline-block;background:var(--ink);color:#fff;padding:15px 30px;border-radius:10px;font-weight:600;font-size:15px;transition:transform .2s;}
+    .hero .btn:hover{transform:translateY(-2px);}
+    .hero-img{aspect-ratio:5/4;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(20,17,15,.5);}
+    .hero-img img{width:100%;height:100%;object-fit:cover;}
+
+    /* Section */
+    .sec-head{display:flex;align-items:flex-end;justify-content:space-between;margin:36px 0 24px;}
+    .sec-head h2{font-family:"Playfair Display",Georgia,serif;font-size:30px;margin:0;}
+    .sec-head a{font-size:14px;color:var(--accent);font-weight:600;}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;padding-bottom:90px;}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:transform .25s,box-shadow .25s;}
+    .card:hover{transform:translateY(-5px);box-shadow:0 30px 60px -30px rgba(20,17,15,.35);}
+    .card-img{aspect-ratio:1;overflow:hidden;background:#f0ebe5;}
+    .card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s;}
+    .card:hover .card-img img{transform:scale(1.05);}
+    .card-body{padding:18px 18px 20px;}
+    .card-body h3{margin:0 0 5px;font-size:16px;font-weight:650;}
+    .card-body .tag{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
+    .card-body .price{margin-top:8px;font-size:16px;font-weight:700;}
+
+    .callout{position:fixed;left:24px;bottom:24px;max-width:300px;background:#fff;border:1px solid var(--line);
+      border-radius:14px;padding:16px 18px;box-shadow:0 24px 60px -24px rgba(20,17,15,.4);font-size:13px;color:var(--muted);z-index:10;}
+    .callout b{color:var(--ink);}
+    .callout .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:7px;animation:blink 1.6s infinite;}
+    @keyframes blink{50%{opacity:.3;}}
+
+    @media(max-width:880px){
+      .hero{grid-template-columns:1fr;padding:40px 0;}
+      .hero h1{font-size:38px;}
+      .grid{grid-template-columns:1fr;}
+      .navlinks{display:none;}
+      .callout{display:none;}
+    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap');
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="ribbon">✨ LIVE DEMO — this is the bundle widget running on a sample store. <span>No Shopify connection needed.</span></div>
+
+  <div class="wrap">
+    <nav>
+      <div class="brand">ZELESTA</div>
+      <div class="navlinks">
+        <a href="#">Bedding</a><a href="#">Bath</a><a href="#">Living</a><a href="#">Sale</a>
+      </div>
+      <div class="navicons"><span>♡</span><span>🛍️</span></div>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <h1>The bed you<br>never want to leave.</h1>
+        <p>Organic long-staple cotton, woven for hotel-grade softness that only gets better with every wash.</p>
+        <a class="btn" href="#shop">Shop the collection</a>
+      </div>
+      <div class="hero-img">
+        <img src="https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?auto=format&fit=crop&w=1100&q=80" alt="Made bed" />
+      </div>
+    </section>
+
+    <div class="sec-head" id="shop">
+      <h2>Bestsellers</h2>
+      <a href="#">View all →</a>
+    </div>
+    <section class="grid" id="product-grid"></section>
+  </div>
+
+  <div class="callout">
+    <span class="dot"></span><b>Try it:</b> open the bundle widget bottom-right → switch a size, change quantity, remove an item, then hit <b>Add All to Cart &amp; Save</b>.
+  </div>
+
+  <!-- Drive the widget manually in demo mode -->
+  <script>window.BundleWidgetConfig = { manual: true };</script>
+  <script src="/widget/widget.js"></script>
+  <script src="/demo/demo.js"></script>
+</body>
+</html>
