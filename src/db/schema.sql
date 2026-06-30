@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS settings (
   redirect_to_cart  BOOLEAN DEFAULT false,
   currency          TEXT    DEFAULT 'EUR',
 
-  enabled           BOOLEAN DEFAULT true,
+  enabled           BOOLEAN DEFAULT false,   -- merchant activates the widget themselves
   updated_at        TIMESTAMPTZ DEFAULT now()
 );
 

@@ -13,6 +13,20 @@ export default function DashboardPage({ goTo }) {
   const [meta, setMeta] = useState(null);
   const [settings, setSettings] = useState(null);
   const [error, setError] = useState(null);
+  const [toggling, setToggling] = useState(false);
+
+  const toggleWidget = async () => {
+    if (!settings) return;
+    setToggling(true);
+    try {
+      const res = await api.saveSettings({ enabled: !settings.enabled });
+      setSettings(res.settings);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setToggling(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -48,15 +62,29 @@ export default function DashboardPage({ goTo }) {
           </Banner>
         )}
 
-        {!loading && settings?.enabled && meta?.scriptTagInstalled && (
-          <Banner tone="success" title="Widget is live on your store">
-            <p>Your bundle widget is active and tracking visitor browsing right now.</p>
+        {!loading && settings && settings.enabled && meta?.scriptTagInstalled && (
+          <Banner
+            tone="success"
+            title="Widget is live on your store"
+            action={{ content: toggling ? 'Deactivating…' : 'Deactivate widget', onAction: toggleWidget, disabled: toggling }}
+          >
+            <p>Your bundle widget is active and tracking visitor browsing right now. Turn it off here whenever you want.</p>
           </Banner>
         )}
 
-        {!loading && (!meta?.scriptTagInstalled || !settings?.enabled) && (
-          <Banner tone="warning" title="Widget is not live yet">
-            <p>Finish the setup checklist below to activate the widget on your storefront.</p>
+        {!loading && settings && !settings.enabled && (
+          <Banner
+            tone="warning"
+            title="Widget is deactivated"
+            action={{ content: toggling ? 'Activating…' : 'Activate widget', onAction: toggleWidget, disabled: toggling }}
+          >
+            <p>The widget is off and won’t show on your store. You decide exactly when it goes live — click activate when you’re ready.</p>
+          </Banner>
+        )}
+
+        {!loading && settings && settings.enabled && !meta?.scriptTagInstalled && (
+          <Banner tone="warning" title="Widget not installed yet">
+            <p>The storefront script isn’t registered. Reinstall the app to inject the widget.</p>
           </Banner>
         )}
 

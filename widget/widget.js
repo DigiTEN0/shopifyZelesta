@@ -174,7 +174,8 @@
 .bw-pill{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid rgba(17,24,39,.08);
   box-shadow:0 14px 40px -12px rgba(17,24,39,.35),0 4px 12px -6px rgba(17,24,39,.18);
   border-radius:999px;padding:10px 16px 10px 10px;cursor:pointer;
-  animation:bw-bounce-in .7s cubic-bezier(.18,.89,.32,1.28) both;transition:transform .25s ease,box-shadow .25s ease;}
+  transition:transform .25s ease,box-shadow .25s ease;}
+.bw-pill.bw-animate{animation:bw-bounce-in .7s cubic-bezier(.18,.89,.32,1.28) both;}
 .bw-pill:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 22px 50px -14px rgba(17,24,39,.42);}
 .bw-stack{position:relative;width:64px;height:44px;flex:0 0 auto;}
 .bw-thumb{position:absolute;top:0;width:42px;height:42px;border-radius:12px;object-fit:cover;background:#f3f4f6;
@@ -193,8 +194,8 @@
 /* ── Expanded panel ── */
 .bw-panel{width:380px;max-width:calc(100vw - 32px);background:#fff;border-radius:var(--bw-radius);overflow:hidden;
   box-shadow:0 30px 80px -20px rgba(17,24,39,.5),0 8px 20px -10px rgba(17,24,39,.25);
-  border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;
-  animation:bw-spring-up .42s cubic-bezier(.16,1,.3,1) both;}
+  border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;}
+.bw-panel.bw-animate{animation:bw-spring-up .42s cubic-bezier(.16,1,.3,1) both;}
 .bw-root.bw-left .bw-panel{transform-origin:bottom left;}
 .bw-head{position:relative;padding:18px 20px 16px;background:var(--bw-primary);color:#fff;}
 .bw-head-row{display:flex;align-items:center;justify-content:space-between;}
@@ -255,7 +256,8 @@
 /* ── Mobile bottom sheet ── */
 @media(max-width:560px){
   .bw-root.bw-right,.bw-root.bw-left{left:0;right:0;bottom:0;}
-  .bw-panel{width:100%;max-width:100%;border-radius:22px 22px 0 0;animation:bw-sheet-up .4s cubic-bezier(.16,1,.3,1) both;}
+  .bw-panel{width:100%;max-width:100%;border-radius:22px 22px 0 0;}
+  .bw-panel.bw-animate{animation:bw-sheet-up .4s cubic-bezier(.16,1,.3,1) both;}
   .bw-items{max-height:50vh;}
   .bw-pill{margin:0 12px 12px;}
   .bw-root.bw-left .bw-pill,.bw-root.bw-right .bw-pill{margin-left:auto;margin-right:12px;width:max-content;}
@@ -291,6 +293,7 @@
     this.expanded = !!opts.startExpanded;
     this.root = null;
     this._prevCount = this.session.products.length;
+    this._animateNext = true; // play entrance on first paint
   }
 
   BundleWidget.prototype.boot = function () {
@@ -310,6 +313,7 @@
     if ((this.settings.excluded.products || []).map(String).includes(String(product.id))) return false;
     this.session.products.push(normalizeProduct(product));
     saveSession(this.session);
+    this._animateNext = true;
     this.render(true);
     return true;
   };
@@ -353,7 +357,12 @@
     if (s.fontFamily && s.fontFamily !== 'inherit') this.root.style.setProperty('--bw-font', s.fontFamily);
     else this.root.style.removeProperty('--bw-font');
 
-    this.root.innerHTML = this.expanded ? this._panelHTML() : this._pillHTML(animateAdd);
+    // Only play the entrance animation on first show / expand — not on every
+    // in-place update (quantity, variant), which otherwise looks like a flicker.
+    const entrance = this._animateNext;
+    this._animateNext = false;
+
+    this.root.innerHTML = this.expanded ? this._panelHTML(entrance) : this._pillHTML(animateAdd, entrance);
     this._bind();
     this._prevCount = count;
     this.onChange(this.snapshot());
@@ -364,7 +373,7 @@
     return { items, calc: computeDiscount(items, this.settings) };
   };
 
-  BundleWidget.prototype._pillHTML = function (animateAdd) {
+  BundleWidget.prototype._pillHTML = function (animateAdd, entrance) {
     const s = this.settings;
     const items = this.selectedItems();
     const calc = computeDiscount(items, s);
@@ -374,7 +383,7 @@
     }).join('');
     const badge = badgeLabel(s, calc);
     return `
-      <div class="bw-pill" data-act="expand">
+      <div class="bw-pill${entrance ? ' bw-animate' : ''}" data-act="expand">
         <span class="bw-pill-close" data-act="dismiss" title="Hide">&times;</span>
         <div class="bw-stack">${thumbs}</div>
         <div class="bw-pill-text">
@@ -385,13 +394,14 @@
       </div>`;
   };
 
-  BundleWidget.prototype._panelHTML = function () {
+  BundleWidget.prototype._panelHTML = function (entrance) {
     const s = this.settings;
     const items = this.selectedItems();
     const calc = computeDiscount(items, s);
+    const anim = entrance ? ' bw-animate' : '';
 
     if (this.session.products.length === 0) {
-      return `<div class="bw-panel"><div class="bw-head"><div class="bw-head-row">
+      return `<div class="bw-panel${anim}"><div class="bw-head"><div class="bw-head-row">
         <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
         <button class="bw-collapse" data-act="collapse">&times;</button></div></div>
         <div class="bw-empty">Your bundle is empty.<br>Browse a few products to build one.</div></div>`;
@@ -403,7 +413,7 @@
       : money(calc.discountAmount, s);
 
     return `
-      <div class="bw-panel">
+      <div class="bw-panel${anim}">
         <div class="bw-head">
           <div class="bw-head-row">
             <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
@@ -478,8 +488,8 @@
     });
   };
 
-  BundleWidget.prototype.expand = function () { this.expanded = true; this.render(); };
-  BundleWidget.prototype.collapse = function () { this.expanded = false; this.render(); };
+  BundleWidget.prototype.expand = function () { this.expanded = true; this._animateNext = true; this.render(); };
+  BundleWidget.prototype.collapse = function () { this.expanded = false; this._animateNext = true; this.render(); };
   BundleWidget.prototype.dismiss = function () {
     this.session.dismissed = true; saveSession(this.session); this.destroy();
   };

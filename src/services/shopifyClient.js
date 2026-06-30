@@ -53,6 +53,35 @@ export class ShopifyClient {
     return this.request('DELETE', path);
   }
 
+  // GraphQL Admin API call. Throws on transport or userErrors-level GraphQL errors.
+  async graphql(query, variables) {
+    const res = await fetch(`${this.base}/graphql.json`, {
+      method: 'POST',
+      headers: {
+        'X-Shopify-Access-Token': this.accessToken,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ query, variables }),
+    });
+    const text = await res.text();
+    let json;
+    try {
+      json = text ? JSON.parse(text) : {};
+    } catch {
+      json = { raw: text };
+    }
+    if (!res.ok) {
+      const err = new Error(`Shopify GraphQL failed: ${res.status} ${text}`);
+      err.status = res.status;
+      throw err;
+    }
+    if (json.errors) {
+      throw new Error(`Shopify GraphQL errors: ${JSON.stringify(json.errors)}`);
+    }
+    return json.data;
+  }
+
   // ── OAuth token exchange (no token needed) ──────────────────
   static async exchangeCodeForToken(shop, code) {
     const res = await fetch(`https://${shop}/admin/oauth/access_token`, {

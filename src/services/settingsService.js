@@ -23,7 +23,7 @@ export const DEFAULT_SETTINGS = {
   savings_as: 'currency',
   redirect_to_cart: false,
   currency: 'EUR',
-  enabled: true,
+  enabled: false, // merchant activates the widget themselves from the dashboard
 };
 
 // Whitelist of writable columns -> guards against arbitrary key injection.

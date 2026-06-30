@@ -50,33 +50,50 @@ export async function generateBundleDiscount(shop, payload) {
   ];
 
   const isPercent = calc.discountType === 'percentage';
-  const value = isPercent ? -Math.abs(calc.percentOff) : -Math.abs(calc.discountAmount);
 
-  const priceRulePayload = {
-    price_rule: {
+  // Discount value + the items it applies to. Scoping to the bundle's products
+  // keeps attribution clean (the unique code only ever discounts these items).
+  const value = isPercent
+    ? { percentage: Math.min(Math.abs(calc.percentOff), 100) / 100 }
+    : { discountAmount: { amount: Math.abs(calc.discountAmount).toFixed(2), appliesOnEachItem: false } };
+
+  const itemsInput = entitledProductIds.length
+    ? { products: { productsToAdd: entitledProductIds.map((id) => `gid://shopify/Product/${id}`) } }
+    : { all: true };
+
+  // Modern GraphQL discount API. Uses the write_discounts scope (REST price_rules
+  // needs a separate write_price_rules scope that requires extra approval).
+  const mutation = `
+    mutation bundleDiscount($input: DiscountCodeBasicInput!) {
+      discountCodeBasicCreate(basicCodeDiscount: $input) {
+        codeDiscountNode { id }
+        userErrors { field message }
+      }
+    }`;
+
+  const variables = {
+    input: {
       title: code,
-      target_type: 'line_item',
-      target_selection: entitledProductIds.length ? 'entitled' : 'all',
-      allocation_method: 'across',
-      value_type: isPercent ? 'percentage' : 'fixed_amount',
-      value: value.toFixed(2),
-      customer_selection: 'all',
-      once_per_customer: true,
-      usage_limit: 1,
-      starts_at: new Date().toISOString(),
-      ...(entitledProductIds.length
-        ? { entitled_product_ids: entitledProductIds }
-        : {}),
+      code,
+      startsAt: new Date().toISOString(),
+      customerSelection: { all: true },
+      customerGets: { value, items: itemsInput },
+      appliesOncePerCustomer: true,
+      usageLimit: 1,
     },
   };
 
-  const ruleRes = await client.post('/price_rules.json', priceRulePayload);
-  const priceRule = ruleRes.price_rule;
-
-  const codeRes = await client.post(`/price_rules/${priceRule.id}/discount_codes.json`, {
-    discount_code: { code },
-  });
-  const discountCode = codeRes.discount_code;
+  const data = await client.graphql(mutation, variables);
+  const out = data.discountCodeBasicCreate;
+  if (out.userErrors && out.userErrors.length) {
+    const err = new Error(
+      `Discount creation failed: ${out.userErrors.map((e) => e.message).join('; ')}`
+    );
+    err.statusCode = 422;
+    throw err;
+  }
+  const gid = (out.codeDiscountNode && out.codeDiscountNode.id) || '';
+  const discountId = Number((gid.match(/(\d+)\s*$/) || [])[1]) || null;
 
   await query(
     `INSERT INTO discount_codes
@@ -86,8 +103,8 @@ export async function generateBundleDiscount(shop, payload) {
     [
       shop,
       code,
-      priceRule.id,
-      discountCode.id,
+      null,
+      discountId,
       calc.discountType,
       calc.discountValue,
       JSON.stringify(entitledProductIds),
