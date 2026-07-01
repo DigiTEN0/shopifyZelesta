@@ -111,11 +111,11 @@ app.use((err, req, res, next) => {
 });
 
 function fallbackLanding() {
-  return `<!doctype html><html><head><meta charset="utf-8"><title>Bundle Widget</title>
+  return `<!doctype html><html><head><meta charset="utf-8"><title>BundleBoost</title>
   <style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0d12;color:#e5e7eb;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0}
   .card{max-width:520px;padding:40px;text-align:center}.card h1{font-size:28px;margin:0 0 12px}.card p{color:#9ca3af;line-height:1.6}
   a{display:inline-block;margin-top:18px;padding:12px 22px;background:#6366F1;color:#fff;border-radius:10px;text-decoration:none;font-weight:600}</style></head>
-  <body><div class="card"><h1>Bundle Widget</h1>
+  <body><div class="card"><h1>BundleBoost</h1>
   <p>The dashboard build was not found. Run <code>npm run build</code> to compile the Polaris dashboard, or open the live demo below.</p>
   <a href="/demo">View the demo &rarr;</a></div></body></html>`;
 }
