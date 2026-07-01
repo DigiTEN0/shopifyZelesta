@@ -34,7 +34,9 @@ app.use(
   express.static(path.join(root, 'widget'), {
     setHeaders: (res) => {
       res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Cache-Control', 'public, max-age=300');
+      // Always revalidate so a fresh deploy of the widget shows up immediately
+      // (no stale 5-minute cache while iterating). ETag still yields cheap 304s.
+      res.setHeader('Cache-Control', 'no-cache, max-age=0, must-revalidate');
     },
   })
 );
