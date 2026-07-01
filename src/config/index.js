@@ -20,7 +20,7 @@ const config = {
     apiKey: required('SHOPIFY_API_KEY'),
     apiSecret: required('SHOPIFY_API_SECRET'),
     scopes: process.env.SHOPIFY_SCOPES ||
-      'read_products,write_discounts,read_orders,write_script_tags,read_script_tags',
+      'read_products,write_discounts,read_orders,write_script_tags,read_script_tags,write_customers,read_customers',
     apiVersion: process.env.SHOPIFY_API_VERSION || '2024-10',
   },
 

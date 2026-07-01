@@ -5,7 +5,8 @@ import { publicCors } from '../middleware/cors.js';
 import { discountRateLimit, publicReadRateLimit } from '../middleware/rateLimit.js';
 import { validateShopParam, requireInstalledShop } from '../middleware/validateShop.js';
 import { requireInstalledSession } from '../middleware/sessionToken.js';
-import { generateBundleDiscount } from '../services/discountService.js';
+import { generateBundleDiscount, generateWelcomeDiscount } from '../services/discountService.js';
+import { saveLead, createShopifyCustomer, setCustomerId, getLeads, getLeadStats } from '../services/leadsService.js';
 import { getSettings, saveSettings, publicSettings } from '../services/settingsService.js';
 import { getAnalytics, resolveRange, recordEvent } from '../services/analyticsService.js';
 import {
@@ -78,6 +79,51 @@ router.post('/events', publicCors, publicReadRateLimit, validateShopParam, async
   }
 });
 
+// Lead capture from the pop-up: save email + browse intent, mint the right
+// discount, push into Shopify Customers, then tell the widget what to reveal.
+router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async (req, res, next) => {
+  try {
+    const { email, name, sessionId, items = [] } = req.body || {};
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) {
+      return res.status(422).json({ error: 'A valid email is required.' });
+    }
+
+    let result;
+    let mode;
+    if (items.length >= 2) {
+      try {
+        result = await generateBundleDiscount(req.shop, { items, sessionId });
+        mode = 'bundle';
+      } catch (e) {
+        if (e.statusCode === 422) {
+          result = await generateWelcomeDiscount(req.shop, { items, sessionId });
+          mode = 'single';
+        } else throw e;
+      }
+    } else if (items.length === 1) {
+      result = await generateWelcomeDiscount(req.shop, { items, sessionId });
+      mode = 'single';
+    } else {
+      result = await generateWelcomeDiscount(req.shop, { sessionId });
+      mode = 'welcome';
+    }
+
+    const productIds = items.map((it) => it.productId).filter(Boolean);
+    const productTitles = items.map((it) => it.title).filter(Boolean);
+    await saveLead(req.shop, { email, name, sessionId, productIds, productTitles, code: result.code, mode });
+
+    // Best-effort: push to Shopify Customers (needs write_customers scope).
+    createShopifyCustomer(req.shop, { email, name, browsedTitles: productTitles, code: result.code })
+      .then((cid) => cid && setCustomerId(req.shop, email, cid))
+      .catch(() => {});
+
+    res.json({ ok: true, mode, ...result });
+  } catch (err) {
+    if (err.statusCode) return res.status(err.statusCode).json({ error: err.message });
+    next(err);
+  }
+});
+
 router.options('*', publicCors, (req, res) => res.sendStatus(204));
 
 // ── ADMIN (embedded dashboard, session-token protected) ───────
@@ -103,6 +149,15 @@ router.post('/settings/:shop', requireInstalledSession, async (req, res, next) =
   try {
     const saved = await saveSettings(req.shop, req.body || {});
     res.json({ settings: saved });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/leads/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const [leads, stats] = await Promise.all([getLeads(req.shop), getLeadStats(req.shop)]);
+    res.json({ leads, stats });
   } catch (err) {
     next(err);
   }

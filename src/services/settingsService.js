@@ -23,6 +23,16 @@ export const DEFAULT_SETTINGS = {
   savings_as: 'currency',
   redirect_to_cart: false,
   currency: 'EUR',
+  popup_enabled: false,
+  popup_discount: 10,
+  popup_discount_type: 'percentage',
+  popup_headline: '',   // empty => widget uses the translated default
+  popup_subheadline: '',
+  popup_button: '',
+  popup_decline: '',
+  popup_image: '',
+  popup_collect_name: true,
+  popup_delay_seconds: 6,
   enabled: false, // merchant activates the widget themselves from the dashboard
 };
 
@@ -99,6 +109,18 @@ export function publicSettings(s) {
     savingsAs: s.savings_as,
     redirectToCart: s.redirect_to_cart,
     currency: s.currency,
+    popup: {
+      enabled: s.popup_enabled,
+      discount: Number(s.popup_discount),
+      discountType: s.popup_discount_type,
+      headline: s.popup_headline,
+      subheadline: s.popup_subheadline,
+      button: s.popup_button,
+      decline: s.popup_decline,
+      image: s.popup_image,
+      collectName: s.popup_collect_name,
+      delaySeconds: s.popup_delay_seconds,
+    },
     enabled: s.enabled,
   };
 }

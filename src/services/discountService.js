@@ -5,6 +5,83 @@ import { getSettings, publicSettings } from './settingsService.js';
 import { computeBundleDiscount } from './discountLogic.js';
 import { randomCode } from '../lib/crypto.js';
 
+// Shared: create a one-time code-based discount via the GraphQL discounts API.
+async function createCodeDiscount(client, { code, isPercent, value, entitledProductIds }) {
+  const discountValue = isPercent
+    ? { percentage: Math.min(Math.abs(value), 100) / 100 }
+    : { discountAmount: { amount: Math.abs(value).toFixed(2), appliesOnEachItem: false } };
+  const itemsInput = entitledProductIds && entitledProductIds.length
+    ? { products: { productsToAdd: entitledProductIds.map((id) => `gid://shopify/Product/${id}`) } }
+    : { all: true };
+
+  const mutation = `
+    mutation d($input: DiscountCodeBasicInput!) {
+      discountCodeBasicCreate(basicCodeDiscount: $input) {
+        codeDiscountNode { id }
+        userErrors { field message }
+      }
+    }`;
+  const data = await client.graphql(mutation, {
+    input: {
+      title: code,
+      code,
+      startsAt: new Date().toISOString(),
+      customerSelection: { all: true },
+      customerGets: { value: discountValue, items: itemsInput },
+      appliesOncePerCustomer: true,
+      usageLimit: 1,
+    },
+  });
+  const out = data.discountCodeBasicCreate;
+  if (out.userErrors && out.userErrors.length) {
+    const err = new Error(`Discount creation failed: ${out.userErrors.map((e) => e.message).join('; ')}`);
+    err.statusCode = 422;
+    throw err;
+  }
+  const gid = (out.codeDiscountNode && out.codeDiscountNode.id) || '';
+  return Number((gid.match(/(\d+)\s*$/) || [])[1]) || null;
+}
+
+/**
+ * Welcome / single-product discount used by the lead-capture pop-up when the
+ * visitor hasn't browsed a full bundle. Uses the merchant's pop-up discount.
+ * @param {string} shop
+ * @param {{items?:Array, sessionId?:string}} payload
+ */
+export async function generateWelcomeDiscount(shop, payload = {}) {
+  const settingsRow = await getSettings(shop);
+  const settings = publicSettings(settingsRow);
+  const client = await getClient(shop);
+  if (!client) {
+    const err = new Error('Shop is not installed.');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  const isPercent = (settings.popup.discountType || 'percentage') === 'percentage';
+  const value = Number(settings.popup.discount) || 0;
+  const items = Array.isArray(payload.items) ? payload.items : [];
+  const entitledProductIds = [...new Set(items.map((it) => Number(it.productId)).filter(Boolean))];
+
+  const code = `BUNDLE-${randomCode(6)}-${Date.now().toString(36).toUpperCase()}`;
+  const discountId = await createCodeDiscount(client, { code, isPercent, value, entitledProductIds });
+
+  await query(
+    `INSERT INTO discount_codes
+       (shop_domain, code, price_rule_id, discount_id, discount_type, discount_value, product_ids, session_id)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)`,
+    [shop, code, null, discountId, isPercent ? 'percentage' : 'fixed', value,
+     JSON.stringify(entitledProductIds), payload.sessionId || null]
+  );
+
+  return {
+    code,
+    discountType: isPercent ? 'percentage' : 'fixed',
+    discountValue: value,
+    label: isPercent ? `${value}%` : value,
+  };
+}
+
 /**
  * @param {string} shop
  * @param {object} payload  { items:[{productId,variantId,price,quantity}], sessionId }

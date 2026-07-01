@@ -32,7 +32,7 @@ const PREVIEW_PRODUCTS = [
   },
 ];
 
-export default function WidgetPreview({ settings }) {
+export default function WidgetPreview({ settings, variant = 'bundle' }) {
   const iframeRef = useRef(null);
   const bootedRef = useRef(false);
 
@@ -51,12 +51,13 @@ export default function WidgetPreview({ settings }) {
       <script src="${APP_URL}/widget/widget.js"></script>
       <script>
         var PRODUCTS=${JSON.stringify(PREVIEW_PRODUCTS)};
+        var VARIANT=${JSON.stringify(variant)};
         function boot(settings){
           if(!window.BundleWidget){return setTimeout(function(){boot(settings)},40);}
           if(window.__pv){window.__pv.applySettings(settings);return;}
-          window.__pv=new window.BundleWidget({shop:'preview',settings:settings,preview:true,startExpanded:true,
+          window.__pv=new window.BundleWidget({shop:'preview',settings:settings,preview:true,startExpanded:(VARIANT!=='popup'),
             session:{sessionId:'pv',products:JSON.parse(JSON.stringify(PRODUCTS)),dismissed:false}});
-          window.__pv.boot();
+          if(VARIANT==='popup'){ window.__pv.showPopup('offer'); } else { window.__pv.boot(); }
         }
         window.addEventListener('message',function(e){if(e.data&&e.data.type==='bw-settings'){boot(e.data.settings);}});
         boot(${JSON.stringify(settings)});
@@ -80,7 +81,7 @@ export default function WidgetPreview({ settings }) {
       srcDoc={srcDoc}
       style={{
         width: '100%',
-        height: 520,
+        height: variant === 'popup' ? 560 : 520,
         border: '1px solid #E3E3E3',
         borderRadius: 12,
         background: '#f6f6f7',

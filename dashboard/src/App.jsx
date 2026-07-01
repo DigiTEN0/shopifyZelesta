@@ -3,6 +3,8 @@ import { Frame, Navigation, Toast } from '@shopify/polaris';
 import DashboardPage from './pages/Dashboard.jsx';
 import BundleSettingsPage from './pages/BundleSettings.jsx';
 import WidgetCustomisationPage from './pages/WidgetCustomisation.jsx';
+import PopupsPage from './pages/Popups.jsx';
+import LeadsPage from './pages/Leads.jsx';
 import AnalyticsPage from './pages/Analytics.jsx';
 import BillingPage from './pages/Billing.jsx';
 
@@ -10,6 +12,8 @@ const PAGES = [
   { id: 'dashboard', label: 'Dashboard', component: DashboardPage },
   { id: 'settings', label: 'Bundle Settings', component: BundleSettingsPage },
   { id: 'customise', label: 'Widget Customisation', component: WidgetCustomisationPage },
+  { id: 'popups', label: 'Pop-up & Leads', component: PopupsPage },
+  { id: 'leads', label: 'Leads', component: LeadsPage },
   { id: 'analytics', label: 'Analytics', component: AnalyticsPage },
   { id: 'billing', label: 'Billing', component: BillingPage },
 ];
@@ -74,6 +78,6 @@ export default function App() {
 
 function initialPage() {
   const path = window.location.pathname.replace(/^\//, '');
-  const known = ['dashboard', 'settings', 'customise', 'analytics', 'billing'];
+  const known = ['dashboard', 'settings', 'customise', 'popups', 'leads', 'analytics', 'billing'];
   return known.includes(path) ? path : 'dashboard';
 }

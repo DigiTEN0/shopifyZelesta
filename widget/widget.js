@@ -53,6 +53,18 @@
     savingsAs: 'currency',
     redirectToCart: false,
     currency: 'EUR',
+    popup: {
+      enabled: false,
+      discount: 10,
+      discountType: 'percentage',
+      headline: '',
+      subheadline: '',
+      button: '',
+      decline: '',
+      image: '',
+      collectName: true,
+      delaySeconds: 6,
+    },
     enabled: true,
   };
 
@@ -162,11 +174,11 @@
   /*  Localisation of the widget's own UI strings                             */
   /* ======================================================================== */
   const I18N = {
-    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Original total', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.' },
-    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Oorspronkelijk totaal', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.' },
-    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ursprünglicher Gesamtpreis', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.' },
-    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Total initial', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.' },
-    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Total original', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.' },
+    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Original total', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more' },
+    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Oorspronkelijk totaal', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer' },
+    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ursprünglicher Gesamtpreis', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr' },
+    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Total initial', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus' },
+    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Total original', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más' },
   };
   function t(locale, key, vars) {
     const dict = I18N[(locale || 'en').slice(0, 2)] || I18N.en;
@@ -277,6 +289,46 @@
   background:#f3f4f6;border:1px dashed #d1d5db;border-radius:8px;padding:6px 12px;margin-bottom:18px;color:#374151;}
 .bw-empty{padding:36px 24px;text-align:center;color:#9ca3af;font-size:13px;}
 
+/* ── Lead-capture pop-up (centered modal) ── */
+.bw-modal-root{position:fixed;inset:0;z-index:2147483001;display:flex;align-items:center;justify-content:center;padding:20px;}
+.bw-backdrop{position:absolute;inset:0;background:rgba(17,17,20,.55);backdrop-filter:saturate(120%) blur(2px);animation:bw-fade-in .25s ease both;}
+.bw-modal{position:relative;display:flex;width:760px;max-width:100%;max-height:calc(100vh - 40px);background:#fff;border-radius:20px;overflow:hidden;
+  box-shadow:0 40px 90px -30px rgba(17,17,20,.55);animation:bw-modal-in .4s cubic-bezier(.16,1,.3,1) both;}
+.bw-modal-img{width:44%;flex:0 0 44%;background:#f1f1f2 center/cover no-repeat;min-height:340px;}
+.bw-modal-body{flex:1;padding:40px 38px;display:flex;flex-direction:column;justify-content:center;position:relative;}
+.bw-modal-x{position:absolute;top:16px;right:18px;width:34px;height:34px;border:none;background:transparent;color:#9aa0a6;font-size:24px;line-height:1;cursor:pointer;border-radius:8px;transition:background .15s,color .15s;}
+.bw-modal-x:hover{background:#f3f4f6;color:#111827;}
+.bw-modal h2{margin:0 0 12px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);}
+.bw-modal h2 .bw-hl{color:var(--bw-secondary);}
+.bw-modal p.bw-modal-sub{margin:0 0 24px;font-size:15px;color:#6b7280;line-height:1.5;}
+.bw-modal-btn{width:100%;border:none;border-radius:12px;background:var(--bw-secondary);color:#fff;font-size:16px;font-weight:750;padding:16px;cursor:pointer;letter-spacing:-.01em;transition:transform .15s ease,filter .2s;}
+.bw-modal-btn:hover{transform:translateY(-1px);filter:brightness(1.05);}
+.bw-modal-btn:disabled{opacity:.6;cursor:default;transform:none;}
+.bw-modal-decline{display:block;width:100%;margin-top:14px;background:none;border:none;color:#9aa0a6;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;}
+.bw-modal-decline:hover{color:#6b7280;}
+.bw-field{width:100%;border:1px solid #e2e4e8;border-radius:11px;padding:14px 15px;font-size:15px;color:#111827;margin-bottom:11px;outline:none;transition:border-color .15s,box-shadow .15s;background:#fbfbfc;}
+.bw-field:focus{border-color:var(--bw-secondary);box-shadow:0 0 0 3px rgba(0,0,0,.05);background:#fff;}
+.bw-field.bw-err{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1);}
+.bw-consent{margin-top:12px;font-size:11.5px;color:#9aa0a6;line-height:1.4;text-align:center;}
+.bw-code-card{padding:40px 32px 30px;text-align:center;}
+.bw-code-big{display:block;font-family:ui-monospace,Menlo,monospace;font-size:19px;font-weight:800;letter-spacing:.04em;color:var(--bw-primary);background:#f6f6f7;border:1px dashed #cfd2d6;border-radius:12px;padding:16px;margin:6px 0 8px;}
+.bw-copy{width:100%;border:none;border-radius:12px;background:var(--bw-primary);color:#fff;font-weight:700;font-size:14.5px;padding:14px;cursor:pointer;margin-top:6px;}
+.bw-shop{display:block;width:100%;margin-top:10px;background:none;border:none;color:#9aa0a6;font-weight:600;font-size:13px;cursor:pointer;}
+.bw-reco{padding:2px 20px 18px;}
+.bw-reco-title{font-size:12.5px;font-weight:700;color:#374151;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;}
+.bw-reco-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.bw-reco-card{flex:0 0 108px;width:108px;cursor:pointer;text-decoration:none;color:inherit;}
+.bw-reco-card img{width:108px;height:108px;object-fit:cover;border-radius:12px;background:#f1f1f2;display:block;}
+.bw-reco-card .bw-reco-name{font-size:11.5px;font-weight:600;margin-top:6px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.bw-reco-card .bw-reco-price{font-size:11.5px;font-weight:700;color:var(--bw-primary);}
+@keyframes bw-modal-in{0%{opacity:0;transform:translateY(18px) scale(.97);}100%{opacity:1;transform:translateY(0) scale(1);}}
+@media(max-width:640px){
+  .bw-modal{flex-direction:column;width:100%;max-height:calc(100vh - 24px);}
+  .bw-modal-img{display:none;}
+  .bw-modal-body{padding:34px 24px 28px;}
+  .bw-modal h2{font-size:25px;}
+}
+
 /* ── Mobile ── */
 @media(max-width:560px){
   /* Collapsed pill keeps the corner you picked in the dashboard */
@@ -329,7 +381,199 @@
 
   BundleWidget.prototype.applySettings = function (settings) {
     this.settings = Object.assign({}, DEFAULTS, settings || {});
-    this.render();
+    this.settings.popup = Object.assign({}, DEFAULTS.popup, (settings && settings.popup) || {});
+    if (this.modal) this._renderModal();
+    else this.render();
+  };
+
+  /* ── Lead-capture pop-up ───────────────────────────────────── */
+  BundleWidget.prototype.popupDiscountLabel = function () {
+    const p = this.settings.popup;
+    if ((p.discountType || 'percentage') === 'percentage') return `${p.discount}%`;
+    return money(Math.round(Number(p.discount) * 100), this.settings);
+  };
+
+  BundleWidget.prototype.maybeShowPopup = function () {
+    const p = this.settings.popup;
+    if (!p || !p.enabled) return false;
+    if (this.session.captured || this.session.popupDismissed) return false;
+    const self = this;
+    clearTimeout(this._popupTimer);
+    this._popupTimer = setTimeout(function () {
+      if (!self.session.captured && !self.session.popupDismissed) self.showPopup('offer');
+    }, Math.max(0, Number(p.delaySeconds) || 0) * 1000);
+    return true;
+  };
+
+  BundleWidget.prototype.showPopup = function (stage) {
+    this.popupStage = stage || 'offer';
+    this._renderModal();
+    if (!this.demo && !this.preview && this.popupStage === 'offer') this._emit('widget_shown');
+  };
+
+  BundleWidget.prototype._renderModal = function () {
+    injectStyles();
+    const s = this.settings;
+    if (!this.modal) { this.modal = document.createElement('div'); document.body.appendChild(this.modal); }
+    this.modal.className = 'bw-root bw-modal-root';
+    this.modal.style.setProperty('--bw-primary', s.primaryColor);
+    this.modal.style.setProperty('--bw-secondary', s.secondaryColor);
+    if (s.fontFamily && s.fontFamily !== 'inherit') this.modal.style.setProperty('--bw-font', s.fontFamily);
+    else this.modal.style.removeProperty('--bw-font');
+    let inner;
+    if (this.popupStage === 'form') inner = this._formHTML();
+    else if (this.popupStage === 'code') inner = this._codeCardHTML();
+    else inner = this._offerHTML();
+    this.modal.innerHTML = `<div class="bw-backdrop" data-act="mclose"></div>${inner}`;
+    this._bindModal();
+  };
+
+  BundleWidget.prototype._offerHTML = function () {
+    const s = this.settings, p = s.popup, loc = s.locale, dl = this.popupDiscountLabel();
+    const headline = p.headline || t(loc, 'popupHead', { discount: dl });
+    const sub = p.subheadline || t(loc, 'popupSub');
+    const yes = p.button || t(loc, 'popupYes', { discount: dl });
+    const no = p.decline || t(loc, 'popupNo');
+    const headHtml = esc(headline).split(esc(dl)).join(`<span class="bw-hl">${esc(dl)}</span>`);
+    const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
+    return `<div class="bw-modal">${img}<div class="bw-modal-body">
+      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <h2>${headHtml}</h2>
+      <p class="bw-modal-sub">${esc(sub)}</p>
+      <button class="bw-modal-btn" data-act="offer-yes">${esc(yes)}</button>
+      <button class="bw-modal-decline" data-act="mclose">${esc(no)}</button>
+    </div></div>`;
+  };
+
+  BundleWidget.prototype._formHTML = function () {
+    const s = this.settings, p = s.popup, loc = s.locale;
+    const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
+    return `<div class="bw-modal">${img}<div class="bw-modal-body">
+      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <h2>${esc(t(loc, 'formTitle'))}</h2>
+      ${p.collectName ? `<input class="bw-field" data-field="name" type="text" placeholder="${esc(t(loc, 'formName'))}" autocomplete="name">` : ''}
+      <input class="bw-field" data-field="email" type="email" placeholder="${esc(t(loc, 'formEmail'))}" autocomplete="email">
+      <button class="bw-modal-btn" data-act="lead-submit">${esc(t(loc, 'formSubmit'))}</button>
+      <div class="bw-consent">${esc(t(loc, 'consent'))}</div>
+    </div></div>`;
+  };
+
+  BundleWidget.prototype._codeCardHTML = function () {
+    const s = this.settings, loc = s.locale, dl = this.popupDiscountLabel();
+    const code = this.session.code || '';
+    return `<div class="bw-modal" style="max-width:420px;width:420px;"><div class="bw-modal-body" style="padding:0;">
+      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <div class="bw-code-card">
+        <div class="bw-check" style="margin:0 auto 14px"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h2 style="font-size:22px">${esc(t(loc, 'codeTitle', { discount: dl }))}</h2>
+        <p class="bw-modal-sub" style="margin-bottom:8px">${esc(t(loc, 'codeSub'))}</p>
+        <span class="bw-code-big">${esc(code)}</span>
+        <button class="bw-copy" data-act="copy-code">${esc(t(loc, 'copyCode'))}</button>
+        <button class="bw-shop" data-act="mclose">${esc(t(loc, 'shopNow'))}</button>
+      </div>
+      <div class="bw-reco" data-reco></div>
+    </div></div>`;
+  };
+
+  BundleWidget.prototype._bindModal = function () {
+    const self = this;
+    this.modal.querySelectorAll('[data-act]').forEach(function (el) {
+      const a = el.getAttribute('data-act');
+      if (a === 'mclose') el.addEventListener('click', function () { self.dismissPopup(); });
+      if (a === 'offer-yes') el.addEventListener('click', function () { self.popupStage = 'form'; self._renderModal(); });
+      if (a === 'lead-submit') el.addEventListener('click', function () { self.submitLead(el); });
+      if (a === 'copy-code') el.addEventListener('click', function () { self._copyCode(el); });
+    });
+    const email = this.modal.querySelector('[data-field="email"]');
+    if (email) {
+      setTimeout(function () { email.focus(); }, 60);
+      email.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { const b = self.modal.querySelector('[data-act="lead-submit"]'); if (b) b.click(); }
+      });
+    }
+  };
+
+  BundleWidget.prototype.dismissPopup = function () {
+    if (!this.session.captured) { this.session.popupDismissed = true; saveSession(this.session); }
+    this.closeModal();
+    if (this.session.captured && this.session.mode === 'bundle') { this.expanded = false; this._animateNext = true; this.render(); }
+  };
+
+  BundleWidget.prototype.closeModal = function () {
+    clearTimeout(this._popupTimer);
+    if (this.modal) { this.modal.remove(); this.modal = null; }
+  };
+
+  BundleWidget.prototype.submitLead = function (btn) {
+    const self = this, loc = this.settings.locale;
+    const emailEl = this.modal.querySelector('[data-field="email"]');
+    const nameEl = this.modal.querySelector('[data-field="name"]');
+    const email = ((emailEl && emailEl.value) || '').trim();
+    const name = ((nameEl && nameEl.value) || '').trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { if (emailEl) { emailEl.classList.add('bw-err'); emailEl.focus(); } return; }
+    if (btn) { btn.disabled = true; btn.textContent = '…'; }
+    const items = this.selectedItems();
+
+    if (this.demo || this.preview) {
+      const mode = items.length >= 2 ? 'bundle' : (items.length === 1 ? 'single' : 'welcome');
+      setTimeout(function () { self._afterCapture({ code: 'BUNDLE-DEMO12-X', mode: mode }); }, 500);
+      return;
+    }
+
+    fetch(`${APP_URL}/api/lead`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shop: this.shop, email: email, name: name, sessionId: this.session.sessionId,
+        items: items.map(function (it) { return { productId: it.productId, variantId: it.variantId, price: it.price / 100, quantity: it.quantity, title: it.title }; }),
+      }),
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'failed'); return j; }); })
+      .then(function (res) { self._afterCapture(res); })
+      .catch(function (err) {
+        console.error('[bundle-widget] lead failed', err);
+        if (btn) { btn.disabled = false; btn.textContent = t(loc, 'formSubmit'); }
+        alert('Sorry, something went wrong. Please try again.');
+      });
+  };
+
+  BundleWidget.prototype._afterCapture = function (res) {
+    this.session.captured = true;
+    this.session.code = res.code;
+    this.session.mode = res.mode;
+    saveSession(this.session);
+    if (res.mode === 'bundle') {
+      this.closeModal();
+      this.expanded = true; this._animateNext = true; this.render();
+    } else {
+      this.popupStage = 'code';
+      this._renderModal();
+      if (res.mode === 'single') this._loadComplementary();
+    }
+  };
+
+  BundleWidget.prototype._copyCode = function (btn) {
+    const loc = this.settings.locale;
+    try { navigator.clipboard.writeText(this.session.code || ''); } catch (e) {}
+    if (btn) { const orig = btn.textContent; btn.textContent = t(loc, 'copied'); setTimeout(function () { btn.textContent = orig; }, 1500); }
+  };
+
+  BundleWidget.prototype._loadComplementary = function () {
+    const self = this;
+    if (this.demo || this.preview) return;
+    const first = this.session.products[0];
+    const container = this.modal && this.modal.querySelector('[data-reco]');
+    if (!first || !container) return;
+    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=4&intent=complementary`)
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        const products = (data && data.products) || [];
+        if (!products.length) return;
+        const s = self.settings, loc = s.locale;
+        container.innerHTML = `<div class="bw-reco-title">${esc(t(loc, 'alsoLike'))}</div><div class="bw-reco-row">` +
+          products.map(function (pr) {
+            const img = (pr.featured_image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
+            return `<a class="bw-reco-card" href="/products/${esc(pr.handle)}"><img src="${esc(img)}" alt=""><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></a>`;
+          }).join('') + `</div>`;
+      }).catch(function () {});
   };
 
   // Add a product to the bundle (dedup by product id). Returns true if added.
@@ -367,6 +611,10 @@
   BundleWidget.prototype.render = function (animateAdd) {
     const s = this.settings;
     if (!s.enabled && !this.preview) { this.destroy(); return; }
+
+    // When the lead pop-up is active and the visitor hasn't opted in yet, the
+    // pop-up owns the flow — keep the corner pill/panel hidden until capture.
+    if (s.popup && s.popup.enabled && !this.session.captured && !this.preview) { this.destroy(); return; }
 
     const count = this.session.products.length;
     const meetsThreshold = this.preview || count >= s.triggerThreshold;
@@ -559,6 +807,18 @@
       return;
     }
 
+    // Lead-capture flow already minted a code — just add to cart and apply it.
+    if (this.session.code) {
+      this._addToCart(items)
+        .then(() => { self._emit('add_to_cart', self.session.code); self._showSuccess(self.session.code, calc); })
+        .catch((err) => {
+          console.error('[bundle-widget] checkout failed', err);
+          if (btn) { btn.disabled = false; btn.textContent = self.settings.ctaText; }
+          alert('Sorry — we could not build your bundle. Please try again.');
+        });
+      return;
+    }
+
     this._generateCode(items)
       .then((res) => {
         return self._addToCart(items).then(() => res);
@@ -748,18 +1008,32 @@
         if (settings.enabled === false) return;
         const widget = new BundleWidget({ shop, settings, session });
         window.__bundleWidget = widget;
+        const popupOn = settings.popup && settings.popup.enabled;
+        const threshold = settings.triggerThreshold || 2;
 
-        const renderIfReady = () => {
-          if (session.products.length >= (settings.triggerThreshold || 2)) widget.boot();
+        const orchestrate = () => {
+          if (widget.session.captured) {
+            // Already opted in: show the bundle pill so they can reopen it.
+            if (widget.session.mode === 'bundle' && widget.session.products.length >= threshold) {
+              widget.expanded = false;
+              widget.boot();
+            }
+            return;
+          }
+          if (popupOn) {
+            widget.maybeShowPopup(); // lead pop-up gates the bundle
+          } else if (widget.session.products.length >= threshold) {
+            widget.boot();
+          }
         };
 
         if (isProductPage()) {
           fetchCurrentProduct().then((product) => {
             if (product) widget.addProduct(product);
-            renderIfReady();
+            orchestrate();
           });
         } else {
-          renderIfReady();
+          orchestrate();
         }
       })
       .catch((e) => console.warn('[bundle-widget] settings load failed', e));

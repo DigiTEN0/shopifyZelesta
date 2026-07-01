@@ -45,9 +45,39 @@ CREATE TABLE IF NOT EXISTS settings (
   redirect_to_cart  BOOLEAN DEFAULT false,
   currency          TEXT    DEFAULT 'EUR',
 
+  -- Lead-capture pop-up (shown before the bundle reveal)
+  popup_enabled       BOOLEAN DEFAULT false,
+  popup_discount      NUMERIC DEFAULT 10,        -- headline welcome discount (% or fixed)
+  popup_discount_type TEXT    DEFAULT 'percentage',
+  popup_headline      TEXT    DEFAULT '',   -- empty => use the translated default
+  popup_subheadline   TEXT    DEFAULT '',
+  popup_button        TEXT    DEFAULT '',
+  popup_decline       TEXT    DEFAULT '',
+  popup_image         TEXT    DEFAULT '',
+  popup_collect_name  BOOLEAN DEFAULT true,
+  popup_delay_seconds INT     DEFAULT 6,
+
   enabled           BOOLEAN DEFAULT false,   -- merchant activates the widget themselves
   updated_at        TIMESTAMPTZ DEFAULT now()
 );
+
+-- Captured leads: email + the browse intent (what they viewed) + the code.
+CREATE TABLE IF NOT EXISTS leads (
+  id                  BIGSERIAL PRIMARY KEY,
+  shop_domain         TEXT NOT NULL REFERENCES shops(shop_domain) ON DELETE CASCADE,
+  email               TEXT NOT NULL,
+  name                TEXT,
+  session_id          TEXT,
+  product_ids         JSONB DEFAULT '[]'::jsonb,
+  product_titles      JSONB DEFAULT '[]'::jsonb,
+  discount_code       TEXT,
+  mode                TEXT,                       -- 'bundle' | 'single' | 'welcome'
+  shopify_customer_id BIGINT,
+  created_at          TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_leads_shop ON leads(shop_domain);
+CREATE INDEX IF NOT EXISTS idx_leads_created ON leads(created_at);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_leads_shop_email ON leads(shop_domain, email);
 
 -- Every unique discount code we mint, for clean attribution.
 CREATE TABLE IF NOT EXISTS discount_codes (
@@ -96,3 +126,18 @@ CREATE TABLE IF NOT EXISTS billing (
   activated_at     TIMESTAMPTZ,
   updated_at       TIMESTAMPTZ DEFAULT now()
 );
+
+-- ─────────────────────────────────────────────────────────────
+-- In-place upgrades for databases created before a column existed.
+-- ADD COLUMN IF NOT EXISTS is idempotent, so this is safe on every deploy.
+-- ─────────────────────────────────────────────────────────────
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_enabled       BOOLEAN DEFAULT false;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_discount      NUMERIC DEFAULT 10;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_discount_type TEXT    DEFAULT 'percentage';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_headline      TEXT    DEFAULT '';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_subheadline   TEXT    DEFAULT '';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_button        TEXT    DEFAULT '';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_decline       TEXT    DEFAULT '';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_image         TEXT    DEFAULT '';
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAULT true;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
