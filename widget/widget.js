@@ -159,6 +159,23 @@
   }
 
   /* ======================================================================== */
+  /*  Localisation of the widget's own UI strings                             */
+  /* ======================================================================== */
+  const I18N = {
+    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Original total', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.' },
+    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Oorspronkelijk totaal', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.' },
+    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ursprünglicher Gesamtpreis', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.' },
+    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Total initial', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.' },
+    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Total original', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.' },
+  };
+  function t(locale, key, vars) {
+    const dict = I18N[(locale || 'en').slice(0, 2)] || I18N.en;
+    let s = dict[key] || I18N.en[key] || key;
+    if (vars) for (const k in vars) s = s.split('{' + k + '}').join(vars[k]);
+    return s;
+  }
+
+  /* ======================================================================== */
   /*  Styles (injected once; uses CSS variables for theming)                  */
   /* ======================================================================== */
   function injectStyles() {
@@ -171,15 +188,15 @@
 .bw-root.bw-left{left:22px;bottom:22px;}
 
 /* ── Collapsed pill ── */
-.bw-pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid rgba(17,24,39,.06);
+.bw-pill{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid rgba(17,24,39,.06);
   box-shadow:0 10px 30px -12px rgba(17,24,39,.28),0 2px 8px -4px rgba(17,24,39,.14);
-  border-radius:999px;padding:7px 13px 7px 7px;cursor:pointer;
+  border-radius:999px;padding:6px 12px 6px 7px;cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease;}
 .bw-pill-count{font-size:12px;font-weight:700;color:#374151;padding-right:2px;}
 .bw-pill.bw-animate{animation:bw-bounce-in .7s cubic-bezier(.18,.89,.32,1.28) both;}
 .bw-pill:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 22px 50px -14px rgba(17,24,39,.42);}
-.bw-stack{position:relative;width:64px;height:44px;flex:0 0 auto;}
-.bw-thumb{position:absolute;top:0;width:42px;height:42px;border-radius:12px;object-fit:cover;background:#f3f4f6;
+.bw-stack{position:relative;width:72px;height:38px;flex:0 0 auto;}
+.bw-thumb{position:absolute;top:0;width:38px;height:38px;border-radius:50%;object-fit:cover;background:#f3f4f6;
   border:2px solid #fff;box-shadow:0 3px 8px -2px rgba(17,24,39,.3);transition:transform .35s cubic-bezier(.18,.89,.32,1.28);}
 .bw-thumb.bw-new{animation:bw-slide-join .5s cubic-bezier(.18,.89,.32,1.28) both;}
 .bw-pill-text{display:flex;flex-direction:column;line-height:1.15;}
@@ -193,7 +210,7 @@
 .bw-pill:hover .bw-pill-close{display:flex;}
 
 /* ── Expanded panel ── */
-.bw-panel{width:380px;max-width:calc(100vw - 32px);background:#fff;border-radius:var(--bw-radius);overflow:hidden;
+.bw-panel{position:relative;width:380px;max-width:calc(100vw - 32px);background:#fff;border-radius:var(--bw-radius);overflow:hidden;
   box-shadow:0 30px 80px -20px rgba(17,24,39,.5),0 8px 20px -10px rgba(17,24,39,.25);
   border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;}
 .bw-panel.bw-animate{animation:bw-spring-up .42s cubic-bezier(.16,1,.3,1) both;}
@@ -218,10 +235,11 @@
 .bw-item-compare{font-size:11.5px;color:#9ca3af;text-decoration:line-through;margin-left:5px;font-weight:500;}
 .bw-remove{position:absolute;top:12px;right:10px;width:20px;height:20px;border:none;background:transparent;color:#c4c4c8;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;transition:color .15s;}
 .bw-remove:hover{color:#dc2626;}
-.bw-item-controls{display:flex;align-items:center;gap:7px;}
-.bw-opts{display:flex;gap:7px;flex:1;min-width:0;}
+.bw-item-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.bw-opts{display:flex;gap:7px;flex:1 1 auto;min-width:0;}
+.bw-opts-multi{flex:1 1 100%;}
 .bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;
-  border:1px solid #e6e6e9;border-radius:9px;padding:7px 26px 7px 11px;font-size:12.5px;font-weight:600;color:#374151;cursor:pointer;flex:1;min-width:0;text-overflow:ellipsis;}
+  border:1px solid #e6e6e9;border-radius:9px;padding:7px 26px 7px 11px;font-size:12.5px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 84px;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bw-select:focus{outline:none;border-color:var(--bw-primary);box-shadow:0 0 0 3px rgba(17,24,39,.07);}
 .bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:9px;overflow:hidden;flex:0 0 auto;margin-left:auto;}
 .bw-qty button{width:26px;height:30px;border:none;background:#fff;cursor:pointer;font-size:15px;color:#374151;line-height:1;transition:background .15s;}
@@ -245,7 +263,11 @@
 .bw-trust{text-align:center;font-size:11.5px;color:#a5a5aa;margin-top:11px;}
 
 /* ── Success state ── */
-.bw-success{padding:40px 24px;text-align:center;animation:bw-fade-in .3s ease both;}
+.bw-success-close{position:absolute;top:12px;right:12px;z-index:2;width:30px;height:30px;border-radius:9px;border:none;background:#f3f4f6;color:#6b7280;font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.bw-success-close:hover{background:#e5e7eb;}
+.bw-success-continue{width:100%;margin-top:9px;border:none;background:transparent;color:#8a8a8f;font-size:12.5px;font-weight:600;cursor:pointer;padding:6px;}
+.bw-success-continue:hover{color:#374151;}
+.bw-success{padding:38px 24px 22px;text-align:center;animation:bw-fade-in .3s ease both;}
 .bw-check{width:64px;height:64px;margin:0 auto 16px;border-radius:50%;background:var(--bw-secondary);display:flex;align-items:center;justify-content:center;animation:bw-pop .5s cubic-bezier(.18,.89,.32,1.28) both;}
 .bw-check svg{width:32px;height:32px;}
 .bw-check path{stroke-dasharray:30;stroke-dashoffset:30;animation:bw-draw .5s .2s ease forwards;}
@@ -384,12 +406,11 @@
     const calc = computeDiscount(items, s);
     const thumbs = this.session.products.slice(0, 3).map((p, i) => {
       const isNew = animateAdd && i === this.session.products.length - 1 && this.session.products.length <= 3;
-      return `<img class="bw-thumb ${isNew ? 'bw-new' : ''}" style="left:${i * 14}px;z-index:${3 - i}" src="${esc(p.image)}" alt="">`;
+      return `<img class="bw-thumb ${isNew ? 'bw-new' : ''}" style="left:${i * 17}px;z-index:${3 - i}" src="${esc(p.image)}" alt="">`;
     }).join('');
     const badge = badgeLabel(s, calc);
     return `
       <div class="bw-pill${entrance ? ' bw-animate' : ''}" data-act="expand" title="${esc(s.headerText)}">
-        <span class="bw-pill-close" data-act="dismiss" title="Hide">&times;</span>
         <div class="bw-stack">${thumbs}</div>
         ${calc.eligible
           ? `<span class="bw-badge">${esc(badge)}</span>`
@@ -407,7 +428,7 @@
       return `<div class="bw-panel${anim}"><div class="bw-head"><div class="bw-head-row">
         <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
         <button class="bw-collapse" data-act="collapse">&times;</button></div></div>
-        <div class="bw-empty">Your bundle is empty.<br>Browse a few products to build one.</div></div>`;
+        <div class="bw-empty">${esc(t(s.locale, 'emptyTitle'))}<br>${esc(t(s.locale, 'emptyBody'))}</div></div>`;
     }
 
     const rows = this.session.products.map((p) => this._itemHTML(p, s)).join('');
@@ -422,17 +443,17 @@
             <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
             <button class="bw-collapse" data-act="collapse" title="Minimise">&times;</button>
           </div>
-          <div class="bw-head-sub">${this.session.products.length} products bundled${calc.eligible ? ' • discount applied' : ''}</div>
+          <div class="bw-head-sub">${esc(t(s.locale, 'bundled', { n: this.session.products.length }))}${calc.eligible ? ' • ' + esc(t(s.locale, 'discountApplied')) : ''}</div>
         </div>
         <div class="bw-items">${rows}</div>
         <div class="bw-foot">
           <div class="bw-totals">
-            ${s.showPrices ? `<div class="bw-row"><span>Original total</span><span class="bw-strike">${money(calc.subtotal, s)}</span></div>` : ''}
-            <div class="bw-row bw-total-row"><span class="bw-total-label">Bundle price</span><span class="bw-total-val">${money(calc.total, s)}</span></div>
-            ${calc.eligible ? `<span class="bw-savings">You save ${savings}</span>` : ''}
+            ${s.showPrices ? `<div class="bw-row"><span>${esc(t(s.locale, 'original'))}</span><span class="bw-strike">${money(calc.subtotal, s)}</span></div>` : ''}
+            <div class="bw-row bw-total-row"><span class="bw-total-label">${esc(t(s.locale, 'bundlePrice'))}</span><span class="bw-total-val">${money(calc.total, s)}</span></div>
+            ${calc.eligible ? `<span class="bw-savings">${esc(t(s.locale, 'save', { x: savings }))}</span>` : ''}
           </div>
           <button class="bw-cta" data-act="checkout" ${calc.eligible ? '' : 'disabled'}>${esc(s.ctaText).split('{savings}').join(esc(savings))}</button>
-          <div class="bw-trust">Discount applied automatically at checkout</div>
+          <div class="bw-trust">${esc(t(s.locale, 'autoApplied'))}</div>
         </div>
       </div>`;
   };
@@ -445,7 +466,7 @@
 
     let optsHTML = '';
     if (hasOptions) {
-      optsHTML = '<div class="bw-opts">' + p.options.map((opt, oi) => {
+      optsHTML = `<div class="bw-opts${p.options.length >= 2 ? ' bw-opts-multi' : ''}">` + p.options.map((opt, oi) => {
         const selected = (v && v.optionValues && v.optionValues[oi]) || opt.values[0];
         return `<select class="bw-select" data-opt="${oi}" data-id="${esc(p.id)}">` +
           opt.values.map((val) => `<option ${val === selected ? 'selected' : ''}>${esc(val)}</option>`).join('') +
@@ -558,16 +579,21 @@
     const self = this;
     this.root.innerHTML = `
       <div class="bw-panel">
+        <button class="bw-success-close" data-act="close" title="${esc(t(s.locale, 'keepShopping'))}">&times;</button>
         <div class="bw-success">
           <div class="bw-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <h3>Bundle added!</h3>
-          <p>Your ${money(calc.discountAmount, s)} discount is locked in and applied at checkout.</p>
+          <h3>${esc(t(s.locale, 'addedTitle'))}</h3>
+          <p>${esc(t(s.locale, 'addedBody', { x: money(calc.discountAmount, s) }))}</p>
           <div class="bw-code">${esc(code)}</div>
-          <button class="bw-cta" data-act="go-cart">View cart &amp; checkout</button>
+          <button class="bw-cta" data-act="go-cart">${esc(t(s.locale, 'viewCart'))}</button>
+          <button class="bw-success-continue" data-act="close">${esc(t(s.locale, 'keepShopping'))}</button>
         </div>
       </div>`;
     const go = this.root.querySelector('[data-act="go-cart"]');
     if (go) go.addEventListener('click', () => self._goToCartWithDiscount(code));
+    this.root.querySelectorAll('[data-act="close"]').forEach((el) =>
+      el.addEventListener('click', () => { self.expanded = false; self._animateNext = true; self.render(); })
+    );
     if (!this.demo && !this.preview && this.settings.redirectToCart) {
       setTimeout(() => self._goToCartWithDiscount(code), 900);
     }
