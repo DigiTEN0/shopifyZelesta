@@ -12,12 +12,14 @@ export default function PopupsPage({ goTo }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [s, setS] = useState(null);
+  const [storeName, setStoreName] = useState('');
 
   useEffect(() => {
     (async () => {
       try {
         const res = await api.getSettings();
         setS(res.settings);
+        setStoreName(res.meta?.storeName || '');
       } catch (e) {
         toast(e.message, true);
       } finally {
@@ -143,7 +145,7 @@ export default function PopupsPage({ goTo }) {
             <Card>
               <BlockStack gap="300">
                 <Text as="h2" variant="headingMd">Live preview</Text>
-                <WidgetPreview variant="popup" settings={toPublic(s)} />
+                <WidgetPreview variant="popup" settings={{ ...toPublic(s), storeName: storeName || 'Your Store' }} />
                 <Text as="p" variant="bodySm" tone="subdued">The real pop-up. Click through “Yes” → the email step to see the whole flow.</Text>
               </BlockStack>
             </Card>

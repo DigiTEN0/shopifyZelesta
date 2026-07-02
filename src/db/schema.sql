@@ -141,3 +141,5 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_decline       TEXT    DEFAUL
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_image         TEXT    DEFAULT '';
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAULT true;
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
+ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
+ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;

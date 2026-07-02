@@ -55,3 +55,23 @@ export async function isInstalled(shop) {
   const row = await getShop(shop);
   return Boolean(row && row.access_token_enc && !row.uninstalled_at);
 }
+
+// The merchant's real store name (e.g. "My Store 2"). Cached after first fetch
+// so the storefront widget can brand itself automatically.
+export async function getShopName(shop) {
+  const row = await getShop(shop);
+  if (row && row.shop_name) return row.shop_name;
+  const client = await getClient(shop);
+  if (!client) return null;
+  try {
+    const res = await client.get('/shop.json');
+    const name = res.shop && res.shop.name;
+    if (name) {
+      await query('UPDATE shops SET shop_name = $2 WHERE shop_domain = $1', [shop, name]);
+      return name;
+    }
+  } catch (err) {
+    console.warn('[shop] could not fetch store name:', err.message);
+  }
+  return null;
+}

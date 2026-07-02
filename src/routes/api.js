@@ -16,7 +16,7 @@ import {
   getFeeHistory,
   getBillingStatus,
 } from '../services/billingService.js';
-import { getShop } from '../services/shopsService.js';
+import { getShop, getShopName } from '../services/shopsService.js';
 
 const router = express.Router();
 
@@ -31,7 +31,8 @@ router.get(
   async (req, res, next) => {
     try {
       const s = await getSettings(req.shop);
-      res.json({ settings: publicSettings(s) });
+      const [pub, storeName] = [publicSettings(s), await getShopName(req.shop)];
+      res.json({ settings: { ...pub, storeName: storeName || '' } });
     } catch (err) {
       next(err);
     }
@@ -88,18 +89,13 @@ router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async 
       return res.status(422).json({ error: 'A valid email is required.' });
     }
 
-    let result;
+    let result = {};
     let mode;
     if (items.length >= 2) {
-      try {
-        result = await generateBundleDiscount(req.shop, { items, sessionId });
-        mode = 'bundle';
-      } catch (e) {
-        if (e.statusCode === 422) {
-          result = await generateWelcomeDiscount(req.shop, { items, sessionId });
-          mode = 'single';
-        } else throw e;
-      }
+      // Bundle: the reveal panel mints the code at checkout for the final
+      // composition (the shopper may still add complementary items), so we
+      // don't waste a Shopify discount here — just record the lead.
+      mode = 'bundle';
     } else if (items.length === 1) {
       result = await generateWelcomeDiscount(req.shop, { items, sessionId });
       mode = 'single';
@@ -110,10 +106,15 @@ router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async 
 
     const productIds = items.map((it) => it.productId).filter(Boolean);
     const productTitles = items.map((it) => it.title).filter(Boolean);
-    await saveLead(req.shop, { email, name, sessionId, productIds, productTitles, code: result.code, mode });
+    const productDetails = items
+      .filter((it) => it.title)
+      .map((it) => ({ title: it.title, image: it.image || '', url: it.url || '' }));
+    await saveLead(req.shop, {
+      email, name, sessionId, productIds, productTitles, productDetails, code: result.code || null, mode,
+    });
 
     // Best-effort: push to Shopify Customers (needs write_customers scope).
-    createShopifyCustomer(req.shop, { email, name, browsedTitles: productTitles, code: result.code })
+    createShopifyCustomer(req.shop, { email, name, browsedTitles: productTitles, code: result.code || null })
       .then((cid) => cid && setCustomerId(req.shop, email, cid))
       .catch(() => {});
 
@@ -138,6 +139,7 @@ router.get('/admin/settings/:shop', requireInstalledSession, async (req, res, ne
       meta: {
         scriptTagInstalled: Boolean(shop?.script_tag_id),
         installedAt: shop?.installed_at,
+        storeName: (await getShopName(req.shop)) || '',
       },
     });
   } catch (err) {

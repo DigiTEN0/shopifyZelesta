@@ -53,6 +53,7 @@
     savingsAs: 'currency',
     redirectToCart: false,
     currency: 'EUR',
+    storeName: '',
     popup: {
       enabled: false,
       discount: 10,
@@ -174,11 +175,11 @@
   /*  Localisation of the widget's own UI strings                             */
   /* ======================================================================== */
   const I18N = {
-    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Original total', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more' },
-    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Oorspronkelijk totaal', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer' },
-    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ursprünglicher Gesamtpreis', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr' },
-    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Total initial', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus' },
-    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Total original', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más' },
+    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Without the bundle', bundleSub: '{n} items together — {discount} off', change: 'change', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more' },
+    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Zonder bundel', bundleSub: '{n} stuks samen — {discount} korting', change: 'wijzigen', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer' },
+    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ohne Bündel', bundleSub: '{n} Artikel zusammen — {discount} Rabatt', change: 'ändern', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr' },
+    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Sans le lot', bundleSub: '{n} articles ensemble — {discount} de réduction', change: 'modifier', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus' },
+    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Sin el paquete', bundleSub: '{n} productos juntos — {discount} de descuento', change: 'cambiar', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más' },
   };
   function t(locale, key, vars) {
     const dict = I18N[(locale || 'en').slice(0, 2)] || I18N.en;
@@ -227,13 +228,17 @@
   border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;}
 .bw-panel.bw-animate{animation:bw-spring-up .42s cubic-bezier(.16,1,.3,1) both;}
 .bw-root.bw-left .bw-panel{transform-origin:bottom left;}
-.bw-head{position:relative;padding:18px 20px 16px;background:var(--bw-primary);color:#fff;}
+.bw-head{position:relative;padding:20px 22px 12px;background:#fff;}
 .bw-head-row{display:flex;align-items:center;justify-content:space-between;}
-.bw-head-title{font-size:15px;font-weight:700;letter-spacing:-.01em;display:flex;align-items:center;gap:9px;}
-.bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(255,255,255,.14);}
-.bw-head-sub{margin-top:4px;font-size:12px;opacity:.7;}
-.bw-collapse{background:rgba(255,255,255,.12);border:none;color:#fff;width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:16px;line-height:1;transition:background .2s;}
-.bw-collapse:hover{background:rgba(255,255,255,.22);}
+.bw-brand{font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--bw-secondary);margin-bottom:5px;}
+.bw-title{font-size:22px;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);line-height:1.08;}
+.bw-sub{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#a5a5aa;}
+.bw-head-title{font-size:17px;font-weight:800;color:var(--bw-primary);display:flex;align-items:center;gap:9px;}
+.bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(17,24,39,.06);}
+.bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:17px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
+.bw-collapse:hover{background:#e5e7eb;color:#111827;}
+.bw-head-light .bw-collapse{position:absolute;top:16px;right:16px;background:transparent;color:#c4c4c8;}
+.bw-head-light .bw-collapse:hover{background:#f3f4f6;color:#111827;}
 
 .bw-items{max-height:46vh;overflow-y:auto;padding:8px 8px 4px;}
 .bw-item{display:flex;gap:12px;padding:12px;border-radius:14px;position:relative;transition:background .2s;}
@@ -241,13 +246,16 @@
 .bw-item+.bw-item{border-top:1px solid #f1f2f4;}
 .bw-item-img{width:56px;height:56px;border-radius:12px;object-fit:cover;background:#f1f1f2;flex:0 0 auto;}
 .bw-item-body{flex:1;min-width:0;}
-.bw-item-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:1px 20px 9px 0;}
-.bw-item-title{font-size:13.5px;font-weight:650;line-height:1.3;color:#111827;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.bw-item-price{font-size:13px;font-weight:700;color:var(--bw-primary);white-space:nowrap;flex:0 0 auto;}
+.bw-item-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:1px 0 4px 0;}
+.bw-item-title{font-size:14px;font-weight:650;line-height:1.3;color:#111827;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.bw-item-price{font-size:14px;font-weight:700;color:var(--bw-primary);white-space:nowrap;flex:0 0 auto;}
 .bw-item-compare{font-size:11.5px;color:#9ca3af;text-decoration:line-through;margin-left:5px;font-weight:500;}
-.bw-remove{position:absolute;top:12px;right:10px;width:20px;height:20px;border:none;background:transparent;color:#c4c4c8;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;transition:color .15s;}
-.bw-remove:hover{color:#dc2626;}
-.bw-item-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.bw-item-meta{font-size:12.5px;color:#8a8a8f;line-height:1.4;}
+.bw-item-meta-txt{color:#8a8a8f;}
+.bw-change{color:var(--bw-secondary);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
+.bw-remove-txt{border:none;background:transparent;color:#c4c4c8;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;transition:color .15s;margin-left:2px;}
+.bw-remove-txt:hover{color:#dc2626;}
+.bw-item-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;}
 .bw-opts{display:flex;gap:7px;flex:1 1 auto;min-width:0;}
 .bw-opts-multi{flex:1 1 100%;}
 .bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;
@@ -265,10 +273,9 @@
 .bw-total-row{margin-top:4px;}
 .bw-total-label{font-size:14px;font-weight:650;color:#111827;}
 .bw-total-val{font-size:23px;font-weight:800;color:var(--bw-primary);letter-spacing:-.02em;}
-.bw-savings{align-self:flex-start;margin-top:5px;background:rgba(17,24,39,.05);color:var(--bw-secondary);
-  font-size:12px;font-weight:700;padding:6px 12px;border-radius:8px;}
-.bw-cta{width:100%;border:none;border-radius:12px;background:var(--bw-primary);color:#fff;font-size:14.5px;font-weight:700;
-  padding:15px;cursor:pointer;letter-spacing:-.01em;transition:transform .15s ease,opacity .2s ease;}
+.bw-savings{align-self:flex-start;margin-top:3px;color:var(--bw-secondary);font-size:13px;font-weight:700;}
+.bw-cta{width:100%;border:none;border-radius:12px;background:var(--bw-secondary);color:#fff;font-size:13.5px;font-weight:800;
+  padding:16px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;transition:transform .15s ease,filter .2s ease;}
 .bw-cta:hover{transform:translateY(-1px);opacity:.93;}
 .bw-cta:active{transform:translateY(0);}
 .bw-cta:disabled{opacity:.45;cursor:default;transform:none;}
@@ -310,17 +317,23 @@
 .bw-field:focus{border-color:var(--bw-secondary);box-shadow:0 0 0 3px rgba(0,0,0,.05);background:#fff;}
 .bw-field.bw-err{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1);}
 .bw-consent{margin-top:12px;font-size:11.5px;color:#9aa0a6;line-height:1.4;text-align:center;}
+.bw-label{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9aa0a6;margin:4px 0 6px;}
+.bw-modal .bw-modal-body > .bw-brand{margin-bottom:10px;}
 .bw-code-card{padding:40px 32px 30px;text-align:center;}
 .bw-code-big{display:block;font-family:ui-monospace,Menlo,monospace;font-size:19px;font-weight:800;letter-spacing:.04em;color:var(--bw-primary);background:#f6f6f7;border:1px dashed #cfd2d6;border-radius:12px;padding:16px;margin:6px 0 8px;}
 .bw-copy{width:100%;border:none;border-radius:12px;background:var(--bw-primary);color:#fff;font-weight:700;font-size:14.5px;padding:14px;cursor:pointer;margin-top:6px;}
 .bw-shop{display:block;width:100%;margin-top:10px;background:none;border:none;color:#9aa0a6;font-weight:600;font-size:13px;cursor:pointer;}
-.bw-reco{padding:2px 20px 18px;}
-.bw-reco-title{font-size:12.5px;font-weight:700;color:#374151;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;}
+.bw-reco{padding:2px 20px 14px;}
+.bw-reco-title{font-size:11px;font-weight:700;color:#9aa0a6;margin:0 0 10px;text-transform:uppercase;letter-spacing:.08em;}
 .bw-reco-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
-.bw-reco-card{flex:0 0 108px;width:108px;cursor:pointer;text-decoration:none;color:inherit;}
-.bw-reco-card img{width:108px;height:108px;object-fit:cover;border-radius:12px;background:#f1f1f2;display:block;}
+.bw-reco-card{flex:0 0 96px;width:96px;cursor:pointer;text-decoration:none;color:inherit;}
+.bw-reco-imgwrap{position:relative;}
+.bw-reco-card img{width:96px;height:96px;object-fit:cover;border-radius:12px;background:#f1f1f2;display:block;}
+.bw-reco-add{position:absolute;bottom:6px;right:6px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--bw-primary);font-size:17px;font-weight:700;line-height:22px;text-align:center;box-shadow:0 3px 8px -2px rgba(17,24,39,.35);transition:transform .15s;}
+.bw-reco-card:hover .bw-reco-add{transform:scale(1.12);background:var(--bw-secondary);color:#fff;}
 .bw-reco-card .bw-reco-name{font-size:11.5px;font-weight:600;margin-top:6px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .bw-reco-card .bw-reco-price{font-size:11.5px;font-weight:700;color:var(--bw-primary);}
+.bw-items + .bw-reco{border-top:1px solid #f1f2f4;padding-top:12px;margin-top:2px;}
 @keyframes bw-modal-in{0%{opacity:0;transform:translateY(18px) scale(.97);}100%{opacity:1;transform:translateY(0) scale(1);}}
 @media(max-width:640px){
   .bw-modal{flex-direction:column;width:100%;max-height:calc(100vh - 24px);}
@@ -372,6 +385,7 @@
     this.root = null;
     this._prevCount = this.session.products.length;
     this._animateNext = true; // play entrance on first paint
+    this._editing = new Set(); // product ids whose variant/qty controls are open
   }
 
   BundleWidget.prototype.boot = function () {
@@ -436,8 +450,10 @@
     const no = p.decline || t(loc, 'popupNo');
     const headHtml = esc(headline).split(esc(dl)).join(`<span class="bw-hl">${esc(dl)}</span>`);
     const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
+    const brand = s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : '';
     return `<div class="bw-modal">${img}<div class="bw-modal-body">
       <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      ${brand}
       <h2>${headHtml}</h2>
       <p class="bw-modal-sub">${esc(sub)}</p>
       <button class="bw-modal-btn" data-act="offer-yes">${esc(yes)}</button>
@@ -448,10 +464,14 @@
   BundleWidget.prototype._formHTML = function () {
     const s = this.settings, p = s.popup, loc = s.locale;
     const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
+    const brand = s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : '';
     return `<div class="bw-modal">${img}<div class="bw-modal-body">
       <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      ${brand}
       <h2>${esc(t(loc, 'formTitle'))}</h2>
-      ${p.collectName ? `<input class="bw-field" data-field="name" type="text" placeholder="${esc(t(loc, 'formName'))}" autocomplete="name">` : ''}
+      <p class="bw-modal-sub">${esc(t(loc, 'popupSub'))}</p>
+      ${p.collectName ? `<label class="bw-label">${esc(t(loc, 'formName'))}</label><input class="bw-field" data-field="name" type="text" placeholder="${esc(t(loc, 'formName'))}" autocomplete="name">` : ''}
+      <label class="bw-label">${esc(t(loc, 'formEmail'))}</label>
       <input class="bw-field" data-field="email" type="email" placeholder="${esc(t(loc, 'formEmail'))}" autocomplete="email">
       <button class="bw-modal-btn" data-act="lead-submit">${esc(t(loc, 'formSubmit'))}</button>
       <div class="bw-consent">${esc(t(loc, 'consent'))}</div>
@@ -461,17 +481,17 @@
   BundleWidget.prototype._codeCardHTML = function () {
     const s = this.settings, loc = s.locale, dl = this.popupDiscountLabel();
     const code = this.session.code || '';
-    return `<div class="bw-modal" style="max-width:420px;width:420px;"><div class="bw-modal-body" style="padding:0;">
+    const brand = s.storeName ? `<div class="bw-brand" style="text-align:center">${esc(s.storeName)}</div>` : '';
+    return `<div class="bw-modal" style="max-width:430px;width:430px;"><div class="bw-modal-body" style="padding:34px 34px 26px;text-align:center;">
       <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
-      <div class="bw-code-card">
-        <div class="bw-check" style="margin:0 auto 14px"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-        <h2 style="font-size:22px">${esc(t(loc, 'codeTitle', { discount: dl }))}</h2>
-        <p class="bw-modal-sub" style="margin-bottom:8px">${esc(t(loc, 'codeSub'))}</p>
-        <span class="bw-code-big">${esc(code)}</span>
-        <button class="bw-copy" data-act="copy-code">${esc(t(loc, 'copyCode'))}</button>
-        <button class="bw-shop" data-act="mclose">${esc(t(loc, 'shopNow'))}</button>
-      </div>
-      <div class="bw-reco" data-reco></div>
+      ${brand}
+      <div class="bw-check" style="margin:6px auto 16px"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h2 style="font-size:24px">${esc(t(loc, 'codeTitle', { discount: dl }))}</h2>
+      <p class="bw-modal-sub" style="margin-bottom:14px">${esc(t(loc, 'codeSub'))}</p>
+      <span class="bw-code-big">${esc(code)}</span>
+      <button class="bw-copy" data-act="copy-code">${esc(t(loc, 'copyCode'))}</button>
+      <button class="bw-shop" data-act="mclose">${esc(t(loc, 'shopNow'))}</button>
+      <div class="bw-reco" data-reco style="margin-top:14px"></div>
     </div></div>`;
   };
 
@@ -524,7 +544,7 @@
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         shop: this.shop, email: email, name: name, sessionId: this.session.sessionId,
-        items: items.map(function (it) { return { productId: it.productId, variantId: it.variantId, price: it.price / 100, quantity: it.quantity, title: it.title }; }),
+        items: items.map(function (it) { return { productId: it.productId, variantId: it.variantId, price: it.price / 100, quantity: it.quantity, title: it.title, image: it.image, url: it.url }; }),
       }),
     }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'failed'); return j; }); })
       .then(function (res) { self._afterCapture(res); })
@@ -604,6 +624,7 @@
         price: v ? v.price : p.price,
         quantity: p.quantity || 1,
         image: p.image,
+        url: p.url || (p.handle ? '/products/' + p.handle : ''),
       };
     });
   };
@@ -684,23 +705,29 @@
       ? `${calc.percentOff}%`
       : money(calc.discountAmount, s);
 
+    const dl = calc.eligible ? `${calc.percentOff}%` : '';
+    const sub = t(s.locale, 'bundleSub', { n: this.session.products.length, discount: dl });
+    const cta = esc(s.ctaText).split('{savings}').join(esc(savings));
+    // Complementary picks only when there's still room in the bundle (<= 3 items).
+    const showReco = this.session.products.length <= 3;
+
     return `
       <div class="bw-panel${anim}">
-        <div class="bw-head">
-          <div class="bw-head-row">
-            <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
-            <button class="bw-collapse" data-act="collapse" title="Minimise">&times;</button>
-          </div>
-          <div class="bw-head-sub">${esc(t(s.locale, 'bundled', { n: this.session.products.length }))}${calc.eligible ? ' • ' + esc(t(s.locale, 'discountApplied')) : ''}</div>
+        <div class="bw-head bw-head-light">
+          <button class="bw-collapse" data-act="collapse" title="Minimise">&times;</button>
+          ${s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : ''}
+          <div class="bw-title">${esc(s.headerText)}</div>
+          <div class="bw-sub">${esc(sub)}</div>
         </div>
         <div class="bw-items">${rows}</div>
+        ${showReco ? '<div class="bw-reco" data-reco></div>' : ''}
         <div class="bw-foot">
           <div class="bw-totals">
             ${s.showPrices ? `<div class="bw-row"><span>${esc(t(s.locale, 'original'))}</span><span class="bw-strike">${money(calc.subtotal, s)}</span></div>` : ''}
             <div class="bw-row bw-total-row"><span class="bw-total-label">${esc(t(s.locale, 'bundlePrice'))}</span><span class="bw-total-val">${money(calc.total, s)}</span></div>
             ${calc.eligible ? `<span class="bw-savings">${esc(t(s.locale, 'save', { x: savings }))}</span>` : ''}
           </div>
-          <button class="bw-cta" data-act="checkout" ${calc.eligible ? '' : 'disabled'}>${esc(s.ctaText).split('{savings}').join(esc(savings))}</button>
+          <button class="bw-cta" data-act="checkout" ${calc.eligible ? '' : 'disabled'}>${cta}</button>
           <div class="bw-trust">${esc(t(s.locale, 'autoApplied'))}</div>
         </div>
       </div>`;
@@ -726,6 +753,23 @@
       ? `<div class="bw-item-price">${money(price, s)}${s.showCompareAt && compare && compare > price ? `<span class="bw-item-compare">${money(compare, s)}</span>` : ''}</div>`
       : '';
 
+    // Selected variant shown as clean text; "wijzigen" reveals the controls.
+    const editing = this._editing && this._editing.has(String(p.id));
+    const variantText = (hasOptions && v && v.optionValues && v.optionValues.length) ? v.optionValues.join(', ') : '';
+    const metaBits = [variantText, (p.quantity || 1) > 1 ? `${p.quantity}×` : ''].filter(Boolean).join(' · ');
+    const metaLine = `${metaBits ? `<span class="bw-item-meta-txt">${esc(metaBits)}</span> · ` : ''}<a class="bw-change" data-act="edit" data-id="${esc(p.id)}">${esc(t(s.locale, 'change'))}</a>`;
+
+    const controls = editing ? `
+      <div class="bw-item-controls">
+        ${optsHTML}
+        <div class="bw-qty">
+          <button data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">−</button>
+          <span>${p.quantity || 1}</span>
+          <button data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">+</button>
+        </div>
+        <button class="bw-remove-txt" data-act="remove" data-id="${esc(p.id)}" title="Remove">&times;</button>
+      </div>` : '';
+
     return `
       <div class="bw-item" data-id="${esc(p.id)}">
         <img class="bw-item-img" src="${esc(p.image)}" alt="">
@@ -734,16 +778,9 @@
             <div class="bw-item-title">${esc(p.title)}</div>
             ${priceHTML}
           </div>
-          <div class="bw-item-controls">
-            ${optsHTML}
-            <div class="bw-qty">
-              <button data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">−</button>
-              <span>${p.quantity || 1}</span>
-              <button data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">+</button>
-            </div>
-          </div>
+          <div class="bw-item-meta">${metaLine}</div>
+          ${controls}
         </div>
-        <button class="bw-remove" data-act="remove" data-id="${esc(p.id)}" title="Remove">&times;</button>
       </div>`;
   };
 
@@ -757,11 +794,59 @@
       if (act === 'remove') el.addEventListener('click', () => self.removeProduct(el.getAttribute('data-id')));
       if (act === 'qty-inc') el.addEventListener('click', () => self.changeQty(el.getAttribute('data-id'), 1));
       if (act === 'qty-dec') el.addEventListener('click', () => self.changeQty(el.getAttribute('data-id'), -1));
+      if (act === 'edit') el.addEventListener('click', () => self.toggleEdit(el.getAttribute('data-id')));
+      if (act === 'add-reco') el.addEventListener('click', (e) => { e.preventDefault(); self.addRecommended(el); });
       if (act === 'checkout') el.addEventListener('click', () => self.checkout(el));
     });
     this.root.querySelectorAll('.bw-select').forEach((sel) => {
       sel.addEventListener('change', () => self.selectOption(sel.getAttribute('data-id'), parseInt(sel.getAttribute('data-opt'), 10), sel.value));
     });
+    // Complementary picks (only when the bundle still has room).
+    if (this.expanded && this.session.products.length <= 3) this._loadPanelReco();
+  };
+
+  BundleWidget.prototype.toggleEdit = function (id) {
+    const key = String(id);
+    if (this._editing.has(key)) this._editing.delete(key);
+    else this._editing.add(key);
+    this.render();
+  };
+
+  // Fetch "similar products" from Shopify and offer them as one-tap additions.
+  BundleWidget.prototype._loadPanelReco = function () {
+    const self = this;
+    if (this.demo || this.preview) return;
+    const container = this.root && this.root.querySelector('[data-reco]');
+    const first = this.session.products[0];
+    if (!container || !first || container.getAttribute('data-loaded')) return;
+    container.setAttribute('data-loaded', '1');
+    const have = new Set(this.session.products.map((p) => String(p.id)));
+    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=6&intent=related`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        const products = ((data && data.products) || []).filter((p) => !have.has(String(p.id))).slice(0, 4);
+        if (!products.length) { container.innerHTML = ''; return; }
+        const s = self.settings;
+        container.innerHTML = `<div class="bw-reco-title">${esc(t(s.locale, 'alsoLike'))}</div><div class="bw-reco-row">` +
+          products.map((pr) => {
+            const img = (pr.featured_image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
+            const data = encodeURIComponent(JSON.stringify(slimProduct(pr)));
+            return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add">+</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
+          }).join('') + `</div>`;
+        self._bind(); // rebind the new add-reco cards
+      }).catch(() => { container.innerHTML = ''; });
+  };
+
+  BundleWidget.prototype.addRecommended = function (el) {
+    try {
+      const p = JSON.parse(decodeURIComponent(el.getAttribute('data-p')));
+      if (!p || !p.id) return;
+      if (this.session.products.some((x) => String(x.id) === String(p.id))) return;
+      this.session.products.push(normalizeProduct(p));
+      saveSession(this.session);
+      this._animateNext = false;
+      this.render();
+    } catch (e) {}
   };
 
   BundleWidget.prototype.expand = function () { this.expanded = true; this._animateNext = true; this.render(); };
@@ -804,18 +889,6 @@
     if (this.demo) {
       // No network in demo — simulate the success state.
       setTimeout(() => self._showSuccess('BUNDLE-DEMO12-X', calc), 700);
-      return;
-    }
-
-    // Lead-capture flow already minted a code — just add to cart and apply it.
-    if (this.session.code) {
-      this._addToCart(items)
-        .then(() => { self._emit('add_to_cart', self.session.code); self._showSuccess(self.session.code, calc); })
-        .catch((err) => {
-          console.error('[bundle-widget] checkout failed', err);
-          if (btn) { btn.disabled = false; btn.textContent = self.settings.ctaText; }
-          alert('Sorry — we could not build your bundle. Please try again.');
-        });
       return;
     }
 
@@ -928,6 +1001,27 @@
     }
     return np;
   }
+  // Map a Shopify recommendations/product JSON to the widget's product shape.
+  function slimProduct(prod) {
+    return {
+      id: prod.id,
+      handle: prod.handle,
+      title: prod.title,
+      url: '/products/' + prod.handle,
+      image: (prod.featured_image || (prod.images && prod.images[0]) || '').replace(/^\/\//, 'https://'),
+      price: prod.price,
+      compareAtPrice: prod.compare_at_price || null,
+      options: (prod.options || []).map((name, i) => ({
+        name: typeof name === 'string' ? name : name.name,
+        values: typeof name === 'string' ? uniqueValues(prod.variants, i) : name.values,
+      })),
+      variants: (prod.variants || []).map((v) => ({
+        id: v.id, title: v.title, price: v.price, compareAtPrice: v.compare_at_price || null,
+        available: v.available, optionValues: [v.option1, v.option2, v.option3].filter((x) => x != null),
+      })),
+      selectedVariantId: null,
+    };
+  }
   function badgeLabel(s, calc) {
     const amount = s.savingsAs === 'percentage' || s.discountType === 'percentage'
       ? `${calc.percentOff}%`
@@ -1020,9 +1114,10 @@
             }
             return;
           }
-          if (popupOn) {
+          // Pop-up only fires once the visitor has actually browsed something.
+          if (popupOn && widget.session.products.length >= 1) {
             widget.maybeShowPopup(); // lead pop-up gates the bundle
-          } else if (widget.session.products.length >= threshold) {
+          } else if (!popupOn && widget.session.products.length >= threshold) {
             widget.boot();
           }
         };

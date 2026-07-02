@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Page, Card, BlockStack, InlineStack, Text, DataTable, Badge, Button, Box,
-  SkeletonBodyText, EmptyState, InlineGrid,
+  Page, Card, BlockStack, InlineStack, Text, Badge, Button, Box, Collapsible,
+  SkeletonBodyText, EmptyState, InlineGrid, Divider, Thumbnail,
 } from '@shopify/polaris';
-import { api } from '../lib/api.js';
+import { api, SHOP } from '../lib/api.js';
 import { useToast } from '../App.jsx';
 import { shortDate } from '../lib/format.js';
 
@@ -33,37 +33,16 @@ export default function LeadsPage({ goTo }) {
     const rows = [['Email', 'Name', 'Browsed products', 'Discount code', 'Type', 'Date', 'In Shopify']];
     leads.forEach((l) =>
       rows.push([
-        l.email,
-        l.name || '',
-        (l.product_titles || []).join(' | '),
-        l.discount_code || '',
-        l.mode || '',
-        l.created_at,
-        l.shopify_customer_id ? 'yes' : 'no',
+        l.email, l.name || '', (l.product_titles || []).join(' | '),
+        l.discount_code || '', l.mode || '', l.created_at, l.shopify_customer_id ? 'yes' : 'no',
       ])
     );
     const csv = rows.map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
     const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'bundleboost-leads.csv';
-    a.click();
+    a.href = url; a.download = 'bundleboost-leads.csv'; a.click();
     URL.revokeObjectURL(url);
   };
-
-  const tableRows = leads.map((l) => [
-    <BlockStack gap="050" key={l.email}>
-      <Text as="span" variant="bodyMd" fontWeight="semibold">{l.email}</Text>
-      {l.name ? <Text as="span" variant="bodySm" tone="subdued">{l.name}</Text> : null}
-    </BlockStack>,
-    <Text as="span" variant="bodySm" key="p">
-      {(l.product_titles || []).length ? (l.product_titles || []).slice(0, 3).join(', ') + ((l.product_titles || []).length > 3 ? '…' : '') : '—'}
-    </Text>,
-    <Badge key="m" tone={MODE_TONE[l.mode] || undefined} size="small">{l.mode || '—'}</Badge>,
-    <Text as="span" variant="bodySm" key="c">{l.discount_code || '—'}</Text>,
-    l.shopify_customer_id ? <Badge tone="success" size="small" key="s">Synced</Badge> : <Badge size="small" key="s">Local</Badge>,
-    <Text as="span" variant="bodySm" tone="subdued" key="d">{shortDate(l.created_at)}</Text>,
-  ]);
 
   return (
     <Page
@@ -74,18 +53,8 @@ export default function LeadsPage({ goTo }) {
     >
       <BlockStack gap="500">
         <InlineGrid columns={{ xs: 1, sm: 2 }} gap="400">
-          <Card>
-            <BlockStack gap="100">
-              <Text as="span" variant="bodySm" tone="subdued">Total leads</Text>
-              <Text as="p" variant="heading2xl">{loading ? '—' : stats.total}</Text>
-            </BlockStack>
-          </Card>
-          <Card>
-            <BlockStack gap="100">
-              <Text as="span" variant="bodySm" tone="subdued">Captured this month</Text>
-              <Text as="p" variant="heading2xl">{loading ? '—' : stats.this_month}</Text>
-            </BlockStack>
-          </Card>
+          <Card><BlockStack gap="100"><Text as="span" variant="bodySm" tone="subdued">Total leads</Text><Text as="p" variant="heading2xl">{loading ? '—' : stats.total}</Text></BlockStack></Card>
+          <Card><BlockStack gap="100"><Text as="span" variant="bodySm" tone="subdued">Captured this month</Text><Text as="p" variant="heading2xl">{loading ? '—' : stats.this_month}</Text></BlockStack></Card>
         </InlineGrid>
 
         <Card padding="0">
@@ -98,11 +67,9 @@ export default function LeadsPage({ goTo }) {
               </EmptyState>
             </Box>
           ) : (
-            <DataTable
-              columnContentTypes={['text', 'text', 'text', 'text', 'text', 'text']}
-              headings={['Contact', 'Browsed', 'Reveal', 'Code', 'Shopify', 'Date']}
-              rows={tableRows}
-            />
+            <BlockStack gap="0">
+              {leads.map((l, i) => <LeadRow key={l.email} lead={l} last={i === leads.length - 1} />)}
+            </BlockStack>
           )}
         </Card>
 
@@ -112,5 +79,64 @@ export default function LeadsPage({ goTo }) {
         </Text>
       </BlockStack>
     </Page>
+  );
+}
+
+function LeadRow({ lead, last }) {
+  const [open, setOpen] = useState(false);
+  const details = lead.product_details && lead.product_details.length
+    ? lead.product_details
+    : (lead.product_titles || []).map((t) => ({ title: t, image: '', url: '' }));
+
+  return (
+    <Box padding="400" borderBlockEndWidth={last ? '0' : '025'} borderColor="border">
+      <InlineStack align="space-between" blockAlign="center" wrap={false} gap="300">
+        <BlockStack gap="050">
+          <InlineStack gap="200" blockAlign="center">
+            <Text as="span" variant="bodyMd" fontWeight="semibold">{lead.email}</Text>
+            <Badge tone={MODE_TONE[lead.mode] || undefined} size="small">{lead.mode || '—'}</Badge>
+            {lead.shopify_customer_id
+              ? <Badge tone="success" size="small">Synced</Badge>
+              : <Badge size="small">Local</Badge>}
+          </InlineStack>
+          <Text as="span" variant="bodySm" tone="subdued">
+            {lead.name ? lead.name + ' · ' : ''}{details.length} product{details.length === 1 ? '' : 's'} browsed · {shortDate(lead.created_at)}
+          </Text>
+        </BlockStack>
+        <Button variant="tertiary" disclosure={open ? 'up' : 'down'} onClick={() => setOpen((o) => !o)}>
+          {open ? 'Hide' : 'Details'}
+        </Button>
+      </InlineStack>
+
+      <Collapsible open={open} id={`lead-${lead.email}`} transition={{ duration: '150ms' }}>
+        <Box paddingBlockStart="300">
+          <Divider />
+          <Box paddingBlockStart="300">
+            <InlineStack gap="300" wrap>
+              {details.map((p, idx) => {
+                const href = p.url ? `https://${SHOP}${p.url}` : null;
+                const card = (
+                  <InlineStack gap="200" blockAlign="center" wrap={false}>
+                    <Thumbnail source={p.image || 'https://cdn.shopify.com/s/files/1/0262/4071/2726/files/emptystate-files.png'} size="small" alt={p.title} />
+                    <Text as="span" variant="bodySm">{p.title}</Text>
+                  </InlineStack>
+                );
+                return (
+                  <Box key={idx} padding="200" borderColor="border" borderWidth="025" borderRadius="200" minWidth="180px">
+                    {href ? <a href={href} target="_blank" rel="noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>{card}</a> : card}
+                  </Box>
+                );
+              })}
+            </InlineStack>
+            {lead.discount_code ? (
+              <Box paddingBlockStart="300">
+                <Text as="span" variant="bodySm" tone="subdued">Code: </Text>
+                <Text as="span" variant="bodySm" fontWeight="semibold">{lead.discount_code}</Text>
+              </Box>
+            ) : null}
+          </Box>
+        </Box>
+      </Collapsible>
+    </Box>
   );
 }

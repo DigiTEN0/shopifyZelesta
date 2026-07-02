@@ -28,12 +28,14 @@ export default function WidgetCustomisationPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [s, setS] = useState(null);
+  const [storeName, setStoreName] = useState('');
 
   useEffect(() => {
     (async () => {
       try {
         const res = await api.getSettings();
         setS(res.settings);
+        setStoreName(res.meta?.storeName || '');
       } catch (e) {
         toast(e.message, true);
       } finally {
@@ -157,7 +159,7 @@ export default function WidgetCustomisationPage() {
                   <Text as="h2" variant="headingMd">Live preview</Text>
                   <Button variant="plain" onClick={() => window.open('/demo', '_blank')}>Demo mode ↗</Button>
                 </InlineStack>
-                <WidgetPreview settings={toPublic(s)} />
+                <WidgetPreview settings={{ ...toPublic(s), storeName: storeName || 'Your Store' }} />
                 <Text as="p" variant="bodySm" tone="subdued">
                   This is the real widget. Switch variants, change quantities and remove items just like your customers will.
                 </Text>

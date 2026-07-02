@@ -56,6 +56,7 @@
   }
 
   const DEMO_SETTINGS = {
+    storeName: 'ZELESTA',
     triggerThreshold: 2,
     discountType: 'percentage',
     tiers: { 2: 10, 3: 15, 4: 20 },

@@ -3,16 +3,17 @@
 import { query } from '../db/pool.js';
 import { getClient } from './shopsService.js';
 
-export async function saveLead(shop, { email, name, sessionId, productIds, productTitles, code, mode }) {
+export async function saveLead(shop, { email, name, sessionId, productIds, productTitles, productDetails, code, mode }) {
   const { rows } = await query(
-    `INSERT INTO leads (shop_domain, email, name, session_id, product_ids, product_titles, discount_code, mode)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+    `INSERT INTO leads (shop_domain, email, name, session_id, product_ids, product_titles, product_details, discount_code, mode)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
      ON CONFLICT (shop_domain, email) DO UPDATE
        SET name = COALESCE(EXCLUDED.name, leads.name),
            session_id = EXCLUDED.session_id,
            product_ids = EXCLUDED.product_ids,
            product_titles = EXCLUDED.product_titles,
-           discount_code = EXCLUDED.discount_code,
+           product_details = EXCLUDED.product_details,
+           discount_code = COALESCE(EXCLUDED.discount_code, leads.discount_code),
            mode = EXCLUDED.mode
      RETURNING *`,
     [
@@ -22,6 +23,7 @@ export async function saveLead(shop, { email, name, sessionId, productIds, produ
       sessionId || null,
       JSON.stringify(productIds || []),
       JSON.stringify(productTitles || []),
+      JSON.stringify(productDetails || []),
       code || null,
       mode || null,
     ]
@@ -83,7 +85,7 @@ export async function createShopifyCustomer(shop, { email, name, browsedTitles, 
 
 export async function getLeads(shop, limit = 200) {
   const { rows } = await query(
-    `SELECT email, name, product_ids, product_titles, discount_code, mode, shopify_customer_id, created_at
+    `SELECT email, name, product_ids, product_titles, product_details, discount_code, mode, shopify_customer_id, created_at
        FROM leads WHERE shop_domain = $1 ORDER BY created_at DESC LIMIT $2`,
     [shop, limit]
   );
