@@ -17,7 +17,7 @@ export const DEFAULT_SETTINGS = {
   cta_text: 'Add All to Cart & Save',
   badge_text: 'Save {amount}',
   font_family: 'inherit',
-  locale: 'en',
+  locale: 'nl',
   show_prices: true,
   show_compare_at: true,
   savings_as: 'currency',

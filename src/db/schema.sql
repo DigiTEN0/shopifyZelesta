@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS settings (
   cta_text          TEXT    DEFAULT 'Add All to Cart & Save',
   badge_text        TEXT    DEFAULT 'Save {amount}',
   font_family       TEXT    DEFAULT 'inherit',
-  locale            TEXT    DEFAULT 'en',
+  locale            TEXT    DEFAULT 'nl',
   show_prices       BOOLEAN DEFAULT true,
   show_compare_at   BOOLEAN DEFAULT true,
   savings_as        TEXT    DEFAULT 'currency', -- 'currency' | 'percentage'
@@ -144,6 +144,7 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAUL
 ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
 ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS trigger_migrated_v1 BOOLEAN DEFAULT false;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS locale_migrated_v1  BOOLEAN DEFAULT false;
 
 -- One-time move off the old default of 2 to the new default of 1 (so the icon
 -- and the complementary carousel work after a single product). Guarded by a
@@ -151,6 +152,12 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS trigger_migrated_v1 BOOLEAN DEFAUL
 UPDATE settings SET trigger_threshold = 1, trigger_migrated_v1 = true
   WHERE trigger_migrated_v1 = false AND trigger_threshold = 2;
 UPDATE settings SET trigger_migrated_v1 = true WHERE trigger_migrated_v1 = false;
+
+-- One-time move off the old default language (en) to the new default (nl).
+-- Guarded so a merchant who later picks another language keeps it.
+UPDATE settings SET locale = 'nl', locale_migrated_v1 = true
+  WHERE locale_migrated_v1 = false AND locale = 'en';
+UPDATE settings SET locale_migrated_v1 = true WHERE locale_migrated_v1 = false;
 -- Move shops off any of the old/robotic dark defaults onto the warm brand
 -- palette (near-black text + tan accent). Only touches known default values, so
 -- a merchant who deliberately picked a colour keeps it.
