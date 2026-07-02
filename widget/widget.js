@@ -1357,9 +1357,14 @@
       .then((r) => (r.ok ? r.json() : { settings: {} }))
       .then((data) => {
         const settings = data.settings || {};
+        // Test mode: add ?bw_preview=1 to any URL (e.g. an unpublished theme's
+        // preview link) to force the widget on for yourself only. Real visitors
+        // never have this param, so it stays hidden until you flip it live.
+        const previewMode = /[?&]bw_preview=1(?:&|$)/.test(window.location.search);
         const popupEnabled = settings.popup && settings.popup.enabled;
         // The widget runs if the bundle is enabled OR the lead pop-up is on.
-        if (settings.enabled === false && !popupEnabled) return;
+        if (settings.enabled === false && !popupEnabled && !previewMode) return;
+        if (previewMode) settings.enabled = true;
         const widget = new BundleWidget({ shop, settings, session });
         window.__bundleWidget = widget;
         const threshold = Math.max(1, settings.triggerThreshold || 1);

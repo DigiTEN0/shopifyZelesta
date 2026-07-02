@@ -20,6 +20,12 @@ import { getShop, getShopName, getClient } from '../services/shopsService.js';
 
 const router = express.Router();
 
+// The public settings endpoint fires on every storefront pageview, so cache it
+// in memory (one small entry per shop) to keep DB load flat under traffic
+// spikes. Invalidated immediately when the merchant saves settings.
+const publicSettingsCache = new Map(); // shop -> { body, exp }
+const PUBLIC_SETTINGS_TTL = 60 * 1000;
+
 // ── PUBLIC (storefront widget) ────────────────────────────────
 
 // Widget config for a shop.
@@ -30,9 +36,14 @@ router.get(
   requireInstalledShop,
   async (req, res, next) => {
     try {
+      const now = Date.now();
+      const cached = publicSettingsCache.get(req.shop);
+      if (cached && cached.exp > now) return res.json(cached.body);
       const s = await getSettings(req.shop);
       const [pub, storeName] = [publicSettings(s), await getShopName(req.shop)];
-      res.json({ settings: { ...pub, storeName: storeName || '' } });
+      const body = { settings: { ...pub, storeName: storeName || '' } };
+      publicSettingsCache.set(req.shop, { body, exp: now + PUBLIC_SETTINGS_TTL });
+      res.json(body);
     } catch (err) {
       next(err);
     }
@@ -144,6 +155,7 @@ router.get('/admin/settings/:shop', requireInstalledSession, async (req, res, ne
 router.post('/settings/:shop', requireInstalledSession, async (req, res, next) => {
   try {
     const saved = await saveSettings(req.shop, req.body || {});
+    publicSettingsCache.delete(req.shop); // reflect changes on the storefront at once
     res.json({ settings: saved });
   } catch (err) {
     next(err);
