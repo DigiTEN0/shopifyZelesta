@@ -242,8 +242,8 @@
 .bw-collapse{background:#f1f2f4;border:none;color:#4b5563;width:34px;height:34px;border-radius:50%;cursor:pointer;transition:background .18s,color .18s;display:flex;align-items:center;justify-content:center;}
 .bw-collapse svg{width:18px;height:18px;}
 .bw-collapse:hover{background:#e5e7eb;color:#111827;}
-.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;width:40px;height:40px;}
-.bw-head-light .bw-collapse svg{width:21px;height:21px;}
+.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;width:30px;height:30px;}
+.bw-head-light .bw-collapse svg{width:16px;height:16px;}
 .bw-head-light .bw-collapse:hover{background:#e5e7eb;color:#111827;}
 
 .bw-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;}
@@ -292,7 +292,8 @@
 .bw-trust{text-align:center;font-size:11.5px;color:#a5a5aa;margin-top:11px;}
 
 /* ── Success state ── */
-.bw-success-close{position:absolute;top:12px;right:12px;z-index:2;width:30px;height:30px;border-radius:9px;border:none;background:#f3f4f6;color:#6b7280;font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.bw-success-close{position:absolute;top:12px;right:12px;z-index:2;width:30px;height:30px;border-radius:50%;border:none;background:#f1f2f4;color:#4b5563;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.bw-success-close svg{width:16px;height:16px;}
 .bw-success-close:hover{background:#e5e7eb;}
 .bw-success-continue{width:100%;margin-top:9px;border:none;background:transparent;color:#8a8a8f;font-size:12.5px;font-weight:600;cursor:pointer;padding:6px;}
 .bw-success-continue:hover{color:#374151;}
@@ -313,8 +314,8 @@
   box-shadow:0 40px 90px -30px rgba(17,17,20,.55);animation:bw-modal-in .4s cubic-bezier(.16,1,.3,1) both;}
 .bw-modal-img{width:44%;flex:0 0 44%;background:#f1f1f2 center/cover no-repeat;min-height:340px;}
 .bw-modal-body{flex:1;padding:40px 38px;display:flex;flex-direction:column;justify-content:center;position:relative;}
-.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
-.bw-modal-x svg{width:21px;height:21px;}
+.bw-modal-x{position:absolute;top:16px;right:16px;width:34px;height:34px;border:none;background:#f1f2f4;color:#4b5563;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
+.bw-modal-x svg{width:18px;height:18px;}
 .bw-modal-x:hover{background:#e5e7eb;color:#111827;}
 
 /* ── Product gallery (lightbox) ── */
@@ -1084,7 +1085,7 @@
     const self = this;
     this.root.innerHTML = `
       <div class="bw-panel">
-        <button class="bw-success-close" data-act="close" title="${esc(t(s.locale, 'keepShopping'))}">&times;</button>
+        <button class="bw-success-close bw-icon-btn" data-act="close" title="${esc(t(s.locale, 'keepShopping'))}" aria-label="Close">${icon('x')}</button>
         <div class="bw-success">
           <div class="bw-check"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <h3>${esc(t(s.locale, 'addedTitle'))}</h3>
