@@ -554,9 +554,10 @@
     }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'failed'); return j; }); })
       .then(function () { self._afterCapture(); })
       .catch(function (err) {
-        console.error('[bundle-widget] lead failed', err);
-        if (btn) { btn.disabled = false; btn.textContent = t(loc, 'formSubmit'); }
-        alert('Sorry, something went wrong. Please try again.');
+        // Never trap the shopper: if the lead save fails, still reveal the
+        // bundle (and its complementary picks) so they can keep going.
+        console.warn('[bundle-widget] lead save failed — revealing bundle anyway', err);
+        self._afterCapture();
       });
   };
 
@@ -861,18 +862,29 @@
     // complementary products handed in by the host page.
     if (this.demo || this.preview) { render(this.recoProducts || []); return; }
 
-    // Live store: Shopify's "related" recommendations, falling back to other
-    // catalogue products if the store has none yet (e.g. a brand-new shop).
+    // Live store: Shopify's related recommendations → generic recommendations →
+    // any other catalogue products (so it always shows something on a real shop).
+    const jsonOrNull = (r) => (r.ok ? r.json() : null);
+    const pluck = (d) => (d && d.products) || [];
     fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=10&intent=related`)
-      .then((r) => (r.ok ? r.json() : null))
+      .then(jsonOrNull)
       .then((data) => {
-        const recs = (data && data.products) || [];
-        if (recs.length) return render(recs);
-        return fetch('/products.json?limit=16')
-          .then((r) => (r.ok ? r.json() : null))
-          .then((d) => render((d && d.products) || []));
+        if (pluck(data).length) return render(pluck(data));
+        return fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=10`)
+          .then(jsonOrNull)
+          .then((d2) => {
+            if (pluck(d2).length) return render(pluck(d2));
+            return fetch('/products.json?limit=20').then(jsonOrNull).then((d3) => {
+              const list = pluck(d3);
+              if (!list.length) console.warn('[bundle-widget] no complementary products found on this store');
+              render(list);
+            });
+          });
       })
-      .catch(() => { container.removeAttribute('data-loaded'); container.innerHTML = ''; });
+      .catch((e) => {
+        console.warn('[bundle-widget] complementary load failed', e);
+        container.removeAttribute('data-loaded'); container.innerHTML = '';
+      });
   };
 
   BundleWidget.prototype.addRecommended = function (el) {
@@ -940,18 +952,26 @@
       return;
     }
 
-    this._generateCode(items)
+    // 1) ALWAYS add the products to the cart first — this must never be blocked
+    //    by discount generation. 2) mint the discount code (non-fatal). 3) show
+    //    the result and open the theme's cart drawer.
+    self._addToCart(items)
+      .then(() => self._generateCode(items).catch((e) => {
+        console.warn('[bundle-widget] discount code failed (items still added)', e);
+        return { code: null };
+      }))
       .then((res) => {
-        return self._addToCart(items).then(() => res);
-      })
-      .then((res) => {
-        self._emit('add_to_cart', res.code);
-        self._showSuccess(res.code, calc, res);
+        const code = res && res.code;
+        self._emit('add_to_cart', code);
+        if (code) self._applyDiscountCookie(code); // apply for checkout, best-effort
+        if (self.settings.redirectToCart) { self._goToCartWithDiscount(code || ''); return; }
+        self._openCartDrawer();
+        self._showSuccess(code || '', calc, res);
       })
       .catch((err) => {
-        console.error('[bundle-widget] checkout failed', err);
+        console.error('[bundle-widget] add to cart failed', err);
         if (btn) { btn.disabled = false; btn.textContent = self.settings.ctaText; }
-        alert('Sorry — we could not build your bundle. Please try again.');
+        alert(err && err.message ? err.message : 'Sorry — we could not add the bundle to your cart. Please try again.');
       });
   };
 
@@ -1005,13 +1025,54 @@
   };
 
   BundleWidget.prototype._addToCart = function (items) {
+    const payload = items
+      .filter((it) => it.variantId)
+      .map((it) => ({ id: Number(it.variantId), quantity: it.quantity || 1 }));
     return fetch('/cart/add.js', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        items: items.map((it) => ({ id: Number(it.variantId), quantity: it.quantity || 1 })),
-      }),
-    }).then((r) => { if (!r.ok) throw new Error('cart add failed'); return r.json(); });
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({ items: payload }),
+    }).then((r) => r.json().then((j) => {
+      // Shopify returns 422 with a description when a variant is unavailable.
+      if (!r.ok) throw new Error(j.description || j.message || 'Could not add to cart');
+      return j;
+    }));
+  };
+
+  // Best-effort: apply the discount to the cart so it carries into checkout.
+  // Fetching /discount/<code> sets the cart discount cookie without navigating.
+  BundleWidget.prototype._applyDiscountCookie = function (code) {
+    try { fetch('/discount/' + encodeURIComponent(code), { credentials: 'same-origin' }).catch(() => {}); } catch (e) {}
+  };
+
+  // Refresh the cart and nudge the theme's cart drawer open. Themes differ, so
+  // we broadcast the events the popular ones listen for and reveal common drawer
+  // nodes — falling back silently if the theme has no drawer.
+  BundleWidget.prototype._openCartDrawer = function () {
+    const fire = (name, detail) => {
+      try { document.dispatchEvent(new CustomEvent(name, { bubbles: true, detail: detail })); } catch (e) {}
+    };
+    fetch('/cart.js', { credentials: 'same-origin' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((cart) => {
+        // Events used by Dawn and many other themes to re-render / open the cart.
+        ['cart:refresh', 'cart:build', 'cart:updated', 'cart-drawer:open', 'ajaxCart:afterCartLoad', 'theme:cart:reload']
+          .forEach((n) => fire(n, cart));
+        try {
+          if (window.Shopify && window.Shopify.onCartUpdate) window.Shopify.onCartUpdate(cart);
+        } catch (e) {}
+        // Reveal common drawer containers.
+        const sel = 'cart-drawer,#CartDrawer,.cart-drawer,#cart-drawer,.js-drawer--cart,[data-cart-drawer],#sidebar-cart,.mini-cart,#mini-cart';
+        const drawer = document.querySelector(sel);
+        if (drawer) {
+          drawer.classList.add('active', 'is-open', 'open', 'drawer--is-open', 'js-drawer-open');
+          drawer.removeAttribute('hidden');
+          drawer.setAttribute('aria-hidden', 'false');
+          try { drawer.setAttribute('open', ''); } catch (e) {}
+        }
+        document.documentElement.classList.add('js-drawer-open', 'cart-drawer-open');
+      })
+      .catch(() => {});
   };
 
   BundleWidget.prototype._emitShown = function () { this._emit('widget_shown'); };
