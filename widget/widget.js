@@ -237,12 +237,17 @@
 .bw-sub{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#a5a5aa;}
 .bw-head-title{font-size:17px;font-weight:800;color:var(--bw-primary);display:flex;align-items:center;gap:9px;}
 .bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(17,24,39,.06);}
-.bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:22px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
+.bw-icon-btn{display:inline-flex;align-items:center;justify-content:center;padding:0;border:none;background:none;cursor:pointer;line-height:0;}
+.bw-icon-btn svg{display:block;}
+.bw-collapse{background:#f1f2f4;border:none;color:#4b5563;width:34px;height:34px;border-radius:50%;cursor:pointer;transition:background .18s,color .18s;display:flex;align-items:center;justify-content:center;}
+.bw-collapse svg{width:18px;height:18px;}
 .bw-collapse:hover{background:#e5e7eb;color:#111827;}
-.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;background:#f1f2f4;color:#4b5563;font-size:34px;font-weight:300;width:40px;height:40px;border-radius:50%;}
+.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;width:40px;height:40px;}
+.bw-head-light .bw-collapse svg{width:21px;height:21px;}
 .bw-head-light .bw-collapse:hover{background:#e5e7eb;color:#111827;}
 
-.bw-items{flex:0 1 auto;min-height:0;overflow-y:auto;padding:8px 8px 4px;}
+.bw-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;}
+.bw-items{padding:8px 8px 4px;}
 .bw-item{display:flex;gap:11px;padding:10px 11px;border-radius:14px;position:relative;transition:background .2s;}
 .bw-item:hover{background:#f9fafb;}
 .bw-item+.bw-item{border-top:1px solid #f1f2f4;}
@@ -263,10 +268,12 @@
   border:1px solid #e6e6e9;border-radius:8px;padding:5px 19px 5px 8px;font-size:11.5px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bw-select:focus{outline:none;border-color:var(--bw-primary);box-shadow:0 0 0 3px rgba(17,24,39,.07);}
 .bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:8px;overflow:hidden;flex:0 0 auto;}
-.bw-qty button{width:22px;height:26px;border:none;background:#fff;cursor:pointer;font-size:14px;color:#374151;line-height:1;transition:background .15s;}
+.bw-qty button{width:24px;height:26px;border:none;background:#fff;cursor:pointer;color:#374151;transition:background .15s;}
+.bw-qty button svg{width:13px;height:13px;}
 .bw-qty button:hover{background:#f3f4f6;}
 .bw-qty span{min-width:18px;text-align:center;font-size:12px;font-weight:700;}
-.bw-remove-inline{flex:0 0 auto;width:24px;height:26px;border:1px solid #e6e6e9;border-radius:8px;background:#fff;color:#b5b8bd;cursor:pointer;font-size:15px;line-height:1;transition:color .15s,border-color .15s;}
+.bw-remove-inline{flex:0 0 auto;width:26px;height:26px;border:1px solid #e6e6e9;border-radius:8px;background:#fff;color:#b5b8bd;cursor:pointer;transition:color .15s,border-color .15s;}
+.bw-remove-inline svg{width:13px;height:13px;}
 .bw-remove-inline:hover{color:#dc2626;border-color:#f0c9c9;}
 
 .bw-foot{padding:16px 20px 18px;border-top:1px solid #f1f2f4;background:#fff;}
@@ -306,30 +313,33 @@
   box-shadow:0 40px 90px -30px rgba(17,17,20,.55);animation:bw-modal-in .4s cubic-bezier(.16,1,.3,1) both;}
 .bw-modal-img{width:44%;flex:0 0 44%;background:#f1f1f2 center/cover no-repeat;min-height:340px;}
 .bw-modal-body{flex:1;padding:40px 38px;display:flex;flex-direction:column;justify-content:center;position:relative;}
-.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;font-size:34px;font-weight:300;line-height:1;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
+.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
+.bw-modal-x svg{width:21px;height:21px;}
 .bw-modal-x:hover{background:#e5e7eb;color:#111827;}
 
 /* ── Product gallery (lightbox) ── */
-.bw-gallery-root{position:fixed;inset:0;z-index:2147483002;display:flex;align-items:center;justify-content:center;padding:20px;}
-.bw-gallery-backdrop{position:absolute;inset:0;background:rgba(17,17,20,.78);backdrop-filter:blur(2px);animation:bw-fade-in .2s ease both;}
-.bw-gallery{position:relative;width:460px;max-width:100%;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:bw-modal-in .35s cubic-bezier(.16,1,.3,1) both;}
-.bw-gallery-x{top:14px;right:14px;}
-.bw-gallery-title{padding:18px 60px 12px 22px;font-size:15px;font-weight:700;color:#111827;line-height:1.3;}
-.bw-gallery-stage{position:relative;background:#f4f4f5;cursor:zoom-in;}
-.bw-gallery-main{width:100%;aspect-ratio:1/1;background-position:center;background-repeat:no-repeat;background-size:contain;transition:background-size .25s ease;}
+.bw-gallery-root{position:fixed;inset:0;z-index:2147483002;display:flex;align-items:center;justify-content:center;padding:24px;}
+.bw-gallery-backdrop{position:absolute;inset:0;background:rgba(17,17,20,.8);backdrop-filter:blur(3px);animation:bw-fade-in .2s ease both;}
+.bw-gallery{position:relative;display:flex;flex-direction:column;width:440px;max-width:100%;max-height:calc(100vh - 48px);background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:bw-modal-in .35s cubic-bezier(.16,1,.3,1) both;}
+.bw-gallery-head{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:15px 15px 12px 20px;}
+.bw-gallery-title{flex:1;min-width:0;font-size:15px;font-weight:700;color:#111827;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bw-gallery-x{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#f1f2f4;color:#4b5563;transition:background .15s,color .15s;}
+.bw-gallery-x svg{width:18px;height:18px;}
+.bw-gallery-x:hover{background:#e5e7eb;color:#111827;}
+.bw-gallery-stage{position:relative;flex:1 1 auto;min-height:0;background:#f4f4f5;cursor:zoom-in;overflow:hidden;}
+.bw-gallery-main{width:100%;height:100%;background-position:center;background-repeat:no-repeat;background-size:contain;transition:background-size .25s ease;}
 .bw-gallery-stage.bw-zoomed{cursor:zoom-out;}
 .bw-gallery-stage.bw-zoomed .bw-gallery-main{background-size:190%;}
-.bw-gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.9);color:#111827;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 10px -3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;transition:background .15s;}
-.bw-gallery-nav:hover{background:#fff;}
-.bw-gallery-nav.bw-prev{left:12px;} .bw-gallery-nav.bw-next{right:12px;}
-.bw-gallery-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:rgba(17,17,20,.66);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap;pointer-events:none;}
-.bw-gallery-hint svg{width:14px;height:14px;}
-.bw-gallery-stage.bw-zoomed .bw-gallery-hint{display:none;}
-.bw-gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 14px;}
-.bw-gallery-thumb{flex:0 0 52px;width:52px;height:52px;padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;background:#f1f1f2;cursor:pointer;}
+.bw-gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.95);color:#111827;box-shadow:0 4px 14px -4px rgba(0,0,0,.45);transition:background .15s,transform .12s;}
+.bw-gallery-nav svg{width:24px;height:24px;}
+.bw-gallery-nav:hover{background:#fff;transform:translateY(-50%) scale(1.06);}
+.bw-gallery-nav.bw-prev{left:14px;} .bw-gallery-nav.bw-next{right:14px;}
+.bw-gallery-thumbs{flex:0 0 auto;display:flex;gap:8px;overflow-x:auto;padding:12px 16px 16px;}
+.bw-gallery-thumbs::-webkit-scrollbar{height:4px;} .bw-gallery-thumbs::-webkit-scrollbar-thumb{background:#e2e4e8;border-radius:4px;}
+.bw-gallery-thumb{flex:0 0 54px;width:54px;height:54px;padding:0;border:2px solid transparent;border-radius:11px;overflow:hidden;background:#f1f1f2;cursor:pointer;transition:border-color .15s;}
 .bw-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .bw-gallery-thumb.bw-on{border-color:var(--bw-secondary);}
-@media(max-width:560px){.bw-gallery{width:100%;} .bw-gallery-thumb{flex-basis:48px;width:48px;height:48px;}}
+@media(max-width:560px){.bw-gallery{width:100%;max-height:calc(100vh - 32px);} .bw-gallery-thumb{flex-basis:50px;width:50px;height:50px;}}
 .bw-modal h2{margin:0 0 12px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);}
 .bw-modal h2 .bw-hl{color:var(--bw-secondary);}
 .bw-modal p.bw-modal-sub{margin:0 0 24px;font-size:15px;color:#6b7280;line-height:1.5;}
@@ -348,19 +358,20 @@
 .bw-code-big{display:block;font-family:ui-monospace,Menlo,monospace;font-size:19px;font-weight:800;letter-spacing:.04em;color:var(--bw-primary);background:#f6f6f7;border:1px dashed #cfd2d6;border-radius:12px;padding:16px;margin:6px 0 8px;}
 .bw-copy{width:100%;border:none;border-radius:12px;background:var(--bw-primary);color:#fff;font-weight:700;font-size:14.5px;padding:14px;cursor:pointer;margin-top:6px;}
 .bw-shop{display:block;width:100%;margin-top:10px;background:none;border:none;color:#9aa0a6;font-weight:600;font-size:13px;cursor:pointer;}
-.bw-reco{flex:0 0 auto;padding:12px 18px 14px;border-top:1px solid #f1f2f4;}
-.bw-reco-title{font-size:11px;font-weight:800;color:#9aa0a6;margin:0 0 11px;text-transform:uppercase;letter-spacing:.08em;}
-.bw-reco-row{display:flex;gap:11px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.bw-reco{flex:0 0 auto;padding:9px 12px 11px;border-top:1px solid #f1f2f4;}
+.bw-reco-title{font-size:10px;font-weight:800;color:#9aa0a6;margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;}
+.bw-reco-row{display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
 .bw-reco-row::-webkit-scrollbar{height:4px;}
 .bw-reco-row::-webkit-scrollbar-thumb{background:#e2e4e8;border-radius:4px;}
-.bw-reco-card{flex:0 0 100px;width:100px;cursor:pointer;text-decoration:none;color:inherit;scroll-snap-align:start;}
+.bw-reco-card{flex:0 0 76px;width:76px;cursor:pointer;text-decoration:none;color:inherit;scroll-snap-align:start;}
 .bw-reco-imgwrap{position:relative;}
-.bw-reco-card img{width:100px;height:100px;object-fit:cover;border-radius:13px;background:#f1f1f2;display:block;border:1px solid rgba(17,24,39,.05);}
-.bw-reco-add{position:absolute;bottom:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--bw-secondary);color:#fff;font-size:18px;font-weight:700;line-height:26px;text-align:center;box-shadow:0 4px 10px -3px rgba(17,24,39,.45);transition:transform .15s;}
+.bw-reco-card img{width:76px;height:76px;object-fit:cover;border-radius:11px;background:#f1f1f2;display:block;border:1px solid rgba(17,24,39,.05);}
+.bw-reco-add{position:absolute;bottom:5px;right:5px;width:23px;height:23px;border-radius:50%;background:var(--bw-secondary);color:#fff;box-shadow:0 4px 10px -3px rgba(17,24,39,.45);transition:transform .15s;}
+.bw-reco-add svg{width:13px;height:13px;}
 .bw-reco-card:hover .bw-reco-add{transform:scale(1.14);}
 .bw-reco-card:hover img{border-color:var(--bw-secondary);}
-.bw-reco-card .bw-reco-name{font-size:11.5px;font-weight:600;margin-top:7px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.bw-reco-card .bw-reco-price{font-size:11.5px;font-weight:700;color:var(--bw-primary);margin-top:2px;}
+.bw-reco-card .bw-reco-name{font-size:11px;font-weight:600;margin-top:5px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.bw-reco-card .bw-reco-price{font-size:11px;font-weight:700;color:var(--bw-primary);margin-top:1px;}
 @keyframes bw-modal-in{0%{opacity:0;transform:translateY(18px) scale(.97);}100%{opacity:1;transform:translateY(0) scale(1);}}
 @media(max-width:640px){
   .bw-modal{flex-direction:column;width:100%;max-height:calc(100vh - 24px);}
@@ -378,7 +389,6 @@
   .bw-root.bw-expanded{left:0;right:0;bottom:0;}
   .bw-panel{width:100%;max-width:100%;border-radius:22px 22px 0 0;}
   .bw-panel.bw-animate{animation:bw-sheet-up .4s cubic-bezier(.16,1,.3,1) both;}
-  .bw-items{max-height:50vh;}
   /* 16px form controls stop iOS from auto-zooming the page on focus */
   .bw-select,.bw-field,.bw-qty span{font-size:16px;}
 }
@@ -484,7 +494,7 @@
     const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
     const brand = s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : '';
     return `<div class="bw-modal">${img}<div class="bw-modal-body">
-      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <button class="bw-modal-x bw-icon-btn" data-act="mclose" aria-label="Close">${icon('x')}</button>
       ${brand}
       <h2>${headHtml}</h2>
       <p class="bw-modal-sub">${esc(sub)}</p>
@@ -498,7 +508,7 @@
     const img = p.image ? `<div class="bw-modal-img" style="background-image:url('${esc(p.image)}')"></div>` : '';
     const brand = s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : '';
     return `<div class="bw-modal">${img}<div class="bw-modal-body">
-      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <button class="bw-modal-x bw-icon-btn" data-act="mclose" aria-label="Close">${icon('x')}</button>
       ${brand}
       <h2>${esc(t(loc, 'formTitle'))}</h2>
       <p class="bw-modal-sub">${esc(t(loc, 'popupSub'))}</p>
@@ -515,7 +525,7 @@
     const code = this.session.code || '';
     const brand = s.storeName ? `<div class="bw-brand" style="text-align:center">${esc(s.storeName)}</div>` : '';
     return `<div class="bw-modal" style="max-width:430px;width:430px;"><div class="bw-modal-body" style="padding:34px 34px 26px;text-align:center;">
-      <button class="bw-modal-x" data-act="mclose" aria-label="Close">&times;</button>
+      <button class="bw-modal-x bw-icon-btn" data-act="mclose" aria-label="Close">${icon('x')}</button>
       ${brand}
       <div class="bw-check" style="margin:6px auto 16px"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <h2 style="font-size:24px">${esc(t(loc, 'codeTitle', { discount: dl }))}</h2>
@@ -750,7 +760,7 @@
     if (this.session.products.length === 0) {
       return `<div class="bw-panel${anim}"><div class="bw-head"><div class="bw-head-row">
         <div class="bw-head-title"><span class="bw-head-dot"></span>${esc(s.headerText)}</div>
-        <button class="bw-collapse" data-act="collapse">&times;</button></div></div>
+        <button class="bw-collapse bw-icon-btn" data-act="collapse" aria-label="Close">${icon('x')}</button></div></div>
         <div class="bw-empty">${esc(t(s.locale, 'emptyTitle'))}<br>${esc(t(s.locale, 'emptyBody'))}</div></div>`;
     }
 
@@ -772,13 +782,15 @@
     return `
       <div class="bw-panel${anim}">
         <div class="bw-head bw-head-light">
-          <button class="bw-collapse" data-act="collapse" title="Minimise">&times;</button>
+          <button class="bw-collapse bw-icon-btn" data-act="collapse" title="Minimise" aria-label="Close">${icon('x')}</button>
           ${s.storeName ? `<div class="bw-brand">${esc(s.storeName)}</div>` : ''}
           <div class="bw-title">${esc(s.headerText)}</div>
           <div class="bw-sub">${esc(sub)}</div>
         </div>
-        <div class="bw-items">${rows}</div>
-        ${showReco ? '<div class="bw-reco" data-reco></div>' : ''}
+        <div class="bw-scroll">
+          <div class="bw-items">${rows}</div>
+          ${showReco ? '<div class="bw-reco" data-reco></div>' : ''}
+        </div>
         <div class="bw-foot">
           <div class="bw-totals">
             ${s.showPrices ? `<div class="bw-row"><span>${esc(t(s.locale, 'original'))}</span><span class="bw-strike">${money(calc.subtotal, s)}</span></div>` : ''}
@@ -819,7 +831,7 @@
       <div class="bw-item" data-id="${esc(p.id)}">
         <button class="bw-item-imgwrap${canZoom ? '' : ' bw-noimg'}" data-act="gallery" data-id="${esc(p.id)}" title="${esc(t(s.locale, 'zoomHint'))}" aria-label="${esc(t(s.locale, 'zoomHint'))}">
           <img class="bw-item-img" src="${esc(productImage(p))}" alt="">
-          ${canZoom ? '<span class="bw-zoom-badge" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L17 17M8.5 6.5v4M6.5 8.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' : ''}
+          ${canZoom ? `<span class="bw-zoom-badge" aria-hidden="true">${icon('zoom')}</span>` : ''}
         </button>
         <div class="bw-item-body">
           <div class="bw-item-top">
@@ -829,11 +841,11 @@
           <div class="bw-item-controls">
             ${optsHTML}
             <div class="bw-qty">
-              <button data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">−</button>
+              <button class="bw-icon-btn" data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">${icon('minus')}</button>
               <span>${p.quantity || 1}</span>
-              <button data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">+</button>
+              <button class="bw-icon-btn" data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">${icon('plus')}</button>
             </div>
-            <button class="bw-remove-inline" data-act="remove" data-id="${esc(p.id)}" title="Remove">&times;</button>
+            <button class="bw-remove-inline bw-icon-btn" data-act="remove" data-id="${esc(p.id)}" title="Remove" aria-label="Remove">${icon('x')}</button>
           </div>
         </div>
       </div>`;
@@ -884,7 +896,7 @@
         list.map((pr) => {
           const img = (pr.featured_image || pr.image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
           const data = encodeURIComponent(JSON.stringify(slimProduct(pr)));
-          return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add">+</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
+          return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add bw-icon-btn">${icon('plus')}</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
         }).join('') + `</div>`;
       // Bind only the new reco cards (avoids double-binding the rest of the panel).
       container.querySelectorAll('[data-act="add-reco"]').forEach((el) =>
@@ -952,12 +964,13 @@
     root.innerHTML = `
       <div class="bw-gallery-backdrop" data-gact="close"></div>
       <div class="bw-gallery">
-        <button class="bw-modal-x bw-gallery-x" data-gact="close" aria-label="Close">&times;</button>
-        <div class="bw-gallery-title">${esc(p.title)}</div>
+        <div class="bw-gallery-head">
+          <div class="bw-gallery-title">${esc(p.title)}</div>
+          <button class="bw-gallery-x bw-icon-btn" data-gact="close" aria-label="Close">${icon('x')}</button>
+        </div>
         <div class="bw-gallery-stage" data-gact="zoom">
           <div class="bw-gallery-main" style="background-image:url('${esc(imgs[0])}')"></div>
-          ${imgs.length > 1 ? '<button class="bw-gallery-nav bw-prev" data-gact="prev" aria-label="Previous">‹</button><button class="bw-gallery-nav bw-next" data-gact="next" aria-label="Next">›</button>' : ''}
-          <span class="bw-gallery-hint"><svg viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L17 17M8.5 6.5v4M6.5 8.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>${esc(t(loc, 'galleryHint'))}</span>
+          ${imgs.length > 1 ? `<button class="bw-gallery-nav bw-prev bw-icon-btn" data-gact="prev" aria-label="Previous">${icon('left')}</button><button class="bw-gallery-nav bw-next bw-icon-btn" data-gact="next" aria-label="Next">${icon('right')}</button>` : ''}
         </div>
         ${imgs.length > 1 ? `<div class="bw-gallery-thumbs">${thumbs}</div>` : ''}
       </div>`;
@@ -1253,6 +1266,16 @@
   function esc(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
+  // Crisp, perfectly centred line icons (no font-glyph alignment issues).
+  const ICONS = {
+    x: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 5.5v13M5.5 12h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    minus: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5.5 12h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+    left: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    right: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    zoom: '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" stroke="currentColor" stroke-width="2"/><path d="M15.2 15.2L20 20M10.5 7.8v5.4M7.8 10.5h5.4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  };
+  function icon(name) { return ICONS[name] || ''; }
 
   /* ======================================================================== */
   /*  LIVE storefront bootstrap                                                */
