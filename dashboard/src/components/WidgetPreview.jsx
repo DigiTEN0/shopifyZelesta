@@ -1,40 +1,39 @@
 // Live preview of the actual storefront widget, rendered inside an iframe so it
 // gets its own document/body (the widget mounts fixed-position elements). Reuses
 // the real /widget/widget.js — what merchants configure is exactly what ships.
-import React, { useEffect, useRef } from 'react';
-import { APP_URL } from '../lib/api.js';
+import React, { useEffect, useRef, useState } from 'react';
+import { APP_URL, api } from '../lib/api.js';
 
-const PREVIEW_PRODUCTS = [
-  {
-    id: 'pv-duvet', title: 'Cloud Cotton Duvet Cover', price: 12900, compareAtPrice: 14900, quantity: 1,
-    image: 'https://images.unsplash.com/photo-1584100936595-c0654b55a2e6?auto=format&fit=crop&w=400&q=80',
-    options: [{ name: 'Size', values: ['Single', 'Double', 'King'] }, { name: 'Colour', values: ['Sand', 'Charcoal'] }],
-    variants: [
-      { id: 'pv-d1', price: 12900, available: true, optionValues: ['Double', 'Sand'] },
-      { id: 'pv-d2', price: 14900, available: true, optionValues: ['King', 'Sand'] },
-      { id: 'pv-d3', price: 12900, available: true, optionValues: ['Double', 'Charcoal'] },
-    ],
-    selectedVariantId: 'pv-d1',
-  },
-  {
-    id: 'pv-pillow', title: 'Sateen Pillowcase Set (2)', price: 3900, compareAtPrice: 4500, quantity: 1,
-    image: 'https://images.unsplash.com/photo-1592789705501-f9ae4287c4cf?auto=format&fit=crop&w=400&q=80',
-    options: [{ name: 'Colour', values: ['Sand', 'Charcoal', 'White'] }],
-    variants: [{ id: 'pv-p1', price: 3900, available: true, optionValues: ['Sand'] }],
-    selectedVariantId: 'pv-p1',
-  },
-  {
-    id: 'pv-sheet', title: 'Brushed Fitted Sheet', price: 5900, compareAtPrice: 6900, quantity: 1,
-    image: 'https://images.unsplash.com/photo-1616627561839-074385245ff6?auto=format&fit=crop&w=400&q=80',
-    options: [{ name: 'Size', values: ['Single', 'Double', 'King'] }],
-    variants: [{ id: 'pv-s1', price: 5900, available: true, optionValues: ['Double'] }],
-    selectedVariantId: 'pv-s1',
-  },
+// Fallback sample used only if the store has no products yet.
+const FALLBACK_PRODUCTS = [
+  { id: 'pv-1', title: 'Sample product A', price: 4900, compareAtPrice: 5900, quantity: 1,
+    image: 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png',
+    options: [{ name: 'Size', values: ['S', 'M', 'L'] }], variants: [{ id: 'v1', price: 4900, available: true, optionValues: ['M'] }], selectedVariantId: 'v1' },
+  { id: 'pv-2', title: 'Sample product B', price: 3500, compareAtPrice: 3900, quantity: 1,
+    image: 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-2_large.png',
+    options: [{ name: 'Colour', values: ['Black', 'Sand'] }], variants: [{ id: 'v2', price: 3500, available: true, optionValues: ['Black'] }], selectedVariantId: 'v2' },
+  { id: 'pv-3', title: 'Sample product C', price: 2900, compareAtPrice: 3400, quantity: 1,
+    image: 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-3_large.png',
+    options: [], variants: [{ id: 'v3', price: 2900, available: true, optionValues: [] }], selectedVariantId: 'v3' },
 ];
 
 export default function WidgetPreview({ settings, variant = 'bundle' }) {
   const iframeRef = useRef(null);
   const bootedRef = useRef(false);
+  const [products, setProducts] = useState(FALLBACK_PRODUCTS);
+
+  // Pull a few real products from the store so the preview shows their catalogue.
+  useEffect(() => {
+    let active = true;
+    api.getPreviewProducts()
+      .then((res) => {
+        const real = (res.products || []).filter((p) => p.image).slice(0, 3);
+        if (active && real.length) setProducts(real.map((p) => ({ ...p, quantity: 1 })));
+      })
+      .catch(() => {});
+    return () => { active = false; };
+  }, []);
+  const PREVIEW_PRODUCTS = products;
 
   const srcDoc = `<!doctype html><html><head><meta charset="utf-8">
     <style>html,body{margin:0;height:100%;background:#f6f6f7;font-family:-apple-system,Segoe UI,Roboto,sans-serif;}

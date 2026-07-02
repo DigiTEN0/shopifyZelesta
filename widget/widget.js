@@ -40,8 +40,8 @@
     disableWhenSale: false,
     minBundleValue: 0,
     excluded: { products: [], collections: [] },
-    primaryColor: '#111827',
-    secondaryColor: '#6366F1',
+    primaryColor: '#1c1917',
+    secondaryColor: '#b08968',
     position: 'bottom-right',
     headerText: 'Your Bundle',
     ctaText: 'Add All to Cart & Save',
@@ -235,9 +235,9 @@
 .bw-sub{margin-top:6px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#a5a5aa;}
 .bw-head-title{font-size:17px;font-weight:800;color:var(--bw-primary);display:flex;align-items:center;gap:9px;}
 .bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(17,24,39,.06);}
-.bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:30px;height:30px;border-radius:9px;cursor:pointer;font-size:17px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
+.bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:22px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
 .bw-collapse:hover{background:#e5e7eb;color:#111827;}
-.bw-head-light .bw-collapse{position:absolute;top:16px;right:16px;background:transparent;color:#c4c4c8;}
+.bw-head-light .bw-collapse{position:absolute;top:15px;right:15px;background:transparent;color:#b5b8bd;font-size:26px;width:36px;height:36px;}
 .bw-head-light .bw-collapse:hover{background:#f3f4f6;color:#111827;}
 
 .bw-items{max-height:46vh;overflow-y:auto;padding:8px 8px 4px;}
@@ -250,21 +250,18 @@
 .bw-item-title{font-size:14px;font-weight:650;line-height:1.3;color:#111827;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .bw-item-price{font-size:14px;font-weight:700;color:var(--bw-primary);white-space:nowrap;flex:0 0 auto;}
 .bw-item-compare{font-size:11.5px;color:#9ca3af;text-decoration:line-through;margin-left:5px;font-weight:500;}
-.bw-item-meta{font-size:12.5px;color:#8a8a8f;line-height:1.4;}
-.bw-item-meta-txt{color:#8a8a8f;}
-.bw-change{color:var(--bw-secondary);font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:2px;}
-.bw-remove-txt{border:none;background:transparent;color:#c4c4c8;cursor:pointer;font-size:16px;line-height:1;padding:0 2px;transition:color .15s;margin-left:2px;}
-.bw-remove-txt:hover{color:#dc2626;}
-.bw-item-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:9px;}
-.bw-opts{display:flex;gap:7px;flex:1 1 auto;min-width:0;}
+.bw-item-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.bw-opts{display:flex;gap:6px;flex:1 1 auto;min-width:0;}
 .bw-opts-multi{flex:1 1 100%;}
-.bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 9px center;
-  border:1px solid #e6e6e9;border-radius:9px;padding:7px 26px 7px 11px;font-size:12.5px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 84px;min-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;
+  border:1px solid #e6e6e9;border-radius:8px;padding:6px 22px 6px 9px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 72px;min-width:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bw-select:focus{outline:none;border-color:var(--bw-primary);box-shadow:0 0 0 3px rgba(17,24,39,.07);}
-.bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:9px;overflow:hidden;flex:0 0 auto;margin-left:auto;}
-.bw-qty button{width:26px;height:30px;border:none;background:#fff;cursor:pointer;font-size:15px;color:#374151;line-height:1;transition:background .15s;}
+.bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:8px;overflow:hidden;flex:0 0 auto;margin-left:auto;}
+.bw-qty button{width:24px;height:28px;border:none;background:#fff;cursor:pointer;font-size:14px;color:#374151;line-height:1;transition:background .15s;}
 .bw-qty button:hover{background:#f3f4f6;}
-.bw-qty span{min-width:26px;text-align:center;font-size:12.5px;font-weight:700;}
+.bw-qty span{min-width:22px;text-align:center;font-size:12px;font-weight:700;}
+.bw-remove-inline{flex:0 0 auto;width:26px;height:28px;border:1px solid #e6e6e9;border-radius:8px;background:#fff;color:#b5b8bd;cursor:pointer;font-size:15px;line-height:1;transition:color .15s,border-color .15s;}
+.bw-remove-inline:hover{color:#dc2626;border-color:#f0c9c9;}
 
 .bw-foot{padding:16px 20px 18px;border-top:1px solid #f1f2f4;background:#fff;}
 .bw-totals{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
@@ -313,7 +310,7 @@
 .bw-modal-btn:disabled{opacity:.6;cursor:default;transform:none;}
 .bw-modal-decline{display:block;width:100%;margin-top:14px;background:none;border:none;color:#9aa0a6;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;}
 .bw-modal-decline:hover{color:#6b7280;}
-.bw-field{width:100%;border:1px solid #e2e4e8;border-radius:11px;padding:14px 15px;font-size:15px;color:#111827;margin-bottom:11px;outline:none;transition:border-color .15s,box-shadow .15s;background:#fbfbfc;}
+.bw-field{width:100%;border:1px solid #e2e4e8;border-radius:11px;padding:14px 15px;font-size:16px;color:#111827;margin-bottom:11px;outline:none;transition:border-color .15s,box-shadow .15s;background:#fbfbfc;}
 .bw-field:focus{border-color:var(--bw-secondary);box-shadow:0 0 0 3px rgba(0,0,0,.05);background:#fff;}
 .bw-field.bw-err{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1);}
 .bw-consent{margin-top:12px;font-size:11.5px;color:#9aa0a6;line-height:1.4;text-align:center;}
@@ -352,6 +349,8 @@
   .bw-panel{width:100%;max-width:100%;border-radius:22px 22px 0 0;}
   .bw-panel.bw-animate{animation:bw-sheet-up .4s cubic-bezier(.16,1,.3,1) both;}
   .bw-items{max-height:50vh;}
+  /* 16px form controls stop iOS from auto-zooming the page on focus */
+  .bw-select,.bw-field,.bw-qty span{font-size:16px;}
 }
 
 /* ── Keyframes ── */
@@ -626,7 +625,8 @@
 
   BundleWidget.prototype.render = function (animateAdd) {
     const s = this.settings;
-    if (!s.enabled && !this.preview) { this.destroy(); return; }
+    const active = s.enabled || (s.popup && s.popup.enabled);
+    if (!active && !this.preview) { this.destroy(); return; }
 
     const count = this.session.products.length;
     // With the pop-up on, the collapsed icon shows from the very first product
@@ -694,9 +694,12 @@
       return `<img class="bw-thumb ${isNew ? 'bw-new' : ''}" style="left:${i * 17}px;z-index:${3 - i}" src="${esc(p.image)}" alt="">`;
     }).join('');
     const badge = badgeLabel(s, calc);
+    // Stack width adapts to the number of thumbnails (no dead space at 1–2).
+    const shown = Math.min(this.session.products.length, 3);
+    const stackW = 38 + Math.max(0, shown - 1) * 17;
     return `
       <div class="bw-pill${entrance ? ' bw-animate' : ''}" data-act="expand" title="${esc(s.headerText)}">
-        <div class="bw-stack">${thumbs}</div>
+        <div class="bw-stack" style="width:${stackW}px">${thumbs}</div>
         ${calc.eligible
           ? `<span class="bw-badge">${esc(badge)}</span>`
           : `<span class="bw-pill-count">${this.session.products.length}</span>`}
@@ -772,23 +775,7 @@
       ? `<div class="bw-item-price">${money(price, s)}${s.showCompareAt && compare && compare > price ? `<span class="bw-item-compare">${money(compare, s)}</span>` : ''}</div>`
       : '';
 
-    // Selected variant shown as clean text; "wijzigen" reveals the controls.
-    const editing = this._editing && this._editing.has(String(p.id));
-    const variantText = (hasOptions && v && v.optionValues && v.optionValues.length) ? v.optionValues.join(', ') : '';
-    const metaBits = [variantText, (p.quantity || 1) > 1 ? `${p.quantity}×` : ''].filter(Boolean).join(' · ');
-    const metaLine = `${metaBits ? `<span class="bw-item-meta-txt">${esc(metaBits)}</span> · ` : ''}<a class="bw-change" data-act="edit" data-id="${esc(p.id)}">${esc(t(s.locale, 'change'))}</a>`;
-
-    const controls = editing ? `
-      <div class="bw-item-controls">
-        ${optsHTML}
-        <div class="bw-qty">
-          <button data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">−</button>
-          <span>${p.quantity || 1}</span>
-          <button data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">+</button>
-        </div>
-        <button class="bw-remove-txt" data-act="remove" data-id="${esc(p.id)}" title="Remove">&times;</button>
-      </div>` : '';
-
+    // Variant selectors are always visible (compact) — no "change" toggle.
     return `
       <div class="bw-item" data-id="${esc(p.id)}">
         <img class="bw-item-img" src="${esc(p.image)}" alt="">
@@ -797,8 +784,15 @@
             <div class="bw-item-title">${esc(p.title)}</div>
             ${priceHTML}
           </div>
-          <div class="bw-item-meta">${metaLine}</div>
-          ${controls}
+          <div class="bw-item-controls">
+            ${optsHTML}
+            <div class="bw-qty">
+              <button data-act="qty-dec" data-id="${esc(p.id)}" aria-label="Less">−</button>
+              <span>${p.quantity || 1}</span>
+              <button data-act="qty-inc" data-id="${esc(p.id)}" aria-label="More">+</button>
+            </div>
+            <button class="bw-remove-inline" data-act="remove" data-id="${esc(p.id)}" title="Remove">&times;</button>
+          </div>
         </div>
       </div>`;
   };
@@ -840,20 +834,30 @@
     if (!container || !first || container.getAttribute('data-loaded')) return;
     container.setAttribute('data-loaded', '1');
     const have = new Set(this.session.products.map((p) => String(p.id)));
-    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=6&intent=related`)
+    const render = (products) => {
+      const list = (products || []).filter((p) => p && !have.has(String(p.id))).slice(0, 6);
+      if (!list.length) { container.innerHTML = ''; return; }
+      const s = self.settings;
+      container.innerHTML = `<div class="bw-reco-title">${esc(t(s.locale, 'alsoLike'))}</div><div class="bw-reco-row">` +
+        list.map((pr) => {
+          const img = (pr.featured_image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
+          const data = encodeURIComponent(JSON.stringify(slimProduct(pr)));
+          return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add">+</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
+        }).join('') + `</div>`;
+      self._bind();
+    };
+    // Try Shopify's "related" recommendations; if the store has none yet
+    // (e.g. a brand-new shop), fall back to other products from the catalogue.
+    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=8&intent=related`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
-        const products = ((data && data.products) || []).filter((p) => !have.has(String(p.id))).slice(0, 4);
-        if (!products.length) { container.innerHTML = ''; return; }
-        const s = self.settings;
-        container.innerHTML = `<div class="bw-reco-title">${esc(t(s.locale, 'alsoLike'))}</div><div class="bw-reco-row">` +
-          products.map((pr) => {
-            const img = (pr.featured_image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
-            const data = encodeURIComponent(JSON.stringify(slimProduct(pr)));
-            return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add">+</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
-          }).join('') + `</div>`;
-        self._bind(); // rebind the new add-reco cards
-      }).catch(() => { container.innerHTML = ''; });
+        const recs = (data && data.products) || [];
+        if (recs.length) return render(recs);
+        return fetch('/products.json?limit=12')
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => render((d && d.products) || []));
+      })
+      .catch(() => { container.innerHTML = ''; });
   };
 
   BundleWidget.prototype.addRecommended = function (el) {
@@ -1128,7 +1132,9 @@
       .then((r) => (r.ok ? r.json() : { settings: {} }))
       .then((data) => {
         const settings = data.settings || {};
-        if (settings.enabled === false) return;
+        const popupEnabled = settings.popup && settings.popup.enabled;
+        // The widget runs if the bundle is enabled OR the lead pop-up is on.
+        if (settings.enabled === false && !popupEnabled) return;
         const widget = new BundleWidget({ shop, settings, session });
         window.__bundleWidget = widget;
         const popupOn = settings.popup && settings.popup.enabled;
@@ -1145,7 +1151,10 @@
           }
         };
 
-        if (isProductPage()) {
+        // Try to capture the product whenever the URL is a product page — more
+        // robust than relying only on theme meta (fixes the icon sometimes not
+        // showing after viewing one product).
+        if (isProductPage() || /\/products\/[^/]+/.test(window.location.pathname)) {
           fetchCurrentProduct().then((product) => {
             if (product) widget.addProduct(product);
             orchestrate();

@@ -59,4 +59,5 @@ export const api = {
   getBilling: (range = 'this-month') => request(`/api/billing/usage/${SHOP}?range=${range}`),
   activateBilling: () => request(`/api/billing/activate`, { method: 'POST', body: { shop: SHOP } }),
   getLeads: () => request(`/api/leads/${SHOP}`),
+  getPreviewProducts: () => request(`/api/preview-products/${SHOP}`),
 };

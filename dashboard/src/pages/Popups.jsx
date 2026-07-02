@@ -66,7 +66,7 @@ export default function PopupsPage({ goTo }) {
       secondaryActions={[{ content: 'See captured leads', onAction: () => goTo('leads') }]}
     >
       <Layout>
-        <Layout.Section>
+        <Layout.Section variant="oneHalf">
           <BlockStack gap="400">
             <Card>
               <BlockStack gap="300">
@@ -74,7 +74,7 @@ export default function PopupsPage({ goTo }) {
                   label="Enable the lead-capture pop-up"
                   checked={s.popup_enabled}
                   onChange={(v) => set({ popup_enabled: v })}
-                  helpText="When on, visitors see the pop-up first. After they enter their email, the bundle (or discount code) is revealed."
+                  helpText="When on, a floating icon appears after a visitor views a product. Tapping it starts the email step, then reveals the bundle."
                 />
               </BlockStack>
             </Card>
@@ -98,14 +98,6 @@ export default function PopupsPage({ goTo }) {
                     <Button pressed={s.popup_discount_type === 'fixed'} onClick={() => set({ popup_discount_type: 'fixed' })}>{s.currency}</Button>
                   </ButtonGroup>
                 </InlineStack>
-                <RangeSlider
-                  label={`Show after ${s.popup_delay_seconds}s on the page`}
-                  min={0}
-                  max={30}
-                  value={Number(s.popup_delay_seconds)}
-                  onChange={(v) => set({ popup_delay_seconds: v })}
-                  output
-                />
                 <Checkbox label="Also ask for the visitor's name" checked={s.popup_collect_name} onChange={(v) => set({ popup_collect_name: v })} />
                 <TextField
                   label="Image URL (left side of the pop-up)"
@@ -135,12 +127,12 @@ export default function PopupsPage({ goTo }) {
             </Card>
 
             <Banner tone="info">
-              <p>How the reveal adapts: browsed <b>2+ products</b> → the full bundle; <b>1 product</b> → that product + complementary picks; <b>0 products</b> → just the code. All automatic.</p>
+              <p>How it works: after a visitor views a product a floating icon appears. Tapping it shows this pop-up (offer → email), then the bundle. Browsed <b>2–3 products</b> → bundle + similar products; <b>1 product</b> → that product + similar products to build a bundle. Complementary products come from your Shopify recommendations automatically.</p>
             </Banner>
           </BlockStack>
         </Layout.Section>
 
-        <Layout.Section variant="oneThird">
+        <Layout.Section variant="oneHalf">
           <Box position="sticky" insetBlockStart="500">
             <Card>
               <BlockStack gap="300">

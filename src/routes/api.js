@@ -16,7 +16,7 @@ import {
   getFeeHistory,
   getBillingStatus,
 } from '../services/billingService.js';
-import { getShop, getShopName } from '../services/shopsService.js';
+import { getShop, getShopName, getClient } from '../services/shopsService.js';
 
 const router = express.Router();
 
@@ -149,6 +149,38 @@ router.post('/settings/:shop', requireInstalledSession, async (req, res, next) =
     next(err);
   }
 });
+
+// A few real products from the store, for the dashboard's live preview.
+router.get('/preview-products/:shop', requireInstalledSession, async (req, res) => {
+  try {
+    const client = await getClient(req.shop);
+    if (!client) return res.json({ products: [] });
+    const data = await client.get('/products.json?limit=6&fields=id,title,handle,images,variants,options');
+    res.json({ products: (data.products || []).map(mapAdminProduct).filter((p) => p.image) });
+  } catch (err) {
+    res.json({ products: [] });
+  }
+});
+
+function mapAdminProduct(p) {
+  const cents = (v) => (v == null ? null : Math.round(parseFloat(v) * 100));
+  const first = (p.variants && p.variants[0]) || {};
+  return {
+    id: p.id,
+    handle: p.handle,
+    title: p.title,
+    url: '/products/' + p.handle,
+    image: (p.images && p.images[0] && p.images[0].src) || '',
+    price: cents(first.price) || 0,
+    compareAtPrice: cents(first.compare_at_price),
+    options: (p.options || []).map((o) => ({ name: o.name, values: o.values })),
+    variants: (p.variants || []).map((v) => ({
+      id: v.id, title: v.title, price: cents(v.price) || 0, compareAtPrice: cents(v.compare_at_price),
+      available: v.available !== false, optionValues: [v.option1, v.option2, v.option3].filter((x) => x != null),
+    })),
+    selectedVariantId: first.id || null,
+  };
+}
 
 router.get('/leads/:shop', requireInstalledSession, async (req, res, next) => {
   try {

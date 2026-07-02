@@ -169,7 +169,7 @@ export default function DashboardPage({ goTo }) {
                 />
                 <ChecklistItem done={billing?.status?.status === 'active'} label="Activate billing" onClick={() => goTo('billing')} />
                 <Divider />
-                <Button onClick={() => window.open('/demo', '_blank')} fullWidth>Preview the live widget</Button>
+                <Button onClick={() => goTo('customise')} fullWidth>Customise the widget</Button>
               </BlockStack>
             </Card>
           </Layout.Section>

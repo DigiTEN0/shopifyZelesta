@@ -81,10 +81,9 @@ export default function WidgetCustomisationPage() {
       title="Widget Customisation"
       subtitle="Design the widget your customers see. The preview updates as you type."
       primaryAction={{ content: 'Save', onAction: save, loading: saving }}
-      secondaryActions={[{ content: 'Open full demo', onAction: () => window.open('/demo', '_blank') }]}
     >
       <Layout>
-        <Layout.Section>
+        <Layout.Section variant="oneHalf">
           <BlockStack gap="400">
             <Card>
               <BlockStack gap="400">
@@ -151,17 +150,14 @@ export default function WidgetCustomisationPage() {
           </BlockStack>
         </Layout.Section>
 
-        <Layout.Section variant="oneThird">
+        <Layout.Section variant="oneHalf">
           <Box position="sticky" insetBlockStart="500">
             <Card>
               <BlockStack gap="300">
-                <InlineStack align="space-between" blockAlign="center">
-                  <Text as="h2" variant="headingMd">Live preview</Text>
-                  <Button variant="plain" onClick={() => window.open('/demo', '_blank')}>Demo mode ↗</Button>
-                </InlineStack>
+                <Text as="h2" variant="headingMd">Live preview</Text>
                 <WidgetPreview settings={{ ...toPublic(s), storeName: storeName || 'Your Store' }} />
                 <Text as="p" variant="bodySm" tone="subdued">
-                  This is the real widget. Switch variants, change quantities and remove items just like your customers will.
+                  The real widget with your own products. Switch variants, change quantities and remove items just like your customers will.
                 </Text>
               </BlockStack>
             </Card>

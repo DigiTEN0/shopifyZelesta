@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS settings (
   excluded          JSONB   DEFAULT '{"products":[],"collections":[]}'::jsonb,
 
   -- Widget customisation
-  primary_color     TEXT    DEFAULT '#111827',
-  secondary_color   TEXT    DEFAULT '#6366F1',
+  primary_color     TEXT    DEFAULT '#1c1917',
+  secondary_color   TEXT    DEFAULT '#b08968',
   position          TEXT    DEFAULT 'bottom-right', -- 'bottom-left' | 'bottom-right'
   header_text       TEXT    DEFAULT 'Your Bundle',
   cta_text          TEXT    DEFAULT 'Add All to Cart & Save',
@@ -143,3 +143,6 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAUL
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
 ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
 ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;
+-- Migrate shops still on the very first default palette to the demo palette.
+UPDATE settings SET primary_color   = '#1c1917' WHERE primary_color   = '#111827';
+UPDATE settings SET secondary_color = '#b08968' WHERE secondary_color = '#6366F1';
