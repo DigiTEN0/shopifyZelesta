@@ -175,11 +175,11 @@
   /*  Localisation of the widget's own UI strings                             */
   /* ======================================================================== */
   const I18N = {
-    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Without the bundle', bundleSub: '{n} items together — {discount} off', change: 'change', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more', growSub: 'Add more & save more' },
-    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Zonder bundel', bundleSub: '{n} stuks samen — {discount} korting', change: 'wijzigen', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer', growSub: 'Voeg meer toe en bespaar meer' },
-    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ohne Bündel', bundleSub: '{n} Artikel zusammen — {discount} Rabatt', change: 'ändern', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr', growSub: 'Füge mehr hinzu und spare mehr' },
-    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Sans le lot', bundleSub: '{n} articles ensemble — {discount} de réduction', change: 'modifier', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus', growSub: 'Ajoutez-en plus et économisez plus' },
-    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Sin el paquete', bundleSub: '{n} productos juntos — {discount} de descuento', change: 'cambiar', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más', growSub: 'Añade más y ahorra más' },
+    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Without the bundle', bundleSub: '{n} items together — {discount} off', change: 'change', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more', growSub: 'Add more & save more', zoomHint: 'Tap to enlarge', galleryHint: 'Tap the image to zoom' },
+    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Zonder bundel', bundleSub: '{n} stuks samen — {discount} korting', change: 'wijzigen', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer', growSub: 'Voeg meer toe en bespaar meer', zoomHint: 'Tik om te vergroten', galleryHint: 'Tik op de afbeelding om te vergroten' },
+    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ohne Bündel', bundleSub: '{n} Artikel zusammen — {discount} Rabatt', change: 'ändern', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr', growSub: 'Füge mehr hinzu und spare mehr', zoomHint: 'Zum Vergrößern tippen', galleryHint: 'Tippe auf das Bild zum Zoomen' },
+    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Sans le lot', bundleSub: '{n} articles ensemble — {discount} de réduction', change: 'modifier', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus', growSub: 'Ajoutez-en plus et économisez plus', zoomHint: 'Appuyez pour agrandir', galleryHint: 'Appuyez sur l\'image pour zoomer' },
+    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Sin el paquete', bundleSub: '{n} productos juntos — {discount} de descuento', change: 'cambiar', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más', growSub: 'Añade más y ahorra más', zoomHint: 'Toca para ampliar', galleryHint: 'Toca la imagen para ampliar' },
   };
   function t(locale, key, vars) {
     const dict = I18N[(locale || 'en').slice(0, 2)] || I18N.en;
@@ -239,30 +239,34 @@
 .bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(17,24,39,.06);}
 .bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:22px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
 .bw-collapse:hover{background:#e5e7eb;color:#111827;}
-.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;background:#f1f2f4;color:#4b5563;font-size:26px;width:40px;height:40px;border-radius:50%;}
+.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;background:#f1f2f4;color:#4b5563;font-size:34px;font-weight:300;width:40px;height:40px;border-radius:50%;}
 .bw-head-light .bw-collapse:hover{background:#e5e7eb;color:#111827;}
 
 .bw-items{flex:0 1 auto;min-height:0;overflow-y:auto;padding:8px 8px 4px;}
-.bw-item{display:flex;gap:12px;padding:12px;border-radius:14px;position:relative;transition:background .2s;}
+.bw-item{display:flex;gap:11px;padding:10px 11px;border-radius:14px;position:relative;transition:background .2s;}
 .bw-item:hover{background:#f9fafb;}
 .bw-item+.bw-item{border-top:1px solid #f1f2f4;}
-.bw-item-img{width:56px;height:56px;border-radius:12px;object-fit:cover;background:#f1f1f2;flex:0 0 auto;}
+.bw-item-imgwrap{position:relative;width:52px;height:52px;flex:0 0 auto;padding:0;border:none;background:#f1f1f2;border-radius:12px;overflow:hidden;cursor:zoom-in;display:block;}
+.bw-item-img{width:100%;height:100%;object-fit:cover;display:block;}
+.bw-zoom-badge{position:absolute;bottom:3px;right:3px;width:19px;height:19px;border-radius:50%;background:rgba(17,17,20,.6);color:#fff;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s;}
+.bw-zoom-badge svg{width:12px;height:12px;}
+.bw-item-imgwrap:hover .bw-zoom-badge{background:var(--bw-secondary);transform:scale(1.1);}
+.bw-item-imgwrap:hover .bw-item-img{filter:brightness(.94);}
 .bw-item-body{flex:1;min-width:0;}
 .bw-item-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:1px 0 4px 0;}
 .bw-item-title{font-size:14px;font-weight:650;line-height:1.3;color:#111827;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .bw-item-price{font-size:14px;font-weight:700;color:var(--bw-primary);white-space:nowrap;flex:0 0 auto;}
 .bw-item-compare{font-size:11.5px;color:#9ca3af;text-decoration:line-through;margin-left:5px;font-weight:500;}
-.bw-item-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;}
-.bw-opts{display:flex;gap:6px;flex:1 1 auto;min-width:0;}
-.bw-opts-multi{flex:1 1 100%;}
-.bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;
-  border:1px solid #e6e6e9;border-radius:8px;padding:6px 22px 6px 9px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 72px;min-width:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.bw-item-controls{display:flex;align-items:center;gap:5px;flex-wrap:nowrap;margin-top:7px;}
+.bw-opts{display:flex;gap:5px;flex:1 1 auto;min-width:0;}
+.bw-select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 7px center;
+  border:1px solid #e6e6e9;border-radius:8px;padding:5px 19px 5px 8px;font-size:11.5px;font-weight:600;color:#374151;cursor:pointer;flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .bw-select:focus{outline:none;border-color:var(--bw-primary);box-shadow:0 0 0 3px rgba(17,24,39,.07);}
-.bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:8px;overflow:hidden;flex:0 0 auto;margin-left:auto;}
-.bw-qty button{width:24px;height:28px;border:none;background:#fff;cursor:pointer;font-size:14px;color:#374151;line-height:1;transition:background .15s;}
+.bw-qty{display:inline-flex;align-items:center;border:1px solid #e6e6e9;border-radius:8px;overflow:hidden;flex:0 0 auto;}
+.bw-qty button{width:22px;height:26px;border:none;background:#fff;cursor:pointer;font-size:14px;color:#374151;line-height:1;transition:background .15s;}
 .bw-qty button:hover{background:#f3f4f6;}
-.bw-qty span{min-width:22px;text-align:center;font-size:12px;font-weight:700;}
-.bw-remove-inline{flex:0 0 auto;width:26px;height:28px;border:1px solid #e6e6e9;border-radius:8px;background:#fff;color:#b5b8bd;cursor:pointer;font-size:15px;line-height:1;transition:color .15s,border-color .15s;}
+.bw-qty span{min-width:18px;text-align:center;font-size:12px;font-weight:700;}
+.bw-remove-inline{flex:0 0 auto;width:24px;height:26px;border:1px solid #e6e6e9;border-radius:8px;background:#fff;color:#b5b8bd;cursor:pointer;font-size:15px;line-height:1;transition:color .15s,border-color .15s;}
 .bw-remove-inline:hover{color:#dc2626;border-color:#f0c9c9;}
 
 .bw-foot{padding:16px 20px 18px;border-top:1px solid #f1f2f4;background:#fff;}
@@ -302,8 +306,30 @@
   box-shadow:0 40px 90px -30px rgba(17,17,20,.55);animation:bw-modal-in .4s cubic-bezier(.16,1,.3,1) both;}
 .bw-modal-img{width:44%;flex:0 0 44%;background:#f1f1f2 center/cover no-repeat;min-height:340px;}
 .bw-modal-body{flex:1;padding:40px 38px;display:flex;flex-direction:column;justify-content:center;position:relative;}
-.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;font-size:28px;line-height:1;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
+.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;font-size:34px;font-weight:300;line-height:1;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
 .bw-modal-x:hover{background:#e5e7eb;color:#111827;}
+
+/* ── Product gallery (lightbox) ── */
+.bw-gallery-root{position:fixed;inset:0;z-index:2147483002;display:flex;align-items:center;justify-content:center;padding:20px;}
+.bw-gallery-backdrop{position:absolute;inset:0;background:rgba(17,17,20,.78);backdrop-filter:blur(2px);animation:bw-fade-in .2s ease both;}
+.bw-gallery{position:relative;width:460px;max-width:100%;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:bw-modal-in .35s cubic-bezier(.16,1,.3,1) both;}
+.bw-gallery-x{top:14px;right:14px;}
+.bw-gallery-title{padding:18px 60px 12px 22px;font-size:15px;font-weight:700;color:#111827;line-height:1.3;}
+.bw-gallery-stage{position:relative;background:#f4f4f5;cursor:zoom-in;}
+.bw-gallery-main{width:100%;aspect-ratio:1/1;background-position:center;background-repeat:no-repeat;background-size:contain;transition:background-size .25s ease;}
+.bw-gallery-stage.bw-zoomed{cursor:zoom-out;}
+.bw-gallery-stage.bw-zoomed .bw-gallery-main{background-size:190%;}
+.bw-gallery-nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,.9);color:#111827;font-size:24px;line-height:1;cursor:pointer;box-shadow:0 3px 10px -3px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.bw-gallery-nav:hover{background:#fff;}
+.bw-gallery-nav.bw-prev{left:12px;} .bw-gallery-nav.bw-next{right:12px;}
+.bw-gallery-hint{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:6px;background:rgba(17,17,20,.66);color:#fff;font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;white-space:nowrap;pointer-events:none;}
+.bw-gallery-hint svg{width:14px;height:14px;}
+.bw-gallery-stage.bw-zoomed .bw-gallery-hint{display:none;}
+.bw-gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 14px;}
+.bw-gallery-thumb{flex:0 0 52px;width:52px;height:52px;padding:0;border:2px solid transparent;border-radius:10px;overflow:hidden;background:#f1f1f2;cursor:pointer;}
+.bw-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.bw-gallery-thumb.bw-on{border-color:var(--bw-secondary);}
+@media(max-width:560px){.bw-gallery{width:100%;} .bw-gallery-thumb{flex-basis:48px;width:48px;height:48px;}}
 .bw-modal h2{margin:0 0 12px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);}
 .bw-modal h2 .bw-hl{color:var(--bw-secondary);}
 .bw-modal p.bw-modal-sub{margin:0 0 24px;font-size:15px;color:#6b7280;line-height:1.5;}
@@ -785,10 +811,16 @@
       ? `<div class="bw-item-price">${money(price, s)}${s.showCompareAt && compare && compare > price ? `<span class="bw-item-compare">${money(compare, s)}</span>` : ''}</div>`
       : '';
 
+    const gallery = productGallery(p);
+    const canZoom = gallery.length > 0;
     // Variant selectors are always visible (compact) — no "change" toggle.
+    // Tapping the image opens the product gallery (with zoom).
     return `
       <div class="bw-item" data-id="${esc(p.id)}">
-        <img class="bw-item-img" src="${esc(p.image)}" alt="">
+        <button class="bw-item-imgwrap${canZoom ? '' : ' bw-noimg'}" data-act="gallery" data-id="${esc(p.id)}" title="${esc(t(s.locale, 'zoomHint'))}" aria-label="${esc(t(s.locale, 'zoomHint'))}">
+          <img class="bw-item-img" src="${esc(productImage(p))}" alt="">
+          ${canZoom ? '<span class="bw-zoom-badge" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L17 17M8.5 6.5v4M6.5 8.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' : ''}
+        </button>
         <div class="bw-item-body">
           <div class="bw-item-top">
             <div class="bw-item-title">${esc(p.title)}</div>
@@ -819,6 +851,7 @@
       if (act === 'qty-dec') el.addEventListener('click', () => self.changeQty(el.getAttribute('data-id'), -1));
       if (act === 'edit') el.addEventListener('click', () => self.toggleEdit(el.getAttribute('data-id')));
       if (act === 'add-reco') el.addEventListener('click', (e) => { e.preventDefault(); self.addRecommended(el); });
+      if (act === 'gallery') el.addEventListener('click', (e) => { e.preventDefault(); self.openGallery(el.getAttribute('data-id')); });
       if (act === 'checkout') el.addEventListener('click', () => self.checkout(el));
     });
     this.root.querySelectorAll('.bw-select').forEach((sel) => {
@@ -897,6 +930,66 @@
       this._animateNext = false;
       this.render();
     } catch (e) {}
+  };
+
+  // Product image gallery (lightbox) with thumbnails + click-to-zoom.
+  BundleWidget.prototype.openGallery = function (id) {
+    const self = this, s = this.settings, loc = s.locale;
+    const p = this.session.products.find((x) => String(x.id) === String(id));
+    if (!p) return;
+    const imgs = productGallery(p);
+    if (!imgs.length) return;
+    let idx = 0;
+    injectStyles();
+    const root = document.createElement('div');
+    root.className = 'bw-root bw-gallery-root';
+    root.style.setProperty('--bw-primary', s.primaryColor);
+    root.style.setProperty('--bw-secondary', s.secondaryColor);
+    if (s.fontFamily && s.fontFamily !== 'inherit') root.style.setProperty('--bw-font', s.fontFamily);
+    this.gallery = root;
+    const thumbs = imgs.map((src, i) =>
+      `<button class="bw-gallery-thumb${i === 0 ? ' bw-on' : ''}" data-i="${i}"><img src="${esc(src)}" alt=""></button>`).join('');
+    root.innerHTML = `
+      <div class="bw-gallery-backdrop" data-gact="close"></div>
+      <div class="bw-gallery">
+        <button class="bw-modal-x bw-gallery-x" data-gact="close" aria-label="Close">&times;</button>
+        <div class="bw-gallery-title">${esc(p.title)}</div>
+        <div class="bw-gallery-stage" data-gact="zoom">
+          <div class="bw-gallery-main" style="background-image:url('${esc(imgs[0])}')"></div>
+          ${imgs.length > 1 ? '<button class="bw-gallery-nav bw-prev" data-gact="prev" aria-label="Previous">‹</button><button class="bw-gallery-nav bw-next" data-gact="next" aria-label="Next">›</button>' : ''}
+          <span class="bw-gallery-hint"><svg viewBox="0 0 20 20" fill="none"><circle cx="8.5" cy="8.5" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M12.5 12.5L17 17M8.5 6.5v4M6.5 8.5h4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>${esc(t(loc, 'galleryHint'))}</span>
+        </div>
+        ${imgs.length > 1 ? `<div class="bw-gallery-thumbs">${thumbs}</div>` : ''}
+      </div>`;
+    document.body.appendChild(root);
+
+    const main = root.querySelector('.bw-gallery-main');
+    const stage = root.querySelector('.bw-gallery-stage');
+    const show = (i) => {
+      idx = (i + imgs.length) % imgs.length;
+      main.style.backgroundImage = `url('${imgs[idx]}')`;
+      stage.classList.remove('bw-zoomed');
+      root.querySelectorAll('.bw-gallery-thumb').forEach((tn, ti) => tn.classList.toggle('bw-on', ti === idx));
+    };
+    const close = () => { if (self.gallery) { self.gallery.remove(); self.gallery = null; } document.removeEventListener('keydown', onKey); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowRight') show(idx + 1);
+      else if (e.key === 'ArrowLeft') show(idx - 1);
+    };
+    document.addEventListener('keydown', onKey);
+    root.querySelectorAll('[data-gact]').forEach((el) => {
+      const a = el.getAttribute('data-gact');
+      if (a === 'close') el.addEventListener('click', (e) => { e.stopPropagation(); close(); });
+      if (a === 'prev') el.addEventListener('click', (e) => { e.stopPropagation(); show(idx - 1); });
+      if (a === 'next') el.addEventListener('click', (e) => { e.stopPropagation(); show(idx + 1); });
+      if (a === 'zoom') el.addEventListener('click', (e) => {
+        if (e.target.closest('.bw-gallery-nav')) return;
+        stage.classList.toggle('bw-zoomed');
+      });
+    });
+    root.querySelectorAll('.bw-gallery-thumb').forEach((tn) =>
+      tn.addEventListener('click', (e) => { e.stopPropagation(); show(parseInt(tn.getAttribute('data-i'), 10)); }));
   };
 
   // Clicking the collapsed icon: if the lead pop-up is on and we haven't captured
@@ -1103,6 +1196,20 @@
     if (!p.variants || !p.variants.length) return null;
     return p.variants.find((v) => String(v.id) === String(p.selectedVariantId)) || p.variants[0];
   }
+  // The image to show for a product: the selected variant's own image when it
+  // has one, otherwise the product's main image.
+  function productImage(p) {
+    const v = currentVariant(p);
+    return (v && v.image) || p.image || (p.images && p.images[0]) || '';
+  }
+  // All images for the product's gallery (variant image first so it leads).
+  function productGallery(p) {
+    const imgs = (p.images && p.images.length ? p.images.slice() : [p.image]).filter(Boolean);
+    const v = currentVariant(p);
+    if (v && v.image && imgs.indexOf(v.image) === -1) imgs.unshift(v.image);
+    else if (v && v.image) { imgs.splice(imgs.indexOf(v.image), 1); imgs.unshift(v.image); }
+    return imgs.length ? imgs : [productImage(p)];
+  }
   function normalizeProduct(p) {
     const np = Object.assign({ quantity: 1 }, p);
     if (np.variants && np.variants.length && !np.selectedVariantId) {
@@ -1115,12 +1222,14 @@
   function slimProduct(prod) {
     const rawImg = prod.featured_image || prod.image ||
       (prod.images && prod.images[0] && (prod.images[0].src || prod.images[0])) || '';
+    const https = (u) => String((u && (u.src || u)) || '').replace(/^\/\//, 'https://');
     return {
       id: prod.id,
       handle: prod.handle,
       title: prod.title,
       url: prod.url || '/products/' + prod.handle,
-      image: String(rawImg).replace(/^\/\//, 'https://'),
+      image: https(rawImg),
+      images: (prod.images || []).map(https).filter(Boolean),
       price: prod.price,
       compareAtPrice: prod.compare_at_price || prod.compareAtPrice || null,
       options: (prod.options || []).map((name, i) => ({
@@ -1129,7 +1238,8 @@
       })),
       variants: (prod.variants || []).map((v) => ({
         id: v.id, title: v.title, price: v.price, compareAtPrice: v.compare_at_price || v.compareAtPrice || null,
-        available: v.available, optionValues: v.optionValues || [v.option1, v.option2, v.option3].filter((x) => x != null),
+        available: v.available, image: v.featured_image ? https(v.featured_image) : (v.image || null),
+        optionValues: v.optionValues || [v.option1, v.option2, v.option3].filter((x) => x != null),
       })),
       selectedVariantId: prod.selectedVariantId || null,
     };
@@ -1165,12 +1275,14 @@
     const url = path.split('?')[0] + '.js';
     return fetch(url).then((r) => (r.ok ? r.json() : null)).then((prod) => {
       if (!prod) return null;
+      const https = (u) => String((u && (u.src || u)) || '').replace(/^\/\//, 'https://');
       return {
         id: prod.id,
         handle: prod.handle,
         title: prod.title,
         url: '/products/' + prod.handle,
-        image: (prod.featured_image || (prod.images && prod.images[0]) || '').replace(/^\/\//, 'https://'),
+        image: https(prod.featured_image || (prod.images && prod.images[0]) || ''),
+        images: (prod.images || []).map(https).filter(Boolean),
         price: prod.price,
         compareAtPrice: prod.compare_at_price || null,
         options: (prod.options || []).map((name, i) => ({
@@ -1185,6 +1297,7 @@
           price: v.price,
           compareAtPrice: v.compare_at_price || null,
           available: v.available,
+          image: v.featured_image ? https(v.featured_image) : null,
           optionValues: [v.option1, v.option2, v.option3].filter((x) => x != null),
         })),
         selectedVariantId: (window.ShopifyAnalytics && window.ShopifyAnalytics.meta && window.ShopifyAnalytics.meta.selectedVariantId) || null,
