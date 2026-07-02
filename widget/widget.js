@@ -239,8 +239,8 @@
 .bw-head-dot{width:8px;height:8px;border-radius:50%;background:var(--bw-secondary);box-shadow:0 0 0 4px rgba(17,24,39,.06);}
 .bw-collapse{background:#f3f4f6;border:none;color:#6b7280;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:22px;line-height:1;transition:background .2s,color .2s;display:flex;align-items:center;justify-content:center;}
 .bw-collapse:hover{background:#e5e7eb;color:#111827;}
-.bw-head-light .bw-collapse{position:absolute;top:15px;right:15px;background:transparent;color:#b5b8bd;font-size:26px;width:36px;height:36px;}
-.bw-head-light .bw-collapse:hover{background:#f3f4f6;color:#111827;}
+.bw-head-light .bw-collapse{position:absolute;top:14px;right:14px;background:#f1f2f4;color:#4b5563;font-size:26px;width:40px;height:40px;border-radius:50%;}
+.bw-head-light .bw-collapse:hover{background:#e5e7eb;color:#111827;}
 
 .bw-items{flex:0 1 auto;min-height:0;overflow-y:auto;padding:8px 8px 4px;}
 .bw-item{display:flex;gap:12px;padding:12px;border-radius:14px;position:relative;transition:background .2s;}
@@ -302,12 +302,12 @@
   box-shadow:0 40px 90px -30px rgba(17,17,20,.55);animation:bw-modal-in .4s cubic-bezier(.16,1,.3,1) both;}
 .bw-modal-img{width:44%;flex:0 0 44%;background:#f1f1f2 center/cover no-repeat;min-height:340px;}
 .bw-modal-body{flex:1;padding:40px 38px;display:flex;flex-direction:column;justify-content:center;position:relative;}
-.bw-modal-x{position:absolute;top:16px;right:18px;width:34px;height:34px;border:none;background:transparent;color:#9aa0a6;font-size:24px;line-height:1;cursor:pointer;border-radius:8px;transition:background .15s,color .15s;}
-.bw-modal-x:hover{background:#f3f4f6;color:#111827;}
+.bw-modal-x{position:absolute;top:16px;right:16px;width:40px;height:40px;border:none;background:#f1f2f4;color:#4b5563;font-size:28px;line-height:1;cursor:pointer;border-radius:50%;transition:background .15s,color .15s;display:flex;align-items:center;justify-content:center;z-index:2;}
+.bw-modal-x:hover{background:#e5e7eb;color:#111827;}
 .bw-modal h2{margin:0 0 12px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);}
 .bw-modal h2 .bw-hl{color:var(--bw-secondary);}
 .bw-modal p.bw-modal-sub{margin:0 0 24px;font-size:15px;color:#6b7280;line-height:1.5;}
-.bw-modal-btn{width:100%;border:none;border-radius:12px;background:var(--bw-secondary);color:#fff;font-size:16px;font-weight:750;padding:16px;cursor:pointer;letter-spacing:-.01em;transition:transform .15s ease,filter .2s;}
+.bw-modal-btn{width:100%;margin-top:14px;border:none;border-radius:12px;background:var(--bw-secondary);color:#fff;font-size:16px;font-weight:750;padding:16px;cursor:pointer;letter-spacing:-.01em;transition:transform .15s ease,filter .2s;}
 .bw-modal-btn:hover{transform:translateY(-1px);filter:brightness(1.05);}
 .bw-modal-btn:disabled{opacity:.6;cursor:default;transform:none;}
 .bw-modal-decline{display:block;width:100%;margin-top:14px;background:none;border:none;color:#9aa0a6;font-size:13.5px;font-weight:600;cursor:pointer;text-align:center;}
@@ -952,9 +952,10 @@
       return;
     }
 
-    // 1) ALWAYS add the products to the cart first — this must never be blocked
-    //    by discount generation. 2) mint the discount code (non-fatal). 3) show
-    //    the result and open the theme's cart drawer.
+    // 1) ALWAYS add the products to the cart first — never blocked by discount
+    //    generation. 2) mint the discount code (non-fatal). 3) go straight to the
+    //    cart with the discount pre-applied: this is reliable on EVERY theme,
+    //    shows all the products, and skips the code-copy screen entirely.
     self._addToCart(items)
       .then(() => self._generateCode(items).catch((e) => {
         console.warn('[bundle-widget] discount code failed (items still added)', e);
@@ -963,10 +964,7 @@
       .then((res) => {
         const code = res && res.code;
         self._emit('add_to_cart', code);
-        if (code) self._applyDiscountCookie(code); // apply for checkout, best-effort
-        if (self.settings.redirectToCart) { self._goToCartWithDiscount(code || ''); return; }
-        self._openCartDrawer();
-        self._showSuccess(code || '', calc, res);
+        self._goToCartWithDiscount(code || '');
       })
       .catch((err) => {
         console.error('[bundle-widget] add to cart failed', err);
@@ -1002,8 +1000,11 @@
 
   BundleWidget.prototype._goToCartWithDiscount = function (code) {
     if (this.demo || this.preview) { this.collapse(); return; }
-    // Applying via /discount/<code> sets the cart cookie so it persists to checkout.
-    window.location.href = `/discount/${encodeURIComponent(code)}?redirect=/cart`;
+    // /discount/<code>?redirect=/cart applies the bundle discount (persists to
+    // checkout) AND lands on the cart with every product visible. No code screen.
+    window.location.href = code
+      ? `/discount/${encodeURIComponent(code)}?redirect=/cart`
+      : '/cart';
   };
 
   // ── Network (live mode) ─────────────────────────────────────
