@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
   Page, Layout, Card, BlockStack, InlineStack, Text, Checkbox, TextField, Select,
-  ButtonGroup, Button, RangeSlider, Divider, Box, Banner, SkeletonBodyText,
+  ButtonGroup, Button, Divider, Box, SkeletonBodyText,
 } from '@shopify/polaris';
 import { api } from '../lib/api.js';
 import { useToast } from '../App.jsx';
@@ -125,10 +125,6 @@ export default function PopupsPage({ goTo }) {
                 <TextField label="Decline link" value={s.popup_decline} onChange={(v) => set({ popup_decline: v })} placeholder="No thanks" autoComplete="off" />
               </BlockStack>
             </Card>
-
-            <Banner tone="info">
-              <p>How it works: after a visitor views a product a floating icon appears. Tapping it shows this pop-up (offer → email), then the bundle. Browsed <b>2–3 products</b> → bundle + similar products; <b>1 product</b> → that product + similar products to build a bundle. Complementary products come from your Shopify recommendations automatically.</p>
-            </Banner>
           </BlockStack>
         </Layout.Section>
 

@@ -32,7 +32,7 @@
 
   // ── Default settings (overridden by backend / demo config) ───────────────
   const DEFAULTS = {
-    triggerThreshold: 2,
+    triggerThreshold: 1,
     discountType: 'percentage',
     tiers: { 2: 10, 3: 15, 4: 20 },
     valueRules: [],
@@ -636,9 +636,10 @@
     if (!active && !this.preview) { this.destroy(); return; }
 
     const count = this.session.products.length;
-    // With the pop-up on, the collapsed icon shows from the very first product
-    // (clicking it starts the email flow). Otherwise it uses the bundle threshold.
-    const iconThreshold = (s.popup && s.popup.enabled) ? 1 : s.triggerThreshold;
+    // The collapsed icon appears after the merchant's chosen number of viewed
+    // products (the Trigger slider) — whether the bundle or the pop-up is on.
+    // Tapping it is what starts the pop-up flow; the threshold is not overridden.
+    const iconThreshold = Math.max(1, s.triggerThreshold || 1);
     const meetsThreshold = this.preview || count >= iconThreshold;
     if (!meetsThreshold || this.session.dismissed) { this.destroy(); return; }
 
@@ -1153,15 +1154,13 @@
         if (settings.enabled === false && !popupEnabled) return;
         const widget = new BundleWidget({ shop, settings, session });
         window.__bundleWidget = widget;
-        const popupOn = settings.popup && settings.popup.enabled;
-        const threshold = settings.triggerThreshold || 2;
+        const threshold = Math.max(1, settings.triggerThreshold || 1);
 
         const orchestrate = () => {
-          // The collapsed icon appears after 1 product (pop-up mode) or the
-          // bundle threshold (no pop-up). It NEVER opens by itself — the visitor
-          // taps it to start the flow. Reopening after capture is the same tap.
-          const iconThreshold = popupOn ? 1 : threshold;
-          if (widget.session.products.length >= iconThreshold) {
+          // The collapsed icon appears after the merchant's chosen number of
+          // viewed products (the Trigger slider). It NEVER opens by itself — the
+          // visitor taps it to start the flow. Reopening after capture is a tap.
+          if (widget.session.products.length >= threshold) {
             widget.expanded = false;
             widget.boot();
           }

@@ -2,7 +2,7 @@
 import { query } from '../db/pool.js';
 
 export const DEFAULT_SETTINGS = {
-  trigger_threshold: 2,
+  trigger_threshold: 1,
   discount_type: 'percentage',
   tiers: { 2: 10, 3: 15, 4: 20 },
   value_rules: [],

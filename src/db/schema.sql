@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS settings (
   shop_domain       TEXT PRIMARY KEY REFERENCES shops(shop_domain) ON DELETE CASCADE,
 
   -- Bundle behaviour
-  trigger_threshold INT     DEFAULT 2,        -- products viewed before widget shows (2..5)
+  trigger_threshold INT     DEFAULT 1,        -- products viewed before widget shows (1..5)
   discount_type     TEXT    DEFAULT 'percentage', -- 'percentage' | 'fixed'
   tiers             JSONB   DEFAULT '{"2":10,"3":15,"4":20}'::jsonb, -- products -> discount
   value_rules       JSONB   DEFAULT '[]'::jsonb, -- [{min_value, type, amount}] bundle-value rules
@@ -143,6 +143,14 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAUL
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
 ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
 ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS trigger_migrated_v1 BOOLEAN DEFAULT false;
+
+-- One-time move off the old default of 2 to the new default of 1 (so the icon
+-- and the complementary carousel work after a single product). Guarded by a
+-- flag so a merchant who later deliberately sets 2 keeps their choice.
+UPDATE settings SET trigger_threshold = 1, trigger_migrated_v1 = true
+  WHERE trigger_migrated_v1 = false AND trigger_threshold = 2;
+UPDATE settings SET trigger_migrated_v1 = true WHERE trigger_migrated_v1 = false;
 -- Move shops off any of the old/robotic dark defaults onto the warm brand
 -- palette (near-black text + tan accent). Only touches known default values, so
 -- a merchant who deliberately picked a colour keeps it.
