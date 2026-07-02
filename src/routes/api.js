@@ -47,7 +47,15 @@ router.post(
   requireInstalledShop,
   async (req, res, next) => {
     try {
-      const result = await generateBundleDiscount(req.shop, req.body || {});
+      let result;
+      try {
+        result = await generateBundleDiscount(req.shop, req.body || {});
+      } catch (e) {
+        // Fewer than 2 products (or below a tier) — fall back to the pop-up
+        // welcome discount so a single-product reveal can still check out.
+        if (e.statusCode === 422) result = await generateWelcomeDiscount(req.shop, req.body || {});
+        else throw e;
+      }
       res.json(result);
     } catch (err) {
       if (err.statusCode) {
@@ -89,36 +97,22 @@ router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async 
       return res.status(422).json({ error: 'A valid email is required.' });
     }
 
-    let result = {};
-    let mode;
-    if (items.length >= 2) {
-      // Bundle: the reveal panel mints the code at checkout for the final
-      // composition (the shopper may still add complementary items), so we
-      // don't waste a Shopify discount here — just record the lead.
-      mode = 'bundle';
-    } else if (items.length === 1) {
-      result = await generateWelcomeDiscount(req.shop, { items, sessionId });
-      mode = 'single';
-    } else {
-      result = await generateWelcomeDiscount(req.shop, { sessionId });
-      mode = 'welcome';
-    }
-
+    // The reveal (bundle panel) mints the actual code at checkout for the final
+    // composition, so lead capture just records the email + browse intent.
+    const mode = items.length >= 2 ? 'bundle' : (items.length === 1 ? 'single' : 'welcome');
     const productIds = items.map((it) => it.productId).filter(Boolean);
     const productTitles = items.map((it) => it.title).filter(Boolean);
     const productDetails = items
       .filter((it) => it.title)
       .map((it) => ({ title: it.title, image: it.image || '', url: it.url || '' }));
-    await saveLead(req.shop, {
-      email, name, sessionId, productIds, productTitles, productDetails, code: result.code || null, mode,
-    });
+    await saveLead(req.shop, { email, name, sessionId, productIds, productTitles, productDetails, code: null, mode });
 
     // Best-effort: push to Shopify Customers (needs write_customers scope).
-    createShopifyCustomer(req.shop, { email, name, browsedTitles: productTitles, code: result.code || null })
+    createShopifyCustomer(req.shop, { email, name, browsedTitles: productTitles, code: null })
       .then((cid) => cid && setCustomerId(req.shop, email, cid))
       .catch(() => {});
 
-    res.json({ ok: true, mode, ...result });
+    res.json({ ok: true, mode });
   } catch (err) {
     if (err.statusCode) return res.status(err.statusCode).json({ error: err.message });
     next(err);

@@ -175,11 +175,11 @@
   /*  Localisation of the widget's own UI strings                             */
   /* ======================================================================== */
   const I18N = {
-    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Without the bundle', bundleSub: '{n} items together — {discount} off', change: 'change', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more' },
-    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Zonder bundel', bundleSub: '{n} stuks samen — {discount} korting', change: 'wijzigen', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer' },
-    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ohne Bündel', bundleSub: '{n} Artikel zusammen — {discount} Rabatt', change: 'ändern', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr' },
-    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Sans le lot', bundleSub: '{n} articles ensemble — {discount} de réduction', change: 'modifier', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus' },
-    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Sin el paquete', bundleSub: '{n} productos juntos — {discount} de descuento', change: 'cambiar', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más' },
+    en: { bundled: '{n} products bundled', discountApplied: 'discount applied', original: 'Without the bundle', bundleSub: '{n} items together — {discount} off', change: 'change', bundlePrice: 'Bundle price', save: 'You save {x}', autoApplied: 'Discount applied automatically at checkout', addedTitle: 'Bundle added!', addedBody: 'Your {x} discount is locked in and applied at checkout.', viewCart: 'View cart & checkout', keepShopping: 'Continue shopping', emptyTitle: 'Your bundle is empty.', emptyBody: 'Browse a few products to build one.', popupHead: 'Want {discount} off your order?', popupSub: 'Sign up and get your discount code instantly.', popupYes: 'Yes, I want {discount} off', popupNo: 'No thanks', formTitle: 'Almost there — where do we send it?', formName: 'Name', formEmail: 'Email address', formSubmit: 'Get my discount', consent: 'You agree to receive marketing emails. Unsubscribe anytime.', codeTitle: "Here's your {discount} discount", codeSub: 'Applied automatically at checkout.', copyCode: 'Copy code', copied: 'Copied!', shopNow: 'Start shopping', alsoLike: 'Complete your bundle & save more', growSub: 'Add more & save more' },
+    nl: { bundled: '{n} producten gebundeld', discountApplied: 'korting toegepast', original: 'Zonder bundel', bundleSub: '{n} stuks samen — {discount} korting', change: 'wijzigen', bundlePrice: 'Bundelprijs', save: 'Je bespaart {x}', autoApplied: 'Korting wordt automatisch toegepast bij het afrekenen', addedTitle: 'Bundel toegevoegd!', addedBody: 'Je korting van {x} is vastgezet en wordt toegepast bij het afrekenen.', viewCart: 'Winkelwagen bekijken & afrekenen', keepShopping: 'Verder winkelen', emptyTitle: 'Je bundel is leeg.', emptyBody: 'Bekijk een paar producten om er een te maken.', popupHead: 'Wil jij {discount} korting op je bestelling?', popupSub: 'Schrijf je in en krijg direct jouw kortingscode.', popupYes: 'Ja, ik wil {discount} korting', popupNo: 'Nee bedankt', formTitle: 'Bijna klaar — waar sturen we het naartoe?', formName: 'Naam', formEmail: 'E-mailadres', formSubmit: 'Ontvang mijn korting', consent: 'Je gaat akkoord met het ontvangen van marketingmails. Je kunt je altijd uitschrijven.', codeTitle: 'Hier is je {discount} korting', codeSub: 'Wordt automatisch toegepast bij het afrekenen.', copyCode: 'Kopieer code', copied: 'Gekopieerd!', shopNow: 'Begin met winkelen', alsoLike: 'Maak je bundel compleet en bespaar meer', growSub: 'Voeg meer toe en bespaar meer' },
+    de: { bundled: '{n} Produkte gebündelt', discountApplied: 'Rabatt angewendet', original: 'Ohne Bündel', bundleSub: '{n} Artikel zusammen — {discount} Rabatt', change: 'ändern', bundlePrice: 'Bündelpreis', save: 'Du sparst {x}', autoApplied: 'Rabatt wird automatisch an der Kasse angewendet', addedTitle: 'Bündel hinzugefügt!', addedBody: 'Dein Rabatt von {x} ist gesichert und wird an der Kasse angewendet.', viewCart: 'Warenkorb ansehen & zur Kasse', keepShopping: 'Weiter einkaufen', emptyTitle: 'Dein Bündel ist leer.', emptyBody: 'Sieh dir ein paar Produkte an, um eins zu erstellen.', popupHead: 'Möchtest du {discount} Rabatt auf deine Bestellung?', popupSub: 'Melde dich an und erhalte sofort deinen Rabattcode.', popupYes: 'Ja, ich will {discount} Rabatt', popupNo: 'Nein danke', formTitle: 'Fast geschafft — wohin sollen wir ihn senden?', formName: 'Name', formEmail: 'E-Mail-Adresse', formSubmit: 'Rabatt erhalten', consent: 'Du stimmst dem Erhalt von Marketing-E-Mails zu. Jederzeit abbestellbar.', codeTitle: 'Hier ist dein Rabatt von {discount}', codeSub: 'Wird an der Kasse automatisch angewendet.', copyCode: 'Code kopieren', copied: 'Kopiert!', shopNow: 'Jetzt einkaufen', alsoLike: 'Vervollständige dein Bündel und spare mehr', growSub: 'Füge mehr hinzu und spare mehr' },
+    fr: { bundled: '{n} produits regroupés', discountApplied: 'réduction appliquée', original: 'Sans le lot', bundleSub: '{n} articles ensemble — {discount} de réduction', change: 'modifier', bundlePrice: 'Prix du lot', save: 'Vous économisez {x}', autoApplied: 'Réduction appliquée automatiquement au paiement', addedTitle: 'Lot ajouté !', addedBody: 'Votre réduction de {x} est garantie et appliquée au paiement.', viewCart: 'Voir le panier et payer', keepShopping: 'Continuer mes achats', emptyTitle: 'Votre lot est vide.', emptyBody: 'Parcourez quelques produits pour en créer un.', popupHead: 'Voulez-vous {discount} de réduction sur votre commande ?', popupSub: 'Inscrivez-vous et recevez votre code de réduction instantanément.', popupYes: 'Oui, je veux {discount} de réduction', popupNo: 'Non merci', formTitle: 'Presque fini — où l\'envoyons-nous ?', formName: 'Nom', formEmail: 'Adresse e-mail', formSubmit: 'Obtenir ma réduction', consent: 'Vous acceptez de recevoir des e-mails marketing. Désabonnement à tout moment.', codeTitle: 'Voici votre réduction de {discount}', codeSub: 'Appliquée automatiquement au paiement.', copyCode: 'Copier le code', copied: 'Copié !', shopNow: 'Commencer mes achats', alsoLike: 'Complétez votre lot et économisez plus', growSub: 'Ajoutez-en plus et économisez plus' },
+    es: { bundled: '{n} productos agrupados', discountApplied: 'descuento aplicado', original: 'Sin el paquete', bundleSub: '{n} productos juntos — {discount} de descuento', change: 'cambiar', bundlePrice: 'Precio del paquete', save: 'Ahorras {x}', autoApplied: 'El descuento se aplica automáticamente al pagar', addedTitle: '¡Paquete añadido!', addedBody: 'Tu descuento de {x} está asegurado y se aplica al pagar.', viewCart: 'Ver carrito y pagar', keepShopping: 'Seguir comprando', emptyTitle: 'Tu paquete está vacío.', emptyBody: 'Explora algunos productos para crear uno.', popupHead: '¿Quieres {discount} de descuento en tu pedido?', popupSub: 'Regístrate y obtén tu código de descuento al instante.', popupYes: 'Sí, quiero {discount} de descuento', popupNo: 'No, gracias', formTitle: 'Casi listo, ¿a dónde lo enviamos?', formName: 'Nombre', formEmail: 'Correo electrónico', formSubmit: 'Obtener mi descuento', consent: 'Aceptas recibir correos de marketing. Cancela cuando quieras.', codeTitle: 'Aquí tienes tu descuento de {discount}', codeSub: 'Se aplica automáticamente al pagar.', copyCode: 'Copiar código', copied: '¡Copiado!', shopNow: 'Empezar a comprar', alsoLike: 'Completa tu paquete y ahorra más', growSub: 'Añade más y ahorra más' },
   };
   function t(locale, key, vars) {
     const dict = I18N[(locale || 'en').slice(0, 2)] || I18N.en;
@@ -535,8 +535,7 @@
     const items = this.selectedItems();
 
     if (this.demo || this.preview) {
-      const mode = items.length >= 2 ? 'bundle' : (items.length === 1 ? 'single' : 'welcome');
-      setTimeout(function () { self._afterCapture({ code: 'BUNDLE-DEMO12-X', mode: mode }); }, 500);
+      setTimeout(function () { self._afterCapture(); }, 400);
       return;
     }
 
@@ -547,7 +546,7 @@
         items: items.map(function (it) { return { productId: it.productId, variantId: it.variantId, price: it.price / 100, quantity: it.quantity, title: it.title, image: it.image, url: it.url }; }),
       }),
     }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || 'failed'); return j; }); })
-      .then(function (res) { self._afterCapture(res); })
+      .then(function () { self._afterCapture(); })
       .catch(function (err) {
         console.error('[bundle-widget] lead failed', err);
         if (btn) { btn.disabled = false; btn.textContent = t(loc, 'formSubmit'); }
@@ -555,19 +554,15 @@
       });
   };
 
-  BundleWidget.prototype._afterCapture = function (res) {
+  BundleWidget.prototype._afterCapture = function () {
+    // Email captured — the pop-up flow ends by revealing the expanded bundle.
+    // (For a single product the panel shows it + complementary picks to grow it.)
     this.session.captured = true;
-    this.session.code = res.code;
-    this.session.mode = res.mode;
     saveSession(this.session);
-    if (res.mode === 'bundle') {
-      this.closeModal();
-      this.expanded = true; this._animateNext = true; this.render();
-    } else {
-      this.popupStage = 'code';
-      this._renderModal();
-      if (res.mode === 'single') this._loadComplementary();
-    }
+    this.closeModal();
+    this.expanded = true;
+    this._animateNext = true;
+    this.render();
   };
 
   BundleWidget.prototype._copyCode = function (btn) {
@@ -633,12 +628,11 @@
     const s = this.settings;
     if (!s.enabled && !this.preview) { this.destroy(); return; }
 
-    // When the lead pop-up is active and the visitor hasn't opted in yet, the
-    // pop-up owns the flow — keep the corner pill/panel hidden until capture.
-    if (s.popup && s.popup.enabled && !this.session.captured && !this.preview) { this.destroy(); return; }
-
     const count = this.session.products.length;
-    const meetsThreshold = this.preview || count >= s.triggerThreshold;
+    // With the pop-up on, the collapsed icon shows from the very first product
+    // (clicking it starts the email flow). Otherwise it uses the bundle threshold.
+    const iconThreshold = (s.popup && s.popup.enabled) ? 1 : s.triggerThreshold;
+    const meetsThreshold = this.preview || count >= iconThreshold;
     if (!meetsThreshold || this.session.dismissed) { this.destroy(); return; }
 
     if (!this.root) {
@@ -666,13 +660,35 @@
 
   BundleWidget.prototype.snapshot = function () {
     const items = this.selectedItems();
-    return { items, calc: computeDiscount(items, this.settings) };
+    return { items, calc: this.calc(items) };
+  };
+
+  // Reveal discount = the bundle tier when eligible (2+ products), otherwise the
+  // pop-up welcome discount (so a single product still gets the promised % and
+  // can grow into a bundle via the complementary picks).
+  BundleWidget.prototype.calc = function (items) {
+    const s = this.settings;
+    const tier = computeDiscount(items, s);
+    if (tier.eligible) return tier;
+    const p = s.popup || {};
+    if (!p.discount) return tier;
+    const subtotal = items.reduce((sum, it) => sum + it.price * (it.quantity || 1), 0);
+    const isPct = (p.discountType || 'percentage') === 'percentage';
+    let amount, pct;
+    if (isPct) { pct = Math.min(Number(p.discount), 100); amount = (subtotal * pct) / 100; }
+    else { amount = Math.min(toCents(p.discount), subtotal); pct = subtotal > 0 ? (amount / subtotal) * 100 : 0; }
+    amount = Math.round(amount);
+    return {
+      subtotal, discountType: isPct ? 'percentage' : 'fixed', discountAmount: amount,
+      total: Math.max(0, subtotal - amount), percentOff: Math.round(pct),
+      eligible: amount > 0 && subtotal >= toCents(s.minBundleValue || 0), reason: null,
+    };
   };
 
   BundleWidget.prototype._pillHTML = function (animateAdd, entrance) {
     const s = this.settings;
     const items = this.selectedItems();
-    const calc = computeDiscount(items, s);
+    const calc = this.calc(items);
     const thumbs = this.session.products.slice(0, 3).map((p, i) => {
       const isNew = animateAdd && i === this.session.products.length - 1 && this.session.products.length <= 3;
       return `<img class="bw-thumb ${isNew ? 'bw-new' : ''}" style="left:${i * 17}px;z-index:${3 - i}" src="${esc(p.image)}" alt="">`;
@@ -690,7 +706,7 @@
   BundleWidget.prototype._panelHTML = function (entrance) {
     const s = this.settings;
     const items = this.selectedItems();
-    const calc = computeDiscount(items, s);
+    const calc = this.calc(items);
     const anim = entrance ? ' bw-animate' : '';
 
     if (this.session.products.length === 0) {
@@ -706,7 +722,10 @@
       : money(calc.discountAmount, s);
 
     const dl = calc.eligible ? `${calc.percentOff}%` : '';
-    const sub = t(s.locale, 'bundleSub', { n: this.session.products.length, discount: dl });
+    const count = this.session.products.length;
+    const sub = count === 1
+      ? t(s.locale, 'growSub')
+      : t(s.locale, 'bundleSub', { n: count, discount: dl });
     const cta = esc(s.ctaText).split('{savings}').join(esc(savings));
     // Complementary picks only when there's still room in the bundle (<= 3 items).
     const showReco = this.session.products.length <= 3;
@@ -788,7 +807,7 @@
     const self = this;
     this.root.querySelectorAll('[data-act]').forEach((el) => {
       const act = el.getAttribute('data-act');
-      if (act === 'expand') el.addEventListener('click', (e) => { if (!e.target.closest('[data-act="dismiss"]')) self.expand(); });
+      if (act === 'expand') el.addEventListener('click', (e) => { if (!e.target.closest('[data-act="dismiss"]')) self.openFromPill(); });
       if (act === 'collapse') el.addEventListener('click', () => self.collapse());
       if (act === 'dismiss') el.addEventListener('click', (e) => { e.stopPropagation(); self.dismiss(); });
       if (act === 'remove') el.addEventListener('click', () => self.removeProduct(el.getAttribute('data-id')));
@@ -849,6 +868,16 @@
     } catch (e) {}
   };
 
+  // Clicking the collapsed icon: if the lead pop-up is on and we haven't captured
+  // an email yet, run the pop-up flow first; otherwise open the bundle directly.
+  BundleWidget.prototype.openFromPill = function () {
+    const s = this.settings;
+    if (s.popup && s.popup.enabled && !this.session.captured && !this.demo && !this.preview) {
+      this.showPopup('offer');
+    } else {
+      this.expand();
+    }
+  };
   BundleWidget.prototype.expand = function () { this.expanded = true; this._animateNext = true; this.render(); };
   BundleWidget.prototype.collapse = function () { this.expanded = false; this._animateNext = true; this.render(); };
   BundleWidget.prototype.dismiss = function () {
@@ -879,7 +908,7 @@
   BundleWidget.prototype.checkout = function (btn) {
     const self = this;
     const items = this.selectedItems();
-    const calc = computeDiscount(items, this.settings);
+    const calc = this.calc(items);
     if (!calc.eligible) return;
 
     if (btn) { btn.disabled = true; btn.textContent = 'Building your bundle…'; }
@@ -1106,18 +1135,12 @@
         const threshold = settings.triggerThreshold || 2;
 
         const orchestrate = () => {
-          if (widget.session.captured) {
-            // Already opted in: show the bundle pill so they can reopen it.
-            if (widget.session.mode === 'bundle' && widget.session.products.length >= threshold) {
-              widget.expanded = false;
-              widget.boot();
-            }
-            return;
-          }
-          // Pop-up only fires once the visitor has actually browsed something.
-          if (popupOn && widget.session.products.length >= 1) {
-            widget.maybeShowPopup(); // lead pop-up gates the bundle
-          } else if (!popupOn && widget.session.products.length >= threshold) {
+          // The collapsed icon appears after 1 product (pop-up mode) or the
+          // bundle threshold (no pop-up). It NEVER opens by itself — the visitor
+          // taps it to start the flow. Reopening after capture is the same tap.
+          const iconThreshold = popupOn ? 1 : threshold;
+          if (widget.session.products.length >= iconThreshold) {
+            widget.expanded = false;
             widget.boot();
           }
         };
