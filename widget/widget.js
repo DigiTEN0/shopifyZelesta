@@ -321,7 +321,7 @@
 /* ── Product gallery (lightbox) ── */
 .bw-gallery-root{position:fixed;inset:0;z-index:2147483002;display:flex;align-items:center;justify-content:center;padding:24px;}
 .bw-gallery-backdrop{position:absolute;inset:0;background:rgba(17,17,20,.8);backdrop-filter:blur(3px);animation:bw-fade-in .2s ease both;}
-.bw-gallery{position:relative;display:flex;flex-direction:column;width:440px;max-width:100%;max-height:calc(100vh - 48px);background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:bw-modal-in .35s cubic-bezier(.16,1,.3,1) both;}
+.bw-gallery{position:relative;display:flex;flex-direction:column;width:440px;max-width:100%;height:min(680px, calc(100vh - 40px));background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 40px 90px -30px rgba(0,0,0,.6);animation:bw-modal-in .35s cubic-bezier(.16,1,.3,1) both;}
 .bw-gallery-head{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:15px 15px 12px 20px;}
 .bw-gallery-title{flex:1;min-width:0;font-size:15px;font-weight:700;color:#111827;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .bw-gallery-x{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:#f1f2f4;color:#4b5563;transition:background .15s,color .15s;}
@@ -340,7 +340,7 @@
 .bw-gallery-thumb{flex:0 0 54px;width:54px;height:54px;padding:0;border:2px solid transparent;border-radius:11px;overflow:hidden;background:#f1f1f2;cursor:pointer;transition:border-color .15s;}
 .bw-gallery-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
 .bw-gallery-thumb.bw-on{border-color:var(--bw-secondary);}
-@media(max-width:560px){.bw-gallery{width:100%;max-height:calc(100vh - 32px);} .bw-gallery-thumb{flex-basis:50px;width:50px;height:50px;}}
+@media(max-width:560px){.bw-gallery{width:100%;height:min(640px, calc(100vh - 28px));} .bw-gallery-thumb{flex-basis:50px;width:50px;height:50px;}}
 .bw-modal h2{margin:0 0 12px;font-size:30px;line-height:1.1;font-weight:800;letter-spacing:-.02em;color:var(--bw-primary);}
 .bw-modal h2 .bw-hl{color:var(--bw-secondary);}
 .bw-modal p.bw-modal-sub{margin:0 0 24px;font-size:15px;color:#6b7280;line-height:1.5;}
