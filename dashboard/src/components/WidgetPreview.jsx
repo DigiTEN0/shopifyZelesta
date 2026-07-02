@@ -22,18 +22,22 @@ export default function WidgetPreview({ settings, variant = 'bundle' }) {
   const bootedRef = useRef(false);
   const [products, setProducts] = useState(FALLBACK_PRODUCTS);
 
-  // Pull a few real products from the store so the preview shows their catalogue.
+  // Pull real products from the store so the preview shows their catalogue.
   useEffect(() => {
     let active = true;
     api.getPreviewProducts()
       .then((res) => {
-        const real = (res.products || []).filter((p) => p.image).slice(0, 3);
+        const real = (res.products || []).filter((p) => p.image);
         if (active && real.length) setProducts(real.map((p) => ({ ...p, quantity: 1 })));
       })
       .catch(() => {});
     return () => { active = false; };
   }, []);
-  const PREVIEW_PRODUCTS = products;
+
+  // Pop-up flow ends on a single-product reveal (so the complementary carousel
+  // shows). The bundle preview shows a full multi-product bundle (no carousel).
+  const PREVIEW_PRODUCTS = variant === 'popup' ? products.slice(0, 1) : products.slice(0, 3);
+  const RECO_PRODUCTS = variant === 'popup' ? products.slice(1, 7) : [];
 
   const srcDoc = `<!doctype html><html><head><meta charset="utf-8">
     <style>html,body{margin:0;height:100%;background:#f6f6f7;font-family:-apple-system,Segoe UI,Roboto,sans-serif;}
@@ -50,11 +54,13 @@ export default function WidgetPreview({ settings, variant = 'bundle' }) {
       <script src="${APP_URL}/widget/widget.js"></script>
       <script>
         var PRODUCTS=${JSON.stringify(PREVIEW_PRODUCTS)};
+        var RECO=${JSON.stringify(RECO_PRODUCTS)};
         var VARIANT=${JSON.stringify(variant)};
         function boot(settings){
           if(!window.BundleWidget){return setTimeout(function(){boot(settings)},40);}
           if(window.__pv){window.__pv.applySettings(settings);return;}
           window.__pv=new window.BundleWidget({shop:'preview',settings:settings,preview:true,startExpanded:(VARIANT!=='popup'),
+            recoProducts:RECO,
             session:{sessionId:'pv',products:JSON.parse(JSON.stringify(PRODUCTS)),dismissed:false}});
           if(VARIANT==='popup'){ window.__pv.showPopup('offer'); } else { window.__pv.boot(); }
         }
@@ -80,7 +86,7 @@ export default function WidgetPreview({ settings, variant = 'bundle' }) {
       srcDoc={srcDoc}
       style={{
         width: '100%',
-        height: variant === 'popup' ? 560 : 520,
+        height: variant === 'popup' ? 620 : 580,
         border: '1px solid #E3E3E3',
         borderRadius: 12,
         background: '#f6f6f7',

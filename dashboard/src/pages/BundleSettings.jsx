@@ -78,8 +78,8 @@ export default function BundleSettingsPage() {
                   Minimum number of products a visitor must view before the widget appears.
                 </Text>
                 <RangeSlider
-                  label={`Show widget after ${s.trigger_threshold} products viewed`}
-                  min={2}
+                  label={`Show widget after ${s.trigger_threshold} product${s.trigger_threshold === 1 ? '' : 's'} viewed`}
+                  min={1}
                   max={5}
                   value={s.trigger_threshold}
                   onChange={(v) => set({ trigger_threshold: v })}

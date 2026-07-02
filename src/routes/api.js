@@ -155,7 +155,7 @@ router.get('/preview-products/:shop', requireInstalledSession, async (req, res) 
   try {
     const client = await getClient(req.shop);
     if (!client) return res.json({ products: [] });
-    const data = await client.get('/products.json?limit=6&fields=id,title,handle,images,variants,options');
+    const data = await client.get('/products.json?limit=12&fields=id,title,handle,images,variants,options');
     res.json({ products: (data.products || []).map(mapAdminProduct).filter((p) => p.image) });
   } catch (err) {
     res.json({ products: [] });

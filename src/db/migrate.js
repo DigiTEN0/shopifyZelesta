@@ -1,6 +1,7 @@
 // Applies schema.sql against the configured database.
-// Idempotent — every statement uses IF NOT EXISTS, so this is safe to run on
-// every deploy (Railway runs it as part of the start command).
+// Idempotent — every statement uses IF NOT EXISTS / guarded UPDATEs, so this is
+// safe to run on every deploy. The server calls applySchema() on boot, and it
+// can also be run directly (`npm run db:migrate`).
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -9,21 +10,25 @@ import config from '../config/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-async function migrate() {
+export async function applySchema() {
   if (!config.db.url) {
     console.warn('[migrate] DATABASE_URL is not set — skipping migration.');
-    process.exit(0);
+    return false;
   }
   const sql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
   console.log('[migrate] Applying schema…');
-  try {
-    await pool.query(sql);
-    console.log('[migrate] Schema applied successfully.');
-    process.exit(0);
-  } catch (err) {
-    console.error('[migrate] Failed:', err.message);
-    process.exit(1);
-  }
+  await pool.query(sql);
+  console.log('[migrate] Schema applied successfully.');
+  return true;
 }
 
-migrate();
+// Run standalone when invoked directly (node src/db/migrate.js).
+const invokedDirectly = process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
+if (invokedDirectly) {
+  applySchema()
+    .then(() => process.exit(0))
+    .catch((err) => {
+      console.error('[migrate] Failed:', err.message);
+      process.exit(1);
+    });
+}

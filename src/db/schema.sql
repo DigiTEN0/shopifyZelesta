@@ -143,6 +143,10 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAUL
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
 ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
 ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;
--- Migrate shops still on the very first default palette to the demo palette.
-UPDATE settings SET primary_color   = '#1c1917' WHERE primary_color   = '#111827';
-UPDATE settings SET secondary_color = '#b08968' WHERE secondary_color = '#6366F1';
+-- Move shops off any of the old/robotic dark defaults onto the warm brand
+-- palette (near-black text + tan accent). Only touches known default values, so
+-- a merchant who deliberately picked a colour keeps it.
+UPDATE settings SET primary_color = '#1c1917'
+  WHERE primary_color IS NULL OR lower(primary_color) IN ('#111827','#000000','#000','#0f172a','#1f2937','#111');
+UPDATE settings SET secondary_color = '#b08968'
+  WHERE secondary_color IS NULL OR lower(secondary_color) IN ('#6366f1','#111827','#1c1917','#000000','#000','#0f172a','#1f2937','#111');

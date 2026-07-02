@@ -225,7 +225,9 @@
 /* ── Expanded panel ── */
 .bw-panel{position:relative;width:380px;max-width:calc(100vw - 32px);background:#fff;border-radius:var(--bw-radius);overflow:hidden;
   box-shadow:0 30px 80px -20px rgba(17,24,39,.5),0 8px 20px -10px rgba(17,24,39,.25);
-  border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;}
+  border:1px solid rgba(17,24,39,.06);transform-origin:bottom right;
+  display:flex;flex-direction:column;max-height:calc(100vh - 24px);}
+.bw-head-light,.bw-foot{flex:0 0 auto;}
 .bw-panel.bw-animate{animation:bw-spring-up .42s cubic-bezier(.16,1,.3,1) both;}
 .bw-root.bw-left .bw-panel{transform-origin:bottom left;}
 .bw-head{position:relative;padding:20px 22px 12px;background:#fff;}
@@ -240,7 +242,7 @@
 .bw-head-light .bw-collapse{position:absolute;top:15px;right:15px;background:transparent;color:#b5b8bd;font-size:26px;width:36px;height:36px;}
 .bw-head-light .bw-collapse:hover{background:#f3f4f6;color:#111827;}
 
-.bw-items{max-height:46vh;overflow-y:auto;padding:8px 8px 4px;}
+.bw-items{flex:0 1 auto;min-height:0;overflow-y:auto;padding:8px 8px 4px;}
 .bw-item{display:flex;gap:12px;padding:12px;border-radius:14px;position:relative;transition:background .2s;}
 .bw-item:hover{background:#f9fafb;}
 .bw-item+.bw-item{border-top:1px solid #f1f2f4;}
@@ -320,17 +322,19 @@
 .bw-code-big{display:block;font-family:ui-monospace,Menlo,monospace;font-size:19px;font-weight:800;letter-spacing:.04em;color:var(--bw-primary);background:#f6f6f7;border:1px dashed #cfd2d6;border-radius:12px;padding:16px;margin:6px 0 8px;}
 .bw-copy{width:100%;border:none;border-radius:12px;background:var(--bw-primary);color:#fff;font-weight:700;font-size:14.5px;padding:14px;cursor:pointer;margin-top:6px;}
 .bw-shop{display:block;width:100%;margin-top:10px;background:none;border:none;color:#9aa0a6;font-weight:600;font-size:13px;cursor:pointer;}
-.bw-reco{padding:2px 20px 14px;}
-.bw-reco-title{font-size:11px;font-weight:700;color:#9aa0a6;margin:0 0 10px;text-transform:uppercase;letter-spacing:.08em;}
-.bw-reco-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
-.bw-reco-card{flex:0 0 96px;width:96px;cursor:pointer;text-decoration:none;color:inherit;}
+.bw-reco{flex:0 0 auto;padding:12px 18px 14px;border-top:1px solid #f1f2f4;}
+.bw-reco-title{font-size:11px;font-weight:800;color:#9aa0a6;margin:0 0 11px;text-transform:uppercase;letter-spacing:.08em;}
+.bw-reco-row{display:flex;gap:11px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;}
+.bw-reco-row::-webkit-scrollbar{height:4px;}
+.bw-reco-row::-webkit-scrollbar-thumb{background:#e2e4e8;border-radius:4px;}
+.bw-reco-card{flex:0 0 100px;width:100px;cursor:pointer;text-decoration:none;color:inherit;scroll-snap-align:start;}
 .bw-reco-imgwrap{position:relative;}
-.bw-reco-card img{width:96px;height:96px;object-fit:cover;border-radius:12px;background:#f1f1f2;display:block;}
-.bw-reco-add{position:absolute;bottom:6px;right:6px;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--bw-primary);font-size:17px;font-weight:700;line-height:22px;text-align:center;box-shadow:0 3px 8px -2px rgba(17,24,39,.35);transition:transform .15s;}
-.bw-reco-card:hover .bw-reco-add{transform:scale(1.12);background:var(--bw-secondary);color:#fff;}
-.bw-reco-card .bw-reco-name{font-size:11.5px;font-weight:600;margin-top:6px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.bw-reco-card .bw-reco-price{font-size:11.5px;font-weight:700;color:var(--bw-primary);}
-.bw-items + .bw-reco{border-top:1px solid #f1f2f4;padding-top:12px;margin-top:2px;}
+.bw-reco-card img{width:100px;height:100px;object-fit:cover;border-radius:13px;background:#f1f1f2;display:block;border:1px solid rgba(17,24,39,.05);}
+.bw-reco-add{position:absolute;bottom:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--bw-secondary);color:#fff;font-size:18px;font-weight:700;line-height:26px;text-align:center;box-shadow:0 4px 10px -3px rgba(17,24,39,.45);transition:transform .15s;}
+.bw-reco-card:hover .bw-reco-add{transform:scale(1.14);}
+.bw-reco-card:hover img{border-color:var(--bw-secondary);}
+.bw-reco-card .bw-reco-name{font-size:11.5px;font-weight:600;margin-top:7px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.bw-reco-card .bw-reco-price{font-size:11.5px;font-weight:700;color:var(--bw-primary);margin-top:2px;}
 @keyframes bw-modal-in{0%{opacity:0;transform:translateY(18px) scale(.97);}100%{opacity:1;transform:translateY(0) scale(1);}}
 @media(max-width:640px){
   .bw-modal{flex-direction:column;width:100%;max-height:calc(100vh - 24px);}
@@ -385,6 +389,9 @@
     this._prevCount = this.session.products.length;
     this._animateNext = true; // play entrance on first paint
     this._editing = new Set(); // product ids whose variant/qty controls are open
+    // Complementary products for the demo/dashboard preview (no live storefront
+    // to fetch from). On a real store these come from Shopify recommendations.
+    this.recoProducts = opts.recoProducts || (opts.settings && opts.settings.recoProducts) || null;
   }
 
   BundleWidget.prototype.boot = function () {
@@ -730,8 +737,9 @@
       ? t(s.locale, 'growSub')
       : t(s.locale, 'bundleSub', { n: count, discount: dl });
     const cta = esc(s.ctaText).split('{savings}').join(esc(savings));
-    // Complementary picks only when there's still room in the bundle (<= 3 items).
-    const showReco = this.session.products.length <= 3;
+    // Complementary picks only when the visitor has a single product so far —
+    // they help grow it into a bundle. With 2+ products they're not needed.
+    const showReco = this.session.products.length === 1;
 
     return `
       <div class="bw-panel${anim}">
@@ -814,8 +822,8 @@
     this.root.querySelectorAll('.bw-select').forEach((sel) => {
       sel.addEventListener('change', () => self.selectOption(sel.getAttribute('data-id'), parseInt(sel.getAttribute('data-opt'), 10), sel.value));
     });
-    // Complementary picks (only when the bundle still has room).
-    if (this.expanded && this.session.products.length <= 3) this._loadPanelReco();
+    // Complementary picks (only when the visitor still has a single product).
+    if (this.expanded && this.session.products.length === 1) this._loadPanelReco();
   };
 
   BundleWidget.prototype.toggleEdit = function (id) {
@@ -828,36 +836,42 @@
   // Fetch "similar products" from Shopify and offer them as one-tap additions.
   BundleWidget.prototype._loadPanelReco = function () {
     const self = this;
-    if (this.demo || this.preview) return;
     const container = this.root && this.root.querySelector('[data-reco]');
     const first = this.session.products[0];
     if (!container || !first || container.getAttribute('data-loaded')) return;
     container.setAttribute('data-loaded', '1');
     const have = new Set(this.session.products.map((p) => String(p.id)));
     const render = (products) => {
-      const list = (products || []).filter((p) => p && !have.has(String(p.id))).slice(0, 6);
-      if (!list.length) { container.innerHTML = ''; return; }
+      const list = (products || []).filter((p) => p && !have.has(String(p.id))).slice(0, 8);
+      if (!list.length) { container.removeAttribute('data-loaded'); container.innerHTML = ''; return; }
       const s = self.settings;
       container.innerHTML = `<div class="bw-reco-title">${esc(t(s.locale, 'alsoLike'))}</div><div class="bw-reco-row">` +
         list.map((pr) => {
-          const img = (pr.featured_image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
+          const img = (pr.featured_image || pr.image || (pr.images && pr.images[0]) || '').replace(/^\/\//, 'https://');
           const data = encodeURIComponent(JSON.stringify(slimProduct(pr)));
           return `<div class="bw-reco-card" data-act="add-reco" data-p="${data}"><div class="bw-reco-imgwrap"><img src="${esc(img)}" alt=""><span class="bw-reco-add">+</span></div><div class="bw-reco-name">${esc(pr.title)}</div><div class="bw-reco-price">${money(pr.price, s)}</div></div>`;
         }).join('') + `</div>`;
-      self._bind();
+      // Bind only the new reco cards (avoids double-binding the rest of the panel).
+      container.querySelectorAll('[data-act="add-reco"]').forEach((el) =>
+        el.addEventListener('click', (e) => { e.preventDefault(); self.addRecommended(el); }));
     };
-    // Try Shopify's "related" recommendations; if the store has none yet
-    // (e.g. a brand-new shop), fall back to other products from the catalogue.
-    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=8&intent=related`)
+
+    // Demo / dashboard preview: no live storefront to query, so use the
+    // complementary products handed in by the host page.
+    if (this.demo || this.preview) { render(this.recoProducts || []); return; }
+
+    // Live store: Shopify's "related" recommendations, falling back to other
+    // catalogue products if the store has none yet (e.g. a brand-new shop).
+    fetch(`/recommendations/products.json?product_id=${encodeURIComponent(first.id)}&limit=10&intent=related`)
       .then((r) => (r.ok ? r.json() : null))
       .then((data) => {
         const recs = (data && data.products) || [];
         if (recs.length) return render(recs);
-        return fetch('/products.json?limit=12')
+        return fetch('/products.json?limit=16')
           .then((r) => (r.ok ? r.json() : null))
           .then((d) => render((d && d.products) || []));
       })
-      .catch(() => { container.innerHTML = ''; });
+      .catch(() => { container.removeAttribute('data-loaded'); container.innerHTML = ''; });
   };
 
   BundleWidget.prototype.addRecommended = function (el) {
@@ -1036,23 +1050,25 @@
   }
   // Map a Shopify recommendations/product JSON to the widget's product shape.
   function slimProduct(prod) {
+    const rawImg = prod.featured_image || prod.image ||
+      (prod.images && prod.images[0] && (prod.images[0].src || prod.images[0])) || '';
     return {
       id: prod.id,
       handle: prod.handle,
       title: prod.title,
-      url: '/products/' + prod.handle,
-      image: (prod.featured_image || (prod.images && prod.images[0]) || '').replace(/^\/\//, 'https://'),
+      url: prod.url || '/products/' + prod.handle,
+      image: String(rawImg).replace(/^\/\//, 'https://'),
       price: prod.price,
-      compareAtPrice: prod.compare_at_price || null,
+      compareAtPrice: prod.compare_at_price || prod.compareAtPrice || null,
       options: (prod.options || []).map((name, i) => ({
         name: typeof name === 'string' ? name : name.name,
         values: typeof name === 'string' ? uniqueValues(prod.variants, i) : name.values,
       })),
       variants: (prod.variants || []).map((v) => ({
-        id: v.id, title: v.title, price: v.price, compareAtPrice: v.compare_at_price || null,
-        available: v.available, optionValues: [v.option1, v.option2, v.option3].filter((x) => x != null),
+        id: v.id, title: v.title, price: v.price, compareAtPrice: v.compare_at_price || v.compareAtPrice || null,
+        available: v.available, optionValues: v.optionValues || [v.option1, v.option2, v.option3].filter((x) => x != null),
       })),
-      selectedVariantId: null,
+      selectedVariantId: prod.selectedVariantId || null,
     };
   }
   function badgeLabel(s, calc) {

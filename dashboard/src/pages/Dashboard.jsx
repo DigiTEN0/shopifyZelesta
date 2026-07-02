@@ -9,7 +9,6 @@ import { money, percent, shortDate } from '../lib/format.js';
 export default function DashboardPage({ goTo }) {
   const [loading, setLoading] = useState(true);
   const [analytics, setAnalytics] = useState(null);
-  const [billing, setBilling] = useState(null);
   const [meta, setMeta] = useState(null);
   const [settings, setSettings] = useState(null);
   const [error, setError] = useState(null);
@@ -32,14 +31,12 @@ export default function DashboardPage({ goTo }) {
     let active = true;
     (async () => {
       try {
-        const [a, b, s] = await Promise.all([
+        const [a, s] = await Promise.all([
           api.getAnalytics('this-month'),
-          api.getBilling('this-month'),
           api.getSettings(),
         ]);
         if (!active) return;
         setAnalytics(a);
-        setBilling(b);
         setMeta(s.meta);
         setSettings(s.settings);
       } catch (e) {
@@ -89,7 +86,7 @@ export default function DashboardPage({ goTo }) {
         )}
 
         {/* Hero stats */}
-        <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
+        <InlineGrid columns={{ xs: 1, sm: 2, lg: 3 }} gap="400">
           <StatCard
             label="Bundle Revenue (this month)"
             value={loading ? null : money(analytics.bundleRevenue, currency)}
@@ -103,11 +100,6 @@ export default function DashboardPage({ goTo }) {
             label="AOV Lift vs store avg"
             value={loading ? null : percent(analytics.aovLift)}
             tone={!loading && analytics.aovLift >= 0 ? 'success' : 'critical'}
-          />
-          <StatCard
-            label="Your Fee (this month)"
-            value={loading ? null : money(billing.usage.estimatedFee, billing.usage.currency || currency)}
-            hint={loading ? '' : `${(billing.usage.feeRate * 100).toFixed(1)}% of bundle GMV`}
           />
         </InlineGrid>
 
@@ -167,7 +159,11 @@ export default function DashboardPage({ goTo }) {
                   label="Set your first discount rule"
                   onClick={() => goTo('settings')}
                 />
-                <ChecklistItem done={billing?.status?.status === 'active'} label="Activate billing" onClick={() => goTo('billing')} />
+                <ChecklistItem
+                  done={!loading && settings && settings.popup && settings.popup.enabled}
+                  label="Turn on the lead-capture pop-up"
+                  onClick={() => goTo('popups')}
+                />
                 <Divider />
                 <Button onClick={() => goTo('customise')} fullWidth>Customise the widget</Button>
               </BlockStack>

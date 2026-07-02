@@ -6,7 +6,6 @@ import WidgetCustomisationPage from './pages/WidgetCustomisation.jsx';
 import PopupsPage from './pages/Popups.jsx';
 import LeadsPage from './pages/Leads.jsx';
 import AnalyticsPage from './pages/Analytics.jsx';
-import BillingPage from './pages/Billing.jsx';
 
 const PAGES = [
   { id: 'dashboard', label: 'Dashboard', component: DashboardPage },
@@ -15,7 +14,6 @@ const PAGES = [
   { id: 'popups', label: 'Pop-up & Leads', component: PopupsPage },
   { id: 'leads', label: 'Leads', component: LeadsPage },
   { id: 'analytics', label: 'Analytics', component: AnalyticsPage },
-  { id: 'billing', label: 'Billing', component: BillingPage },
 ];
 
 // Lightweight toast bus so any page can surface a confirmation.
@@ -78,6 +76,6 @@ export default function App() {
 
 function initialPage() {
   const path = window.location.pathname.replace(/^\//, '');
-  const known = ['dashboard', 'settings', 'customise', 'popups', 'leads', 'analytics', 'billing'];
+  const known = ['dashboard', 'settings', 'customise', 'popups', 'leads', 'analytics'];
   return known.includes(path) ? path : 'dashboard';
 }

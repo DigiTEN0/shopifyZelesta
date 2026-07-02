@@ -10,6 +10,7 @@ import apiRouter from './routes/api.js';
 import webhooksRouter from './routes/webhooks.js';
 import { confirmBilling } from './services/billingService.js';
 import { normalizeShop } from './lib/shopDomain.js';
+import { applySchema } from './db/migrate.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -130,6 +131,10 @@ process.on('unhandledRejection', (reason) => {
 process.on('uncaughtException', (err) => {
   console.error('[uncaughtException]', err);
 });
+
+// Apply the DB schema on boot (idempotent). Non-fatal: if the DB is briefly
+// unreachable we still start serving — routes surface their own errors.
+applySchema().catch((err) => console.error('[migrate] boot migration failed:', err.message));
 
 app.listen(config.port, () => {
   console.log(`\n  Bundle Widget app running on ${config.appUrl}`);
