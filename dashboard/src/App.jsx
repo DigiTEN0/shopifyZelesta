@@ -33,11 +33,11 @@ export default function App() {
       <div style={{ padding: '18px 16px 8px', display: 'flex', alignItems: 'center', gap: 9 }}>
         <span style={{
           width: 26, height: 26, borderRadius: 8, flex: '0 0 auto',
-          background: '#111827', color: '#fff', display: 'flex', alignItems: 'center',
+          background: '#1c1917', color: '#fff', display: 'flex', alignItems: 'center',
           justifyContent: 'center', fontWeight: 800, fontSize: 15,
         }}>B</span>
-        <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: '-0.02em', color: '#1a1a1a' }}>
-          Bundle<span style={{ color: '#5C6AC4' }}>Boost</span>
+        <span style={{ fontWeight: 800, fontSize: 17, letterSpacing: '-0.02em', color: '#1c1917' }}>
+          Bundle<span style={{ color: '#b08968' }}>Boost</span>
         </span>
       </div>
       <Navigation.Section

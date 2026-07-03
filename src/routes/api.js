@@ -80,18 +80,18 @@ router.post(
 // Funnel events from the widget (impressions etc.).
 router.post('/events', publicCors, publicReadRateLimit, validateShopParam, async (req, res, next) => {
   try {
-    const { sessionId, eventType, productIds, productCount, bundleValue, discountCode } =
-      req.body || {};
+    const body = req.body || {};
+    const eventType = body.eventType;
     if (!['widget_shown', 'add_to_cart'].includes(eventType)) {
       return res.status(400).json({ error: 'Unknown event type.' });
     }
     await recordEvent(req.shop, {
-      sessionId,
+      sessionId: String(body.sessionId || '').slice(0, 64),
       eventType,
-      productIds,
-      productCount,
-      bundleValue,
-      discountCode,
+      productIds: (Array.isArray(body.productIds) ? body.productIds : []).slice(0, 50),
+      productCount: Math.max(0, Math.min(500, parseInt(body.productCount, 10) || 0)),
+      bundleValue: Number(body.bundleValue) || null,
+      discountCode: body.discountCode ? String(body.discountCode).slice(0, 64) : null,
     });
     res.json({ ok: true });
   } catch (err) {
@@ -103,8 +103,13 @@ router.post('/events', publicCors, publicReadRateLimit, validateShopParam, async
 // discount, push into Shopify Customers, then tell the widget what to reveal.
 router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async (req, res, next) => {
   try {
-    const { email, name, sessionId, items = [] } = req.body || {};
-    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email))) {
+    const body = req.body || {};
+    // Bound every public input so a hostile client can't stuff the database.
+    const email = String(body.email || '').trim().slice(0, 320);
+    const name = String(body.name || '').trim().slice(0, 120);
+    const sessionId = String(body.sessionId || '').slice(0, 64);
+    const items = (Array.isArray(body.items) ? body.items : []).slice(0, 20);
+    if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
       return res.status(422).json({ error: 'A valid email is required.' });
     }
 
@@ -112,10 +117,14 @@ router.post('/lead', publicCors, discountRateLimit, requireInstalledShop, async 
     // composition, so lead capture just records the email + browse intent.
     const mode = items.length >= 2 ? 'bundle' : (items.length === 1 ? 'single' : 'welcome');
     const productIds = items.map((it) => it.productId).filter(Boolean);
-    const productTitles = items.map((it) => it.title).filter(Boolean);
+    const productTitles = items.map((it) => String(it.title || '').slice(0, 200)).filter(Boolean);
     const productDetails = items
       .filter((it) => it.title)
-      .map((it) => ({ title: it.title, image: it.image || '', url: it.url || '' }));
+      .map((it) => ({
+        title: String(it.title).slice(0, 200),
+        image: String(it.image || '').slice(0, 500),
+        url: String(it.url || '').slice(0, 500),
+      }));
     await saveLead(req.shop, { email, name, sessionId, productIds, productTitles, productDetails, code: null, mode });
 
     // Best-effort: push to Shopify Customers (needs write_customers scope).

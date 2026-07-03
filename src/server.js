@@ -18,6 +18,30 @@ const root = path.resolve(__dirname, '..');
 const app = express();
 app.set('trust proxy', 1);
 
+// Baseline security headers on every response. (frame-ancestors for the
+// embedded dashboard is set separately below — Shopify must be able to frame us.)
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  next();
+});
+
+// Refuse to run silently with dev crypto defaults in production: tokens would
+// be encrypted with a publicly-known key. Loud banner (not a crash, so an
+// existing deployment keeps serving while the operator fixes the env).
+if (config.env === 'production') {
+  if (config.security.tokenEncryptionKey === '0'.repeat(64)) {
+    console.error(
+      '\n[SECURITY] TOKEN_ENCRYPTION_KEY is not set! Access tokens are encrypted with a KNOWN default key.\n' +
+      '[SECURITY] Fix now: openssl rand -hex 32 -> set TOKEN_ENCRYPTION_KEY on the host, redeploy,\n' +
+      '[SECURITY] then reinstall the app on each shop so tokens are re-stored under the new key.\n'
+    );
+  }
+  if (config.security.sessionSecret === 'dev-insecure-session-secret') {
+    console.error('[SECURITY] SESSION_SECRET is not set — using the insecure dev default. Set a random secret.');
+  }
+}
+
 // ── Webhooks need the RAW body for HMAC, so mount BEFORE json parsing ──
 app.use('/webhooks', express.raw({ type: '*/*' }), webhooksRouter);
 
@@ -117,7 +141,7 @@ function fallbackLanding() {
   return `<!doctype html><html><head><meta charset="utf-8"><title>BundleBoost</title>
   <style>body{font-family:-apple-system,Segoe UI,Roboto,sans-serif;background:#0b0d12;color:#e5e7eb;display:flex;min-height:100vh;align-items:center;justify-content:center;margin:0}
   .card{max-width:520px;padding:40px;text-align:center}.card h1{font-size:28px;margin:0 0 12px}.card p{color:#9ca3af;line-height:1.6}
-  a{display:inline-block;margin-top:18px;padding:12px 22px;background:#6366F1;color:#fff;border-radius:10px;text-decoration:none;font-weight:600}</style></head>
+  a{display:inline-block;margin-top:18px;padding:12px 22px;background:#b08968;color:#fff;border-radius:10px;text-decoration:none;font-weight:600}</style></head>
   <body><div class="card"><h1>BundleBoost</h1>
   <p>The dashboard build was not found. Run <code>npm run build</code> to compile the Polaris dashboard, or open the live demo below.</p>
   <a href="/demo">View the demo &rarr;</a></div></body></html>`;

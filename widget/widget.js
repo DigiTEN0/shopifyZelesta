@@ -398,7 +398,7 @@
 /* ── Keyframes ── */
 @keyframes bw-bounce-in{0%{opacity:0;transform:translateY(40px) scale(.8);}60%{opacity:1;transform:translateY(-6px) scale(1.04);}100%{transform:translateY(0) scale(1);}}
 @keyframes bw-slide-join{0%{opacity:0;transform:translateX(26px) scale(.6) rotate(8deg);}100%{opacity:1;transform:translateX(0) scale(1) rotate(0);}}
-@keyframes bw-pulse{0%,100%{box-shadow:0 4px 10px -3px var(--bw-secondary),0 0 0 0 rgba(99,102,241,.45);}50%{box-shadow:0 4px 10px -3px var(--bw-secondary),0 0 0 7px rgba(99,102,241,0);}}
+@keyframes bw-pulse{0%,100%{box-shadow:0 4px 10px -3px var(--bw-secondary),0 0 0 0 rgba(17,24,39,.28);}50%{box-shadow:0 4px 10px -3px var(--bw-secondary),0 0 0 7px rgba(17,24,39,0);}}
 @keyframes bw-spring-up{0%{opacity:0;transform:translateY(30px) scale(.92);}100%{opacity:1;transform:translateY(0) scale(1);}}
 @keyframes bw-sheet-up{0%{transform:translateY(100%);}100%{transform:translateY(0);}}
 @keyframes bw-fade-in{from{opacity:0;}to{opacity:1;}}

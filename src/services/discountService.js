@@ -5,6 +5,51 @@ import { getSettings, publicSettings } from './settingsService.js';
 import { computeBundleDiscount } from './discountLogic.js';
 import { randomCode } from '../lib/crypto.js';
 
+// Server-side truth for the money path: look up every claimed variant on
+// Shopify and rebuild the items with the REAL price and product id. A shopper
+// can freely choose variants and quantities, but can't inflate prices, invent
+// products, or fake item counts to unlock a bigger discount tier.
+async function verifyItemsWithShopify(client, rawItems) {
+  const claimed = (Array.isArray(rawItems) ? rawItems : [])
+    .filter((it) => it && /^\d+$/.test(String(it.variantId)))
+    .slice(0, 20);
+  if (!claimed.length) return [];
+
+  const ids = [...new Set(claimed.map((it) => String(it.variantId)))]
+    .map((id) => `gid://shopify/ProductVariant/${id}`);
+  const data = await client.graphql(
+    `query bwVerifyItems($ids: [ID!]!) {
+       nodes(ids: $ids) { ... on ProductVariant { id price product { id } } }
+     }`,
+    { ids }
+  );
+
+  const real = new Map();
+  for (const n of data.nodes || []) {
+    if (!n || !n.id) continue;
+    const vid = n.id.split('/').pop();
+    const pid = n.product && n.product.id ? Number(n.product.id.split('/').pop()) : null;
+    real.set(vid, { price: Number(n.price), productId: pid });
+  }
+
+  const seen = new Set();
+  const out = [];
+  for (const it of claimed) {
+    const vid = String(it.variantId);
+    if (seen.has(vid)) continue;
+    seen.add(vid);
+    const v = real.get(vid);
+    if (!v || !Number.isFinite(v.price)) continue; // unknown/fake variant — dropped
+    out.push({ productId: v.productId, variantId: vid, price: v.price, quantity: clampQty(it.quantity) });
+  }
+  return out;
+}
+
+function clampQty(q) {
+  const n = parseInt(q, 10);
+  return Math.max(1, Math.min(50, Number.isFinite(n) ? n : 1));
+}
+
 // Shared: create a one-time code-based discount via the GraphQL discounts API.
 async function createCodeDiscount(client, { code, isPercent, value, entitledProductIds }) {
   const discountValue = isPercent
@@ -60,7 +105,8 @@ export async function generateWelcomeDiscount(shop, payload = {}) {
 
   const isPercent = (settings.popup.discountType || 'percentage') === 'percentage';
   const value = Number(settings.popup.discount) || 0;
-  const items = Array.isArray(payload.items) ? payload.items : [];
+  // Only scope the code to products that actually exist on this store.
+  const items = await verifyItemsWithShopify(client, payload.items);
   const entitledProductIds = [...new Set(items.map((it) => Number(it.productId)).filter(Boolean))];
 
   const code = `BUNDLE-${randomCode(6)}-${Date.now().toString(36).toUpperCase()}`;
@@ -88,13 +134,6 @@ export async function generateWelcomeDiscount(shop, payload = {}) {
  * @returns {Promise<{code, discountType, discountValue, discountAmount, total, subtotal, percentOff}>}
  */
 export async function generateBundleDiscount(shop, payload) {
-  const items = Array.isArray(payload.items) ? payload.items : [];
-  if (items.length < 2) {
-    const err = new Error('A bundle needs at least 2 products.');
-    err.statusCode = 422;
-    throw err;
-  }
-
   const settingsRow = await getSettings(shop);
   const settings = publicSettings(settingsRow);
 
@@ -104,18 +143,26 @@ export async function generateBundleDiscount(shop, payload) {
     throw err;
   }
 
+  const client = await getClient(shop);
+  if (!client) {
+    const err = new Error('Shop is not installed.');
+    err.statusCode = 404;
+    throw err;
+  }
+
+  // Rebuild the items from Shopify's own data — never trust client prices.
+  const items = await verifyItemsWithShopify(client, payload.items);
+  if (items.length < 2) {
+    const err = new Error('A bundle needs at least 2 products.');
+    err.statusCode = 422;
+    throw err;
+  }
+
   const calc = computeBundleDiscount(items, settings);
   if (!calc.eligible) {
     const err = new Error(`Bundle not eligible for a discount (${calc.reason}).`);
     err.statusCode = 422;
     err.details = calc;
-    throw err;
-  }
-
-  const client = await getClient(shop);
-  if (!client) {
-    const err = new Error('Shop is not installed.');
-    err.statusCode = 404;
     throw err;
   }
 
