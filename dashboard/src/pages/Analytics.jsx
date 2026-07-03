@@ -99,10 +99,10 @@ export default function AnalyticsPage() {
         ) : (
           <>
             <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
-              <Metric label="Bundle revenue" value={money(data.bundleRevenue, currency)} />
-              <Metric label="Bundles created" value={String(data.bundleOrderCount)} />
-              <Metric label="Widget trigger rate" value={`${data.triggerRate}%`} sub="of sessions" />
-              <Metric label="Conversion rate" value={`${data.conversionRate}%`} sub="appearances → add to cart" />
+              <Metric label="Bundle revenue" value={money(data.bundleRevenue, currency)} sub="paid orders" />
+              <Metric label="Bundle orders" value={String(data.bundleOrderCount)} sub="paid, with a BUNDLE- code" />
+              <Metric label="Shoppers reached" value={String(data.shoppersReached ?? 0)} sub="saw the widget" />
+              <Metric label="Conversion rate" value={`${data.conversionRate}%`} sub="shoppers → add to cart" />
             </InlineGrid>
 
             <Layout>
@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
                 <Box paddingBlockStart="400">
                   <Card>
                     <BlockStack gap="300">
-                      <Text as="h2" variant="headingMd">Bundles created per day</Text>
+                      <Text as="h2" variant="headingMd">Bundle orders per day</Text>
                       <BarChart data={data.bundlesPerDay} />
                     </BlockStack>
                   </Card>
@@ -150,8 +150,8 @@ export default function AnalyticsPage() {
                   <Card>
                     <BlockStack gap="200">
                       <Text as="h2" variant="headingMd">Funnel</Text>
-                      <FunnelRow label="Widget shown" value={data.widgetShown} />
-                      <FunnelRow label="Added to cart" value={data.addToCart} />
+                      <FunnelRow label="Shoppers reached" value={data.shoppersReached ?? data.widgetShown} />
+                      <FunnelRow label="Added a bundle to cart" value={data.addToCart} />
                       <Divider />
                       <InlineStack align="space-between">
                         <Text as="span" variant="bodySm" tone="subdued">AOV lift vs store</Text>

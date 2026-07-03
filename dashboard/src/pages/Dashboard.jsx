@@ -160,7 +160,7 @@ export default function DashboardPage({ goTo }) {
                   onClick={() => goTo('settings')}
                 />
                 <ChecklistItem
-                  done={!loading && settings && settings.popup && settings.popup.enabled}
+                  done={!loading && !!(settings && settings.popup_enabled)}
                   label="Turn on the lead-capture pop-up"
                   onClick={() => goTo('popups')}
                 />

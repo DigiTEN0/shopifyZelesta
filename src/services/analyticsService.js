@@ -93,7 +93,7 @@ export async function getAnalytics(shop, { since, until }) {
     revenueOverTime: toSeries(revenueByDay),
     bundlesPerDay: toSeries(bundlesByDay),
     topProducts,
-    triggerRate: funnel.triggerRate,
+    shoppersReached: funnel.shoppersReached,
     conversionRate: funnel.conversionRate,
     widgetShown: funnel.widgetShown,
     addToCart: funnel.addToCart,
@@ -149,31 +149,25 @@ function bundleCodes(order) {
 }
 
 async function getFunnel(shop, since, until) {
+  // Count DISTINCT shoppers (sessions), not raw events — a single shopper fires
+  // widget_shown on every page they browse, which is why an event-based ratio
+  // could exceed 100%. Session-based keeps the funnel honest and <= 100%.
   const { rows } = await query(
-    `SELECT event_type, COUNT(*)::int AS n
-       FROM bundle_events
-      WHERE shop_domain = $1 AND created_at BETWEEN $2 AND $3
-      GROUP BY event_type`,
-    [shop, since, until]
-  );
-  const map = Object.fromEntries(rows.map((r) => [r.event_type, r.n]));
-  const widgetShown = map.widget_shown || 0;
-  const addToCart = map.add_to_cart || 0;
-
-  // Trigger rate needs total sessions; approximate with distinct sessions seen.
-  const sessRes = await query(
-    `SELECT COUNT(DISTINCT session_id)::int AS sessions
+    `SELECT
+        COUNT(DISTINCT session_id) FILTER (WHERE event_type = 'widget_shown')::int AS shown,
+        COUNT(DISTINCT session_id) FILTER (WHERE event_type = 'add_to_cart')::int  AS carted
        FROM bundle_events
       WHERE shop_domain = $1 AND created_at BETWEEN $2 AND $3`,
     [shop, since, until]
   );
-  const sessions = sessRes.rows[0]?.sessions || 0;
+  const shoppersReached = rows[0]?.shown || 0;
+  const addToCart = rows[0]?.carted || 0;
 
   return {
-    widgetShown,
+    shoppersReached,
+    widgetShown: shoppersReached,
     addToCart,
-    triggerRate: sessions ? round2((widgetShown / sessions) * 100) : 0,
-    conversionRate: widgetShown ? round2((addToCart / widgetShown) * 100) : 0,
+    conversionRate: shoppersReached ? round2((addToCart / shoppersReached) * 100) : 0,
   };
 }
 
