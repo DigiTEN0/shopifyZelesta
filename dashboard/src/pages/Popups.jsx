@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
-  Page, Layout, Card, BlockStack, InlineStack, Text, Checkbox, TextField, Select,
-  ButtonGroup, Button, Divider, Box, SkeletonBodyText,
+  Page, Layout, Card, BlockStack, InlineStack, Text, Checkbox, TextField,
+  Box, SkeletonBodyText,
 } from '@shopify/polaris';
 import { api } from '../lib/api.js';
 import { useToast } from '../App.jsx';
@@ -35,15 +35,12 @@ export default function PopupsPage({ goTo }) {
     try {
       const res = await api.saveSettings({
         popup_enabled: s.popup_enabled,
-        popup_discount: Number(s.popup_discount),
-        popup_discount_type: s.popup_discount_type,
         popup_headline: s.popup_headline,
         popup_subheadline: s.popup_subheadline,
         popup_button: s.popup_button,
         popup_decline: s.popup_decline,
         popup_image: s.popup_image,
         popup_collect_name: s.popup_collect_name,
-        popup_delay_seconds: Number(s.popup_delay_seconds),
       });
       setS(res.settings);
       toast('Pop-up saved');
@@ -82,22 +79,11 @@ export default function PopupsPage({ goTo }) {
             <Card>
               <BlockStack gap="400">
                 <Text as="h2" variant="headingMd">The offer</Text>
-                <InlineStack gap="300" blockAlign="end">
-                  <div style={{ minWidth: 150 }}>
-                    <TextField
-                      label="Discount"
-                      type="number"
-                      value={String(s.popup_discount)}
-                      onChange={(v) => set({ popup_discount: v })}
-                      suffix={s.popup_discount_type === 'percentage' ? '%' : s.currency}
-                      autoComplete="off"
-                    />
-                  </div>
-                  <ButtonGroup variant="segmented">
-                    <Button pressed={s.popup_discount_type === 'percentage'} onClick={() => set({ popup_discount_type: 'percentage' })}>%</Button>
-                    <Button pressed={s.popup_discount_type === 'fixed'} onClick={() => set({ popup_discount_type: 'fixed' })}>{s.currency}</Button>
-                  </ButtonGroup>
-                </InlineStack>
+                <Text as="p" tone="subdued" variant="bodySm">
+                  The pop-up automatically promises the same discount the visitor sees on the
+                  floating icon — their live bundle discount (from your Bundle Settings tiers).
+                  No separate number to keep in sync.
+                </Text>
                 <Checkbox label="Also ask for the visitor's name" checked={s.popup_collect_name} onChange={(v) => set({ popup_collect_name: v })} />
                 <TextField
                   label="Image URL (left side of the pop-up)"
@@ -152,6 +138,15 @@ function toPublic(s) {
     locale: s.locale,
     currency: s.currency,
     enabled: true,
+    // The pop-up derives its promised discount from the bundle tiers, so the
+    // preview needs the real discount config to show the same number.
+    discountType: s.discount_type,
+    tiers: s.tiers,
+    valueRules: s.value_rules,
+    maxDiscountCap: Number(s.max_discount_cap),
+    minBundleValue: Number(s.min_bundle_value),
+    showPrices: s.show_prices,
+    savingsAs: s.savings_as,
     popup: {
       enabled: true, // always enabled in the preview so you can see it
       discount: Number(s.popup_discount),

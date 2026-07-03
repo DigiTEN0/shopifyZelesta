@@ -445,7 +445,13 @@
   };
 
   /* ── Lead-capture pop-up ───────────────────────────────────── */
+  // The pop-up promises exactly what the collapsed icon shows: the live bundle
+  // discount for the products browsed so far (calc() already falls back to the
+  // lowest tier for a single product). Never a separate, mismatching number.
   BundleWidget.prototype.popupDiscountLabel = function () {
+    const calc = this.calc(this.selectedItems());
+    if (calc.eligible && calc.discountType === 'percentage' && calc.percentOff > 0) return `${calc.percentOff}%`;
+    if (calc.eligible && calc.discountAmount > 0) return money(calc.discountAmount, this.settings);
     const p = this.settings.popup;
     if ((p.discountType || 'percentage') === 'percentage') return `${p.discount}%`;
     return money(Math.round(Number(p.discount) * 100), this.settings);
@@ -717,13 +723,18 @@
     const s = this.settings;
     const tier = computeDiscount(items, s);
     if (tier.eligible) return tier;
+    // Not tier-eligible yet (usually a single product): promise the LOWEST
+    // bundle tier — exactly what the visitor unlocks by completing the bundle.
+    // Only if no tiers are configured at all, fall back to the pop-up value.
     const p = s.popup || {};
-    if (!p.discount) return tier;
+    let value = lowestTierValue(s.tiers);
+    let isPct = (s.discountType || 'percentage') === 'percentage';
+    if (!value) { value = Number(p.discount) || 0; isPct = (p.discountType || 'percentage') === 'percentage'; }
+    if (!value) return tier;
     const subtotal = items.reduce((sum, it) => sum + it.price * (it.quantity || 1), 0);
-    const isPct = (p.discountType || 'percentage') === 'percentage';
     let amount, pct;
-    if (isPct) { pct = Math.min(Number(p.discount), 100); amount = (subtotal * pct) / 100; }
-    else { amount = Math.min(toCents(p.discount), subtotal); pct = subtotal > 0 ? (amount / subtotal) * 100 : 0; }
+    if (isPct) { pct = Math.min(value, 100); amount = (subtotal * pct) / 100; }
+    else { amount = Math.min(toCents(value), subtotal); pct = subtotal > 0 ? (amount / subtotal) * 100 : 0; }
     amount = Math.round(amount);
     return {
       subtotal, discountType: isPct ? 'percentage' : 'fixed', discountAmount: amount,
@@ -1267,6 +1278,12 @@
       selectedVariantId: prod.selectedVariantId || null,
     };
   }
+  // The smallest configured bundle tier (e.g. tiers {2:10,3:15} -> 10).
+  function lowestTierValue(tiers) {
+    const keys = Object.keys(tiers || {}).map(Number).filter((n) => !Number.isNaN(n)).sort((a, b) => a - b);
+    return keys.length ? Number((tiers || {})[keys[0]]) || 0 : 0;
+  }
+
   function badgeLabel(s, calc) {
     const amount = s.savingsAs === 'percentage' || s.discountType === 'percentage'
       ? `${calc.percentOff}%`

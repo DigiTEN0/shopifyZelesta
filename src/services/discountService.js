@@ -103,8 +103,17 @@ export async function generateWelcomeDiscount(shop, payload = {}) {
     throw err;
   }
 
-  const isPercent = (settings.popup.discountType || 'percentage') === 'percentage';
-  const value = Number(settings.popup.discount) || 0;
+  // Mirror the widget: the single-product/welcome discount equals the LOWEST
+  // bundle tier (what the icon and pop-up promised). Pop-up value is only a
+  // fallback for shops without tiers.
+  const tiers = settings.tiers || {};
+  const tierKeys = Object.keys(tiers).map(Number).filter((n) => !Number.isNaN(n)).sort((a, b) => a - b);
+  let isPercent = (settings.discountType || 'percentage') === 'percentage';
+  let value = tierKeys.length ? Number(tiers[tierKeys[0]]) || 0 : 0;
+  if (!value) {
+    isPercent = (settings.popup.discountType || 'percentage') === 'percentage';
+    value = Number(settings.popup.discount) || 0;
+  }
   // Only scope the code to products that actually exist on this store.
   const items = await verifyItemsWithShopify(client, payload.items);
   const entitledProductIds = [...new Set(items.map((it) => Number(it.productId)).filter(Boolean))];
