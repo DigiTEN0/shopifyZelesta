@@ -143,6 +143,12 @@ ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_collect_name  BOOLEAN DEFAUL
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS popup_delay_seconds INT     DEFAULT 6;
 ALTER TABLE shops    ADD COLUMN IF NOT EXISTS shop_name           TEXT;
 ALTER TABLE leads    ADD COLUMN IF NOT EXISTS product_details     JSONB DEFAULT '[]'::jsonb;
+-- Last-activity timestamp: bumped every time a lead is (re)captured, so the
+-- date shown reflects the most recent engagement, not just first capture.
+-- Backfill existing rows from created_at so their dates stay accurate.
+ALTER TABLE leads    ADD COLUMN IF NOT EXISTS updated_at          TIMESTAMPTZ;
+UPDATE leads SET updated_at = created_at WHERE updated_at IS NULL;
+ALTER TABLE leads    ALTER COLUMN updated_at SET DEFAULT now();
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS trigger_migrated_v1 BOOLEAN DEFAULT false;
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS locale_migrated_v1  BOOLEAN DEFAULT false;
 

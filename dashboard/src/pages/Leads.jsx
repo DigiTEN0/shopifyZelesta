@@ -100,7 +100,7 @@ function LeadRow({ lead, last }) {
               : <Badge size="small">Local</Badge>}
           </InlineStack>
           <Text as="span" variant="bodySm" tone="subdued">
-            {lead.name ? lead.name + ' · ' : ''}{details.length} product{details.length === 1 ? '' : 's'} browsed · {shortDate(lead.created_at)}
+            {lead.name ? lead.name + ' · ' : ''}{details.length} product{details.length === 1 ? '' : 's'} browsed · {shortDate(lead.updated_at || lead.created_at)}
           </Text>
         </BlockStack>
         <Button variant="tertiary" disclosure={open ? 'up' : 'down'} onClick={() => setOpen((o) => !o)}>

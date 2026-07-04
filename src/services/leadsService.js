@@ -14,7 +14,8 @@ export async function saveLead(shop, { email, name, sessionId, productIds, produ
            product_titles = EXCLUDED.product_titles,
            product_details = EXCLUDED.product_details,
            discount_code = COALESCE(EXCLUDED.discount_code, leads.discount_code),
-           mode = EXCLUDED.mode
+           mode = EXCLUDED.mode,
+           updated_at = now()
      RETURNING *`,
     [
       shop,
@@ -85,8 +86,9 @@ export async function createShopifyCustomer(shop, { email, name, browsedTitles, 
 
 export async function getLeads(shop, limit = 200) {
   const { rows } = await query(
-    `SELECT email, name, product_ids, product_titles, product_details, discount_code, mode, shopify_customer_id, created_at
-       FROM leads WHERE shop_domain = $1 ORDER BY created_at DESC LIMIT $2`,
+    `SELECT email, name, product_ids, product_titles, product_details, discount_code, mode, shopify_customer_id,
+            created_at, COALESCE(updated_at, created_at) AS updated_at
+       FROM leads WHERE shop_domain = $1 ORDER BY COALESCE(updated_at, created_at) DESC LIMIT $2`,
     [shop, limit]
   );
   return rows;
