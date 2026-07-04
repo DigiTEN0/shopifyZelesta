@@ -1398,10 +1398,15 @@
     if (!id || !events.length) return;
     const payload = JSON.stringify({ shop, visitorId: id.vid, sessionId: id.sid, events });
     const url = `${APP_URL}/api/track`;
+    // IMPORTANT: send as text/plain, not application/json. The storefront and the
+    // app are different origins, so application/json would make this a non-simple
+    // request needing a CORS preflight — which sendBeacon can't do, so the browser
+    // silently drops it. text/plain is CORS-safelisted (a "simple" request) and
+    // always goes through. The server parses text/plain bodies as JSON.
     try {
-      if (navigator.sendBeacon) { navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' })); return; }
+      if (navigator.sendBeacon) { navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain' })); return; }
     } catch (e) {}
-    try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }); } catch (e) {}
+    try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }); } catch (e) {}
   }
   function bwTrackView(shop) {
     const id = bwIdentity(false);

@@ -46,7 +46,10 @@ if (config.env === 'production') {
 app.use('/webhooks', express.raw({ type: '*/*' }), webhooksRouter);
 
 // ── Standard parsers ──────────────────────────────────────────
-app.use(express.json({ limit: '256kb' }));
+// Also parse text/plain as JSON: the storefront tracking beacon
+// (navigator.sendBeacon) must use a CORS-safelisted content type to avoid a
+// preflight it can't perform, so it sends JSON under a text/plain type.
+app.use(express.json({ limit: '256kb', type: ['application/json', 'text/plain'] }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(config.security.sessionSecret));
 
