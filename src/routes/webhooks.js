@@ -3,7 +3,10 @@
 import express from 'express';
 import { verifyWebhookHmac } from '../lib/crypto.js';
 import { normalizeShop } from '../lib/shopDomain.js';
-import { handleAppUninstalled, handleOrderCreate } from '../services/webhookService.js';
+import {
+  handleAppUninstalled, handleOrderCreate,
+  handleCustomerDataRequest, handleCustomerRedact, handleShopRedact,
+} from '../services/webhookService.js';
 
 const router = express.Router();
 
@@ -37,6 +40,34 @@ router.post('/orders/create', verify, async (req, res) => {
     if (req.shop) await handleOrderCreate(req.shop, req.payload);
   } catch (err) {
     console.error('[webhooks] order handler error:', err.message);
+  }
+});
+
+// ── GDPR mandatory compliance webhooks ────────────────────────
+router.post('/customers/data_request', verify, async (req, res) => {
+  res.sendStatus(200);
+  try {
+    if (req.shop) await handleCustomerDataRequest(req.shop, req.payload);
+  } catch (err) {
+    console.error('[webhooks] data_request handler error:', err.message);
+  }
+});
+
+router.post('/customers/redact', verify, async (req, res) => {
+  res.sendStatus(200);
+  try {
+    if (req.shop) await handleCustomerRedact(req.shop, req.payload);
+  } catch (err) {
+    console.error('[webhooks] customers/redact handler error:', err.message);
+  }
+});
+
+router.post('/shop/redact', verify, async (req, res) => {
+  res.sendStatus(200);
+  try {
+    if (req.shop) await handleShopRedact(req.shop);
+  } catch (err) {
+    console.error('[webhooks] shop/redact handler error:', err.message);
   }
 });
 

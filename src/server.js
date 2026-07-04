@@ -11,6 +11,7 @@ import webhooksRouter from './routes/webhooks.js';
 import { confirmBilling } from './services/billingService.js';
 import { normalizeShop } from './lib/shopDomain.js';
 import { applySchema } from './db/migrate.js';
+import { purgeOldVisitorData } from './services/visitorService.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
@@ -162,6 +163,12 @@ process.on('uncaughtException', (err) => {
 // Apply the DB schema on boot (idempotent). Non-fatal: if the DB is briefly
 // unreachable we still start serving — routes surface their own errors.
 applySchema().catch((err) => console.error('[migrate] boot migration failed:', err.message));
+
+// Data retention: purge anonymous browsing data past the retention window on
+// boot and once a day thereafter. RETENTION_DAYS overrides the 90-day default.
+const RETENTION_DAYS = parseInt(process.env.RETENTION_DAYS, 10) || 90;
+setTimeout(() => purgeOldVisitorData(RETENTION_DAYS), 30 * 1000).unref();
+setInterval(() => purgeOldVisitorData(RETENTION_DAYS), 24 * 60 * 60 * 1000).unref();
 
 app.listen(config.port, () => {
   console.log(`\n  Bundle Widget app running on ${config.appUrl}`);

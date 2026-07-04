@@ -1408,23 +1408,53 @@
     } catch (e) {}
     try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }); } catch (e) {}
   }
+  // Consent gate. We only track when the storefront's OWN consent setup allows
+  // analytics — we read Shopify's Customer Privacy API and never render any UI
+  // of our own. If no consent framework is present, the merchant's setup governs
+  // and we proceed. Nothing (not even the visitor id) is stored until allowed.
+  function bwTrackingAllowed() {
+    try {
+      const cp = window.Shopify && window.Shopify.customerPrivacy;
+      if (cp && typeof cp.analyticsProcessingAllowed === 'function') {
+        return cp.analyticsProcessingAllowed() === true;
+      }
+    } catch (e) {}
+    return true;
+  }
+  // Run fn now if tracking is allowed, otherwise once the shopper accepts later.
+  function bwWhenAllowed(fn) {
+    if (bwTrackingAllowed()) { fn(); return; }
+    try {
+      const handler = () => {
+        if (bwTrackingAllowed()) {
+          document.removeEventListener('visitorConsentCollected', handler);
+          fn();
+        }
+      };
+      document.addEventListener('visitorConsentCollected', handler);
+    } catch (e) {}
+  }
   function bwTrackView(shop) {
-    const id = bwIdentity(false);
-    if (!id) return;
-    fetchCurrentProduct().then((p) => {
-      if (!p || !p.id) return;
-      bwSend(shop, id, [{ type: 'product_view', productId: String(p.id), title: p.title, handle: p.handle, price: p.price }]);
+    bwWhenAllowed(() => {
+      const id = bwIdentity(false);
+      if (!id) return;
+      fetchCurrentProduct().then((p) => {
+        if (!p || !p.id) return;
+        bwSend(shop, id, [{ type: 'product_view', productId: String(p.id), title: p.title, handle: p.handle, price: p.price }]);
+      });
     });
   }
   function bwTrackPurchase(shop) {
-    const id = bwIdentity(true); // don't invent a visitor for an untracked buyer
-    if (!id) return;
-    let total = null;
-    try {
-      const c = (window.Shopify && (window.Shopify.checkout || window.Shopify.Checkout)) || {};
-      total = Math.round(Number(c.total_price || 0)) || null;
-    } catch (e) {}
-    bwSend(shop, id, [{ type: 'purchase', price: total }]);
+    bwWhenAllowed(() => {
+      const id = bwIdentity(true); // don't invent a visitor for an untracked buyer
+      if (!id) return;
+      let total = null;
+      try {
+        const c = (window.Shopify && (window.Shopify.checkout || window.Shopify.Checkout)) || {};
+        total = Math.round(Number(c.total_price || 0)) || null;
+      } catch (e) {}
+      bwSend(shop, id, [{ type: 'purchase', price: total }]);
+    });
   }
 
   function bootLive() {

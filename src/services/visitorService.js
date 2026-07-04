@@ -239,3 +239,26 @@ export async function getIntelligence(shop, { since, until }) {
     coViewed: pairs.rows.map((r) => ({ a: r.a_title, b: r.b_title, together: r.together })),
   };
 }
+
+// Data-retention: drop anonymous browsing data older than the retention window
+// so we only ever keep what we need. Runs on a timer from the server.
+export async function purgeOldVisitorData(retentionDays = 90) {
+  const days = Math.max(1, Number(retentionDays) || 90);
+  const cutoff = `${days} days`;
+  try {
+    const ev = await query(`DELETE FROM visitor_events   WHERE created_at    < now() - $1::interval`, [cutoff]);
+    await query(`DELETE FROM visitor_sessions WHERE last_event_at < now() - $1::interval`, [cutoff]);
+    // Remove visitors that no longer have any sessions left.
+    await query(
+      `DELETE FROM visitors v
+        WHERE v.last_seen < now() - $1::interval
+          AND NOT EXISTS (SELECT 1 FROM visitor_sessions s WHERE s.visitor_id = v.id)`,
+      [cutoff]
+    );
+    if (ev.rowCount) console.log(`[retention] purged ${ev.rowCount} visitor event(s) older than ${days}d`);
+    return { ok: true, events: ev.rowCount };
+  } catch (err) {
+    console.warn('[retention] purge failed:', err.message);
+    return { ok: false };
+  }
+}
