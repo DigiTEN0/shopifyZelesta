@@ -75,53 +75,23 @@ export default function VisitorExplorerPage() {
   return (
     <Page
       title="Visitor Explorer"
-      subtitle="Stealth Mode silently tracks anonymous browsing and estimates the revenue a bundle strategy could unlock — before you ever show the widget."
+      subtitle="Stealth Mode silently records anonymous browsing — who's shopping, what they view, and which products get browsed together — before you ever show the widget."
     >
       <BlockStack gap="500">
         {/* Stealth toggle */}
         {stealth !== null && (
           <Banner
             tone={stealth ? 'success' : 'info'}
-            title={stealth ? 'Stealth Mode is ON — gathering proof' : 'Stealth Mode is OFF'}
+            title={stealth ? 'Stealth Mode is ON — recording browsing' : 'Stealth Mode is OFF'}
             action={{ content: savingStealth ? 'Saving…' : (stealth ? 'Turn off' : 'Turn on Stealth Mode'), onAction: toggleStealth, disabled: savingStealth }}
           >
             <p>
               {stealth
-                ? 'Every visit is tracked anonymously in the background. No pop-up, no widget, zero change to the storefront. Watch the potential revenue build up below.'
-                : 'Turn this on to silently record browsing and see what a bundle strategy could earn — without touching the storefront yet.'}
+                ? 'Every visit is tracked anonymously in the background. No pop-up, no widget, zero change to the storefront. See who is shopping and which products get browsed together below.'
+                : 'Turn this on to silently record who is browsing and what they view — without touching the storefront yet.'}
             </p>
           </Banner>
         )}
-
-        {/* Potential revenue */}
-        <Card>
-          <BlockStack gap="400">
-            <InlineStack align="space-between" blockAlign="center">
-              <Text as="h2" variant="headingMd">Potential revenue</Text>
-              <div style={{ minWidth: 170 }}>
-                <Select label="" labelHidden options={RANGE_OPTIONS} value={range} onChange={setRange} />
-              </div>
-            </InlineStack>
-            {loading || !potential ? (
-              <SkeletonBodyText lines={4} />
-            ) : (
-              <>
-                <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
-                  <Stat label="Potential bundle revenue" value={money(potential.potentialBundleRevenue, currency)} tone="success" />
-                  <Stat label="Bundle-ready visits" value={String(potential.bundleIntentSessions)} />
-                  <Stat label="Average bundle value" value={money(potential.averageBundleValue, currency)} />
-                  <Stat label="Potential AOV increase" value={`+${potential.potentialAovIncrease}%`} tone="success" />
-                </InlineGrid>
-                <Text as="p" tone="subdued" variant="bodySm">
-                  Conservative estimate: of the <b>{potential.bundleIntentSessions}</b> visits that browsed 2+ products
-                  ({potential.bundleIntentRate}% of all visits), we assume only <b>{Math.round(potential.captureRate * 100)}%</b> complete
-                  a bundle — the other <b>{100 - Math.round(potential.captureRate * 100)}%</b> buy a single item or nothing. The AOV
-                  increase is the store-wide blended lift, not the per-bundle jump. Real numbers are typically higher once the widget is live.
-                </Text>
-              </>
-            )}
-          </BlockStack>
-        </Card>
 
         <Layout>
           {/* Visitor table */}
@@ -142,7 +112,7 @@ export default function VisitorExplorerPage() {
                       <div style={{ flex: 2 }}><Text as="span" variant="bodySm" tone="subdued">Visitor</Text></div>
                       <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Sessions</Text></div>
                       <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Viewed</Text></div>
-                      <div style={{ width: 100, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Potential</Text></div>
+                      <div style={{ width: 110, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Browsed value</Text></div>
                       <div style={{ width: 90, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Purchased</Text></div>
                     </InlineStack>
                   </Box>
@@ -156,7 +126,7 @@ export default function VisitorExplorerPage() {
                           </div>
                           <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.sessions}</Text></div>
                           <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.viewedProducts}</Text></div>
-                          <div style={{ width: 100, textAlign: 'right' }}><Text as="span" variant="bodyMd" fontWeight="semibold">{money(v.potentialValue, currency)}</Text></div>
+                          <div style={{ width: 110, textAlign: 'right' }}><Text as="span" variant="bodyMd" fontWeight="semibold">{money(v.potentialValue, currency)}</Text></div>
                           <div style={{ width: 90, textAlign: 'right' }}>
                             {v.purchased ? <Badge tone="success">Yes</Badge> : <Badge>No</Badge>}
                           </div>
@@ -174,7 +144,12 @@ export default function VisitorExplorerPage() {
             <BlockStack gap="400">
               <Card>
                 <BlockStack gap="300">
-                  <Text as="h2" variant="headingMd">Most viewed products</Text>
+                  <InlineStack align="space-between" blockAlign="center" gap="200" wrap={false}>
+                    <Text as="h2" variant="headingMd">Most viewed products</Text>
+                    <div style={{ minWidth: 130, flex: '0 0 auto' }}>
+                      <Select label="" labelHidden options={RANGE_OPTIONS} value={range} onChange={setRange} />
+                    </div>
+                  </InlineStack>
                   <Divider />
                   {!potential || potential.topProducts?.length === 0 ? (
                     <Text as="p" tone="subdued" variant="bodySm">No data yet.</Text>
@@ -239,7 +214,7 @@ export default function VisitorExplorerPage() {
                 <Stat label="Last seen" value={shortDate(detail.lastSeen)} small />
                 <Stat label="Sessions" value={String(detail.totalSessions)} small />
                 <Stat label="Products viewed" value={String(detail.totalProductsViewed)} small />
-                <Stat label="Potential value" value={money(detail.potentialValue, currency)} small tone="success" />
+                <Stat label="Browsed value" value={money(detail.potentialValue, currency)} small tone="success" />
                 <Stat label="Purchased" value={detail.purchased ? 'Yes' : 'No'} small />
               </InlineGrid>
               <Divider />

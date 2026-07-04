@@ -7,11 +7,9 @@ import pool, { query } from '../db/pool.js';
 const ID_RE = /^(visitor|session)_[a-f0-9]{8,64}$/i;
 const EVENT_TYPES = new Set(['product_view', 'add_to_cart', 'purchase']);
 
-// A single visitor who viewed ≥ 2 distinct products in a session is a "bundle
-// opportunity". We assume only a conservative slice of them would actually
-// complete a bundle — never inflate.
-const CAPTURE_RATE = 0.10;
-const MAX_BUNDLE_PRODUCTS = 3; // a realistic bundle size for value estimates
+// The "browsed value" shown per visitor sums their most-viewed products, capped
+// at a realistic bundle size so a long browse session doesn't inflate it.
+const MAX_BUNDLE_PRODUCTS = 3;
 
 function validId(id) {
   return typeof id === 'string' && ID_RE.test(id);
@@ -203,81 +201,6 @@ export async function getVisitor(shop, visitorId) {
     email: v.email || null,
     customerId: v.customer_id || null,
     sessions,
-  };
-}
-
-// Conservative potential-revenue estimate for a date range.
-export async function getPotential(shop, { since, until }, settings = {}) {
-  // Distinct (session, product, price) so repeat views don't double-count.
-  const { rows } = await query(
-    `WITH per AS (
-       SELECT DISTINCT session_id, product_id, price
-         FROM visitor_events
-        WHERE shop_domain = $1 AND event_type = 'product_view'
-          AND product_id IS NOT NULL AND created_at BETWEEN $2 AND $3
-     ),
-     capped AS (
-       SELECT session_id, product_id, price,
-              ROW_NUMBER() OVER (PARTITION BY session_id ORDER BY price DESC) AS rn
-         FROM per
-     ),
-     sess AS (
-       SELECT session_id,
-              COUNT(*) AS products,
-              SUM(price) FILTER (WHERE rn <= $4) AS bundle_value
-         FROM capped GROUP BY session_id
-     )
-     SELECT
-       COUNT(*)::int AS total_sessions,
-       COUNT(*) FILTER (WHERE products >= 2)::int AS bundle_intent_sessions,
-       COALESCE(AVG(bundle_value) FILTER (WHERE products >= 2), 0) AS avg_bundle_value
-       FROM sess`,
-    [shop, since, until, MAX_BUNDLE_PRODUCTS]
-  );
-  const r = rows[0] || {};
-  const totalSessions = Number(r.total_sessions) || 0;
-  const intent = Number(r.bundle_intent_sessions) || 0;
-  const avgBundleValue = Math.round(Number(r.avg_bundle_value) || 0);
-
-  // Revenue is computed from the fractional expectation so it doesn't collapse
-  // to 0 at low traffic (rounding orders first would hide real potential).
-  const expectedOrders = intent * CAPTURE_RATE;
-  const potentialOrders = Math.round(expectedOrders);
-  const potentialRevenue = Math.round(expectedOrders * avgBundleValue);
-
-  // AOV uplift baseline: the average price of a single product. A bundle order
-  // (avg bundle value) vs a normal single-item order is the AOV increase.
-  const { rows: baseRows } = await query(
-    `SELECT COALESCE(AVG(price), 0) AS avg_single
-       FROM (
-         SELECT DISTINCT session_id, product_id, price
-           FROM visitor_events
-          WHERE shop_domain = $1 AND event_type = 'product_view'
-            AND product_id IS NOT NULL AND price > 0
-            AND created_at BETWEEN $2 AND $3
-       ) d`,
-    [shop, since, until]
-  );
-  const avgSingleValue = Math.round(Number(baseRows[0]?.avg_single) || 0); // cents
-  // BLENDED store-wide AOV lift, not the per-bundle jump. Only CAPTURE_RATE of
-  // orders become bundles; the rest stay single-item. This keeps the number
-  // honest and conservative (the ~+10–40% bundle apps actually report) instead
-  // of the eye-popping per-bundle figure — and it already assumes most shoppers
-  // buy just one product.
-  const aovIncrease = avgSingleValue > 0
-    ? Math.round((CAPTURE_RATE * (avgBundleValue - avgSingleValue) / avgSingleValue) * 1000) / 10
-    : 0;
-  const bundleIntentRate = totalSessions > 0 ? Math.round((intent / totalSessions) * 1000) / 10 : 0;
-
-  return {
-    captureRate: CAPTURE_RATE,
-    totalSessions,
-    bundleIntentSessions: intent,
-    bundleIntentRate,           // % of sessions that browsed ≥ 2 products
-    potentialBundleOrders: potentialOrders,
-    potentialBundleRevenue: toEuros(potentialRevenue),
-    averageBundleValue: toEuros(avgBundleValue),
-    potentialAovIncrease: Math.max(0, aovIncrease),
   };
 }
 

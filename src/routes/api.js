@@ -9,7 +9,7 @@ import { generateBundleDiscount, generateWelcomeDiscount } from '../services/dis
 import { saveLead, createShopifyCustomer, setCustomerId, getLeads, getLeadStats } from '../services/leadsService.js';
 import { getSettings, saveSettings, publicSettings } from '../services/settingsService.js';
 import { getAnalytics, resolveRange, recordEvent } from '../services/analyticsService.js';
-import { recordBatch, listVisitors, getVisitor, getPotential, getIntelligence } from '../services/visitorService.js';
+import { recordBatch, listVisitors, getVisitor, getIntelligence } from '../services/visitorService.js';
 import {
   activateBilling,
   confirmBilling,
@@ -261,14 +261,11 @@ router.get('/visitors/:shop/:visitorId', requireInstalledSession, async (req, re
   }
 });
 
+// Product intelligence for a date range (most viewed + viewed together).
 router.get('/potential/:shop', requireInstalledSession, async (req, res, next) => {
   try {
     const window = resolveRange(req.query.range || 'this-month', req.query.from, req.query.to);
-    const [potential, intelligence] = await Promise.all([
-      getPotential(req.shop, window),
-      getIntelligence(req.shop, window),
-    ]);
-    res.json({ ...potential, ...intelligence });
+    res.json(await getIntelligence(req.shop, window));
   } catch (err) {
     next(err);
   }
