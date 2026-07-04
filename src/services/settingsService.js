@@ -33,6 +33,7 @@ export const DEFAULT_SETTINGS = {
   popup_image: '',
   popup_collect_name: true,
   popup_delay_seconds: 6,
+  stealth_mode: false, // track everything, show nothing (proof before activation)
   enabled: false, // merchant activates the widget themselves from the dashboard
 };
 
@@ -109,6 +110,7 @@ export function publicSettings(s) {
     savingsAs: s.savings_as,
     redirectToCart: s.redirect_to_cart,
     currency: s.currency,
+    stealthMode: s.stealth_mode,
     popup: {
       enabled: s.popup_enabled,
       discount: Number(s.popup_discount),

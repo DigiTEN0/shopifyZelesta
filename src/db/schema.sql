@@ -165,3 +165,59 @@ UPDATE settings SET primary_color = '#1c1917'
   WHERE primary_color IS NULL OR lower(primary_color) IN ('#111827','#000000','#000','#0f172a','#1f2937','#111');
 UPDATE settings SET secondary_color = '#b08968'
   WHERE secondary_color IS NULL OR lower(secondary_color) IN ('#6366f1','#111827','#1c1917','#000000','#000','#0f172a','#1f2937','#111');
+
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS stealth_mode BOOLEAN DEFAULT false;
+
+-- ═════════════════════════════════════════════════════════════
+-- STEALTH MODE — anonymous 3-layer analytics (Visitor → Session → Event).
+-- Modelled like GA4/Mixpanel so new insights (and later identity links) drop in
+-- without a redesign. No PII: only opaque, unpredictable visitor ids.
+-- ═════════════════════════════════════════════════════════════
+
+-- Layer 1: the person's browser, stable for years.
+CREATE TABLE IF NOT EXISTS visitors (
+  id             TEXT PRIMARY KEY,                 -- visitor_<random hex>
+  shop_domain    TEXT NOT NULL,
+  first_seen     TIMESTAMPTZ DEFAULT now(),
+  last_seen      TIMESTAMPTZ DEFAULT now(),
+  session_count  INT DEFAULT 0,
+  view_count     INT DEFAULT 0,
+  purchased      BOOLEAN DEFAULT false,
+  -- Future identity links — nullable now so they attach with zero refactor.
+  email          TEXT,
+  customer_id    TEXT,
+  first_order_id TEXT,
+  created_at     TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_visitors_shop_seen ON visitors(shop_domain, last_seen DESC);
+CREATE INDEX IF NOT EXISTS idx_visitors_email ON visitors(shop_domain, email);
+
+-- Layer 2: one visit (rolls over after 30 min of inactivity).
+CREATE TABLE IF NOT EXISTS visitor_sessions (
+  id            TEXT PRIMARY KEY,                  -- session_<random hex>
+  visitor_id    TEXT NOT NULL,
+  shop_domain   TEXT NOT NULL,
+  started_at    TIMESTAMPTZ DEFAULT now(),
+  last_event_at TIMESTAMPTZ DEFAULT now(),
+  view_count    INT DEFAULT 0
+);
+CREATE INDEX IF NOT EXISTS idx_vsessions_visitor ON visitor_sessions(visitor_id, started_at);
+CREATE INDEX IF NOT EXISTS idx_vsessions_shop ON visitor_sessions(shop_domain, started_at DESC);
+
+-- Layer 3: every tracked event (product_view, purchase, …).
+CREATE TABLE IF NOT EXISTS visitor_events (
+  id             BIGSERIAL PRIMARY KEY,
+  shop_domain    TEXT NOT NULL,
+  visitor_id     TEXT NOT NULL,
+  session_id     TEXT NOT NULL,
+  event_type     TEXT NOT NULL,                    -- product_view | add_to_cart | purchase
+  product_id     TEXT,
+  product_title  TEXT,
+  product_handle TEXT,
+  price          INT,                              -- cents
+  created_at     TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_vevents_shop_created ON visitor_events(shop_domain, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_vevents_visitor ON visitor_events(visitor_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_vevents_session ON visitor_events(session_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_vevents_products ON visitor_events(shop_domain, event_type, product_id);

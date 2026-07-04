@@ -1359,13 +1359,78 @@
     return [...new Set((variants || []).map((v) => v[key]).filter((x) => x != null))];
   }
 
+  /* ── Stealth-mode tracking (anonymous, ultra-light) ──────────
+     Persistent visitor id (localStorage) + rolling 30-min session id. Events go
+     out via sendBeacon so nothing blocks the shopper's page. No PII. */
+  const BW_VID = 'bw_vid', BW_SID = 'bw_sid', BW_SID_TS = 'bw_sid_ts';
+  const BW_SESSION_MS = 30 * 60 * 1000;
+  function bwRandHex(n) {
+    const a = new Uint8Array(n);
+    if (window.crypto && window.crypto.getRandomValues) window.crypto.getRandomValues(a);
+    else for (let i = 0; i < n; i++) a[i] = Math.floor(Math.random() * 256);
+    let s = '';
+    for (let i = 0; i < n; i++) s += ('0' + a[i].toString(16)).slice(-2);
+    return s;
+  }
+  function bwStore() { try { return window.localStorage; } catch (e) { return null; } }
+  // Returns { vid, sid } — creating ids as needed. `existingOnly` skips creating
+  // a brand-new visitor (used on the purchase page: only link known visitors).
+  function bwIdentity(existingOnly) {
+    const ls = bwStore();
+    if (!ls) return null;
+    let vid = ls.getItem(BW_VID);
+    if (!/^visitor_[a-f0-9]{8,64}$/.test(vid || '')) {
+      if (existingOnly) return null;
+      vid = 'visitor_' + bwRandHex(16);
+      ls.setItem(BW_VID, vid);
+    }
+    const now = Date.now();
+    let sid = ls.getItem(BW_SID);
+    const ts = parseInt(ls.getItem(BW_SID_TS) || '0', 10);
+    if (!/^session_[a-f0-9]{8,64}$/.test(sid || '') || (now - ts) > BW_SESSION_MS) {
+      sid = 'session_' + bwRandHex(16);
+      ls.setItem(BW_SID, sid);
+    }
+    ls.setItem(BW_SID_TS, String(now));
+    return { vid, sid };
+  }
+  function bwSend(shop, id, events) {
+    if (!id || !events.length) return;
+    const payload = JSON.stringify({ shop, visitorId: id.vid, sessionId: id.sid, events });
+    const url = `${APP_URL}/api/track`;
+    try {
+      if (navigator.sendBeacon) { navigator.sendBeacon(url, new Blob([payload], { type: 'application/json' })); return; }
+    } catch (e) {}
+    try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }); } catch (e) {}
+  }
+  function bwTrackView(shop) {
+    const id = bwIdentity(false);
+    if (!id) return;
+    fetchCurrentProduct().then((p) => {
+      if (!p || !p.id) return;
+      bwSend(shop, id, [{ type: 'product_view', productId: String(p.id), title: p.title, handle: p.handle, price: p.price }]);
+    });
+  }
+  function bwTrackPurchase(shop) {
+    const id = bwIdentity(true); // don't invent a visitor for an untracked buyer
+    if (!id) return;
+    let total = null;
+    try {
+      const c = (window.Shopify && (window.Shopify.checkout || window.Shopify.Checkout)) || {};
+      total = Math.round(Number(c.total_price || 0)) || null;
+    } catch (e) {}
+    bwSend(shop, id, [{ type: 'purchase', price: total }]);
+  }
+
   function bootLive() {
     const shop = detectShop();
     const session = loadSession();
 
-    // Reset session when we land on the order-status / thank-you page.
+    // Order-status / thank-you page: attribute the purchase to the tracked
+    // visitor (if any), reset the bundle session, and stop.
     if (/\/(thank_you|orders)\b/.test(window.location.pathname) ||
         (window.Shopify && window.Shopify.Checkout && window.Shopify.Checkout.step === 'thank_you')) {
+      bwTrackPurchase(shop);
       clearSession();
       return;
     }
@@ -1379,6 +1444,14 @@
         // never have this param, so it stays hidden until you flip it live.
         const previewMode = /[?&]bw_preview=1(?:&|$)/.test(window.location.search);
         const popupEnabled = settings.popup && settings.popup.enabled;
+        const stealth = !!settings.stealthMode;
+
+        // Track when the app is active in any form (stealth, widget or pop-up).
+        if (stealth || settings.enabled || popupEnabled) bwTrackView(shop);
+
+        // Stealth mode: record everything, show NOTHING on the storefront.
+        if (stealth && !previewMode) return;
+
         // The widget runs if the bundle is enabled OR the lead pop-up is on.
         if (settings.enabled === false && !popupEnabled && !previewMode) return;
         if (previewMode) settings.enabled = true;

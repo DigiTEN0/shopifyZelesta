@@ -9,6 +9,7 @@ import { generateBundleDiscount, generateWelcomeDiscount } from '../services/dis
 import { saveLead, createShopifyCustomer, setCustomerId, getLeads, getLeadStats } from '../services/leadsService.js';
 import { getSettings, saveSettings, publicSettings } from '../services/settingsService.js';
 import { getAnalytics, resolveRange, recordEvent } from '../services/analyticsService.js';
+import { recordBatch, listVisitors, getVisitor, getPotential, getIntelligence } from '../services/visitorService.js';
 import {
   activateBilling,
   confirmBilling,
@@ -97,6 +98,22 @@ router.post('/events', publicCors, publicReadRateLimit, validateShopParam, async
   } catch (err) {
     next(err);
   }
+});
+
+// Stealth-mode tracking beacon (product views / purchases). Fire-and-forget:
+// validate + bound, then record. Never surfaces an error to the storefront.
+router.post('/track', publicCors, publicReadRateLimit, validateShopParam, async (req, res) => {
+  try {
+    const body = req.body || {};
+    await recordBatch(req.shop, {
+      visitorId: String(body.visitorId || ''),
+      sessionId: String(body.sessionId || ''),
+      events: Array.isArray(body.events) ? body.events.slice(0, 25) : [],
+    });
+  } catch (err) {
+    // swallow — tracking must never break a shopper's page
+  }
+  res.json({ ok: true });
 });
 
 // Lead capture from the pop-up: save email + browse intent, mint the right
@@ -218,6 +235,40 @@ router.get('/analytics/:shop', requireInstalledSession, async (req, res, next) =
     const window = resolveRange(range, from, to);
     const data = await getAnalytics(req.shop, window);
     res.json(data);
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ── Stealth Mode: Visitor Explorer + potential revenue + product intelligence ──
+router.get('/visitors/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const limit = Math.max(1, Math.min(200, parseInt(req.query.limit, 10) || 50));
+    const offset = Math.max(0, parseInt(req.query.offset, 10) || 0);
+    res.json(await listVisitors(req.shop, { limit, offset }));
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/visitors/:shop/:visitorId', requireInstalledSession, async (req, res, next) => {
+  try {
+    const v = await getVisitor(req.shop, req.params.visitorId);
+    if (!v) return res.status(404).json({ error: 'Visitor not found.' });
+    res.json(v);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/potential/:shop', requireInstalledSession, async (req, res, next) => {
+  try {
+    const window = resolveRange(req.query.range || 'this-month', req.query.from, req.query.to);
+    const [potential, intelligence] = await Promise.all([
+      getPotential(req.shop, window),
+      getIntelligence(req.shop, window),
+    ]);
+    res.json({ ...potential, ...intelligence });
   } catch (err) {
     next(err);
   }

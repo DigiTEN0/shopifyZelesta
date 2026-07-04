@@ -60,4 +60,12 @@ export const api = {
   activateBilling: () => request(`/api/billing/activate`, { method: 'POST', body: { shop: SHOP } }),
   getLeads: () => request(`/api/leads/${SHOP}`),
   getPreviewProducts: () => request(`/api/preview-products/${SHOP}`),
+  getVisitors: (limit = 50, offset = 0) => request(`/api/visitors/${SHOP}?limit=${limit}&offset=${offset}`),
+  getVisitor: (id) => request(`/api/visitors/${SHOP}/${encodeURIComponent(id)}`),
+  getPotential: (range = 'this-month', from, to) => {
+    const q = new URLSearchParams({ range });
+    if (from) q.set('from', from);
+    if (to) q.set('to', to);
+    return request(`/api/potential/${SHOP}?${q.toString()}`);
+  },
 };
