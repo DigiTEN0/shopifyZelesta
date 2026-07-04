@@ -259,8 +259,13 @@ export async function getPotential(shop, { since, until }, settings = {}) {
     [shop, since, until]
   );
   const avgSingleValue = Math.round(Number(baseRows[0]?.avg_single) || 0); // cents
+  // BLENDED store-wide AOV lift, not the per-bundle jump. Only CAPTURE_RATE of
+  // orders become bundles; the rest stay single-item. This keeps the number
+  // honest and conservative (the ~+10–40% bundle apps actually report) instead
+  // of the eye-popping per-bundle figure — and it already assumes most shoppers
+  // buy just one product.
   const aovIncrease = avgSingleValue > 0
-    ? Math.round(((avgBundleValue - avgSingleValue) / avgSingleValue) * 1000) / 10
+    ? Math.round((CAPTURE_RATE * (avgBundleValue - avgSingleValue) / avgSingleValue) * 1000) / 10
     : 0;
   const bundleIntentRate = totalSessions > 0 ? Math.round((intent / totalSessions) * 1000) / 10 : 0;
 

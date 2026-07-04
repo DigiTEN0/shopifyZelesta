@@ -108,14 +108,15 @@ export default function VisitorExplorerPage() {
               <>
                 <InlineGrid columns={{ xs: 1, sm: 2, lg: 4 }} gap="400">
                   <Stat label="Potential bundle revenue" value={money(potential.potentialBundleRevenue, currency)} tone="success" />
-                  <Stat label="Potential bundle orders" value={String(potential.potentialBundleOrders)} />
+                  <Stat label="Bundle-ready visits" value={String(potential.bundleIntentSessions)} />
                   <Stat label="Average bundle value" value={money(potential.averageBundleValue, currency)} />
                   <Stat label="Potential AOV increase" value={`+${potential.potentialAovIncrease}%`} tone="success" />
                 </InlineGrid>
                 <Text as="p" tone="subdued" variant="bodySm">
                   Conservative estimate: of the <b>{potential.bundleIntentSessions}</b> visits that browsed 2+ products
-                  ({potential.bundleIntentRate}% of all visits), we assume only <b>{Math.round(potential.captureRate * 100)}%</b> would
-                  complete a bundle. Real numbers are typically higher once the widget is live.
+                  ({potential.bundleIntentRate}% of all visits), we assume only <b>{Math.round(potential.captureRate * 100)}%</b> complete
+                  a bundle — the other <b>{100 - Math.round(potential.captureRate * 100)}%</b> buy a single item or nothing. The AOV
+                  increase is the store-wide blended lift, not the per-bundle jump. Real numbers are typically higher once the widget is live.
                 </Text>
               </>
             )}
@@ -180,13 +181,14 @@ export default function VisitorExplorerPage() {
                   ) : (
                     <BlockStack gap="200">
                       {(potential?.topProducts || []).map((p, i) => (
-                        <InlineStack key={i} align="space-between" blockAlign="center" wrap={false}>
-                          <InlineStack gap="200" blockAlign="center" wrap={false}>
-                            <Text as="span" variant="bodySm" tone="subdued">{i + 1}.</Text>
-                            <Text as="span" variant="bodyMd" truncate>{p.title || '(untitled)'}</Text>
-                          </InlineStack>
-                          <Badge>{`${p.views}×`}</Badge>
-                        </InlineStack>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
+                          <Text as="span" variant="bodySm" tone="subdued">{i + 1}.</Text>
+                          <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                               title={p.title || ''}>
+                            <Text as="span" variant="bodyMd">{p.title || '(untitled)'}</Text>
+                          </div>
+                          <div style={{ flex: '0 0 auto' }}><Badge>{`${p.views}×`}</Badge></div>
+                        </div>
                       ))}
                     </BlockStack>
                   )}
@@ -203,12 +205,13 @@ export default function VisitorExplorerPage() {
                   ) : (
                     <BlockStack gap="300">
                       {(potential?.coViewed || []).map((c, i) => (
-                        <InlineStack key={i} align="space-between" blockAlign="center" wrap={false}>
-                          <Text as="span" variant="bodySm">
-                            <b>{c.a || '?'}</b> + <b>{c.b || '?'}</b>
-                          </Text>
-                          <Badge tone="info">{`${c.together}×`}</Badge>
-                        </InlineStack>
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
+                          <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                               title={`${c.a || '?'} + ${c.b || '?'}`}>
+                            <Text as="span" variant="bodySm"><b>{c.a || '?'}</b> + <b>{c.b || '?'}</b></Text>
+                          </div>
+                          <div style={{ flex: '0 0 auto' }}><Badge tone="info">{`${c.together}×`}</Badge></div>
+                        </div>
                       ))}
                     </BlockStack>
                   )}
