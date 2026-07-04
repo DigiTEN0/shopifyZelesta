@@ -215,9 +215,11 @@
 .bw-pill-text{display:flex;flex-direction:column;line-height:1.15;}
 .bw-pill-title{font-size:13px;font-weight:700;letter-spacing:-.01em;}
 .bw-pill-sub{font-size:11.5px;color:#6b7280;font-weight:500;}
-.bw-badge{margin-left:2px;background:var(--bw-secondary);color:#fff;font-size:11px;font-weight:800;
-  padding:5px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 10px -3px var(--bw-secondary);
-  animation:bw-pulse 2.4s ease-in-out infinite;}
+.bw-badge{margin-left:3px;background:var(--bw-secondary);color:#fff;font-size:15px;font-weight:900;
+  letter-spacing:-.02em;padding:6px 12px;border-radius:999px;white-space:nowrap;line-height:1;
+  box-shadow:0 6px 18px -5px var(--bw-secondary),0 2px 5px -2px rgba(17,24,39,.25),inset 0 1px 0 rgba(255,255,255,.3);
+  animation:bw-badge-pop 2.6s ease-in-out infinite;}
+@keyframes bw-badge-pop{0%,72%,100%{transform:scale(1);}80%{transform:scale(1.09);}88%{transform:scale(.98);}}
 .bw-pill-close{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#111827;color:#fff;
   border:2px solid #fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;}
 .bw-pill:hover .bw-pill-close{display:flex;}
@@ -1288,7 +1290,9 @@
     const amount = s.savingsAs === 'percentage' || s.discountType === 'percentage'
       ? `${calc.percentOff}%`
       : money(calc.discountAmount, s);
-    return (s.badgeText || 'Save {amount}').replace('{amount}', amount);
+    // Collapsed pill leads with the discount itself — short and punchy ("−15%")
+    // instead of a longer "Save 15%" phrase, so the number is the hook.
+    return `−${amount}`;
   }
   function esc(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
