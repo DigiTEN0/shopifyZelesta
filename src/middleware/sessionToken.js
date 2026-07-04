@@ -15,6 +15,17 @@ function verifyJwt(token) {
   if (parts.length !== 3) return null;
   const [headerB64, payloadB64, sigB64] = parts;
 
+  // Pin the algorithm to HS256. We never read `alg` to choose how to verify —
+  // we always HMAC with the app secret — but rejecting other/none algorithms up
+  // front closes the door on algorithm-confusion attempts entirely.
+  let header;
+  try {
+    header = JSON.parse(base64urlDecode(headerB64).toString('utf8'));
+  } catch {
+    return null;
+  }
+  if (!header || header.alg !== 'HS256') return null;
+
   const expected = crypto
     .createHmac('sha256', config.shopify.apiSecret)
     .update(`${headerB64}.${payloadB64}`)
@@ -32,9 +43,12 @@ function verifyJwt(token) {
   }
 
   const now = Math.floor(Date.now() / 1000);
-  if (payload.exp && now >= payload.exp) return null;
+  // Require expiry and audience — Shopify session tokens always carry both, and
+  // insisting on them avoids ever honouring a token without a lifetime or one
+  // minted for a different app.
+  if (!payload.exp || now >= payload.exp) return null;
   if (payload.nbf && now < payload.nbf - 5) return null;
-  if (payload.aud && payload.aud !== config.shopify.apiKey) return null;
+  if (payload.aud !== config.shopify.apiKey) return null;
   return payload;
 }
 

@@ -19,11 +19,17 @@ const root = path.resolve(__dirname, '..');
 const app = express();
 app.set('trust proxy', 1);
 
-// Baseline security headers on every response. (frame-ancestors for the
-// embedded dashboard is set separately below — Shopify must be able to frame us.)
+// Baseline security headers on every response. We deliberately do NOT set
+// X-Frame-Options / a frame-ancestors CSP here — the embedded dashboard must be
+// framable by Shopify admin, and that CSP is set per-route below.
 app.use((req, res, next) => {
   res.setHeader('X-Content-Type-Options', 'nosniff');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+  res.setHeader('X-XSS-Protection', '0'); // modern browsers: disable the legacy, buggy auditor
+  if (config.env === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=15552000; includeSubDomains');
+  }
   next();
 });
 
