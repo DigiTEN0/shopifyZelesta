@@ -191,10 +191,32 @@
   /* ======================================================================== */
   /*  Styles (injected once; uses CSS variables for theming)                  */
   /* ======================================================================== */
+  // ── Shadow DOM isolation ─────────────────────────────────────
+  // On a live storefront the whole widget renders inside a shadow root, so the
+  // merchant's theme CSS can never reach in and override our styling (the
+  // classic "the theme overwrites everything" problem). The demo and the
+  // dashboard live-preview keep rendering in the light DOM.
+  let bwShadowMode = false;
+  let bwShadowRoot = null;
+  function getMount() {
+    if (!bwShadowMode) return document.body;
+    if (!bwShadowRoot) {
+      const host = document.createElement('div');
+      host.id = 'bw-host';
+      (document.body || document.documentElement).appendChild(host);
+      bwShadowRoot = host.attachShadow({ mode: 'open' });
+    }
+    return bwShadowRoot;
+  }
+
   function injectStyles() {
-    if (document.getElementById('bw-styles')) return;
+    const inShadow = bwShadowMode;
+    const target = inShadow ? getMount() : document.head;
+    const found = inShadow ? target.getElementById('bw-styles') : document.getElementById('bw-styles');
+    if (found) return;
     const css = `
-:root{--bw-primary:#111827;--bw-secondary:#6366F1;--bw-radius:18px;}
+:host{all:initial;}
+:host,:root{--bw-primary:#111827;--bw-secondary:#6366F1;--bw-radius:18px;}
 .bw-root,.bw-root *{box-sizing:border-box;}
 .bw-root{position:fixed;z-index:2147483000;font-family:var(--bw-font, -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif);-webkit-font-smoothing:antialiased;color:#111827;}
 .bw-root.bw-right{right:22px;bottom:22px;}
@@ -411,7 +433,7 @@
     const el = document.createElement('style');
     el.id = 'bw-styles';
     el.textContent = css;
-    document.head.appendChild(el);
+    target.appendChild(el);
   }
 
   /* ======================================================================== */
@@ -480,7 +502,7 @@
   BundleWidget.prototype._renderModal = function () {
     injectStyles();
     const s = this.settings;
-    if (!this.modal) { this.modal = document.createElement('div'); document.body.appendChild(this.modal); }
+    if (!this.modal) { this.modal = document.createElement('div'); getMount().appendChild(this.modal); }
     this.modal.className = 'bw-root bw-modal-root';
     this.modal.style.setProperty('--bw-primary', s.primaryColor);
     this.modal.style.setProperty('--bw-secondary', s.secondaryColor);
@@ -692,7 +714,7 @@
 
     if (!this.root) {
       this.root = document.createElement('div');
-      document.body.appendChild(this.root);
+      getMount().appendChild(this.root);
       if (!this.demo && !this.preview) this._emitShown();
     }
     this.root.className = 'bw-root ' + (s.position === 'bottom-left' ? 'bw-left' : 'bw-right') +
@@ -997,7 +1019,7 @@
         </div>
         ${imgs.length > 1 ? `<div class="bw-gallery-thumbs">${thumbs}</div>` : ''}
       </div>`;
-    document.body.appendChild(root);
+    getMount().appendChild(root);
 
     const main = root.querySelector('.bw-gallery-main');
     const stage = root.querySelector('.bw-gallery-stage');
@@ -1462,6 +1484,9 @@
   }
 
   function bootLive() {
+    // Live storefront: isolate everything in a shadow root so the theme's CSS
+    // can't override the widget. (Demo / dashboard preview stay in light DOM.)
+    bwShadowMode = true;
     const shop = detectShop();
     const session = loadSession();
 
