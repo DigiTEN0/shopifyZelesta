@@ -3,6 +3,7 @@ import { query } from '../db/pool.js';
 
 export const DEFAULT_SETTINGS = {
   trigger_threshold: 1,
+  max_bundle_products: 5, // sliding window: keep the N most-recently-viewed products
   discount_type: 'percentage',
   tiers: { 2: 10, 3: 15, 4: 20 },
   value_rules: [],
@@ -71,6 +72,11 @@ export async function saveSettings(shop, patch) {
     if (['tiers', 'value_rules', 'excluded'].includes(key)) {
       value = JSON.stringify(value);
     }
+    // Bound the bundle cap to a sane integer range.
+    if (key === 'max_bundle_products') {
+      const n = parseInt(value, 10);
+      value = Number.isFinite(n) ? Math.max(2, Math.min(50, n)) : 5;
+    }
     sets.push(`${key} = $${i}`);
     values.push(value);
     i++;
@@ -90,6 +96,7 @@ export async function saveSettings(shop, patch) {
 export function publicSettings(s) {
   return {
     triggerThreshold: s.trigger_threshold,
+    maxBundleProducts: Math.max(2, Math.min(50, Number(s.max_bundle_products) || 5)),
     discountType: s.discount_type,
     tiers: s.tiers,
     valueRules: s.value_rules,

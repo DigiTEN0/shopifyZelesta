@@ -33,6 +33,7 @@
   // ── Default settings (overridden by backend / demo config) ───────────────
   const DEFAULTS = {
     triggerThreshold: 1,
+    maxBundleProducts: 5,
     discountType: 'percentage',
     tiers: { 2: 10, 3: 15, 4: 20 },
     valueRules: [],
@@ -224,7 +225,7 @@
 
 /* ── Collapsed pill ── */
 .bw-pill{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid rgba(17,24,39,.06);
-  box-shadow:0 10px 30px -12px rgba(17,24,39,.28),0 2px 8px -4px rgba(17,24,39,.14);
+  box-shadow:0 20px 44px -16px rgba(17,24,39,.36),0 7px 16px -7px rgba(17,24,39,.20),0 1px 2px rgba(17,24,39,.06);
   border-radius:999px;padding:6px 12px 6px 7px;cursor:pointer;
   transition:transform .2s ease,box-shadow .2s ease;}
 .bw-pill-count{font-size:12px;font-weight:500;color:#374151;padding-right:2px;}
@@ -239,9 +240,11 @@
 .bw-pill-sub{font-size:11.5px;color:#6b7280;font-weight:500;}
 .bw-badge{margin-left:2px;background:var(--bw-secondary);color:#fff;font-size:12.5px;font-weight:700;
   letter-spacing:.01em;padding:5px 10px;border-radius:999px;white-space:nowrap;line-height:1;
-  box-shadow:0 4px 12px -5px var(--bw-secondary),inset 0 1px 0 rgba(255,255,255,.22);
-  animation:bw-badge-pop 3.4s ease-in-out infinite;}
-@keyframes bw-badge-pop{0%,82%,100%{transform:scale(1);}90%{transform:scale(1.05);}}
+  box-shadow:0 3px 11px -5px var(--bw-secondary),inset 0 1px 0 rgba(255,255,255,.22);
+  animation:bw-badge-breathe 5s ease-in-out infinite;}
+/* A soft glow breath — no size jump, so it's easy to ignore, yet draws the eye. */
+@keyframes bw-badge-breathe{0%,100%{box-shadow:0 3px 11px -5px var(--bw-secondary),inset 0 1px 0 rgba(255,255,255,.22);}
+  50%{box-shadow:0 7px 18px -3px var(--bw-secondary),inset 0 1px 0 rgba(255,255,255,.22);}}
 .bw-pill-close{position:absolute;top:-7px;right:-7px;width:20px;height:20px;border-radius:50%;background:#111827;color:#fff;
   border:2px solid #fff;font-size:11px;display:none;align-items:center;justify-content:center;cursor:pointer;}
 .bw-pill:hover .bw-pill-close{display:flex;}
@@ -606,6 +609,9 @@
     const name = ((nameEl && nameEl.value) || '').trim();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { if (emailEl) { emailEl.classList.add('bw-err'); emailEl.focus(); } return; }
     if (btn) { btn.disabled = true; btn.textContent = '…'; }
+    // Remember the email so we can keep this lead's browsed products in sync as
+    // the shopper continues browsing after the pop-up.
+    this.session.email = email;
     const items = this.selectedItems();
 
     if (this.demo || this.preview) {
@@ -672,10 +678,38 @@
     if (this.session.products.some((p) => String(p.id) === String(product.id))) return false;
     if ((this.settings.excluded.products || []).map(String).includes(String(product.id))) return false;
     this.session.products.push(normalizeProduct(product));
+    // Sliding window: never let the bundle grow past the merchant's cap. Keep the
+    // most-recently-viewed products and drop the oldest ones off the front.
+    const max = Math.max(2, parseInt(this.settings.maxBundleProducts, 10) || 5);
+    if (this.session.products.length > max) {
+      this.session.products = this.session.products.slice(-max);
+    }
     saveSession(this.session);
     this._animateNext = true;
     this.render(true);
+    // Keep an already-captured lead's product list in sync as they keep browsing.
+    this.syncLead();
     return true;
+  };
+
+  // After the shopper has given their email, quietly keep their lead record's
+  // browsed products up to date as they continue browsing (capped like above).
+  BundleWidget.prototype.syncLead = function () {
+    if (!this.session.captured || !this.session.email || this.demo || this.preview) return;
+    const items = this.selectedItems();
+    try {
+      bwWhenAllowed(() => {
+        const payload = JSON.stringify({
+          shop: this.shop, email: this.session.email, sessionId: this.session.sessionId,
+          items: items.map((it) => ({ productId: it.productId, title: it.title, price: it.price / 100, image: it.image, url: it.url })),
+        });
+        const url = `${APP_URL}/api/lead/sync`;
+        try {
+          if (navigator.sendBeacon) { navigator.sendBeacon(url, new Blob([payload], { type: 'text/plain' })); return; }
+        } catch (e) {}
+        try { fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: payload, keepalive: true }); } catch (e) {}
+      });
+    } catch (e) {}
   };
 
   BundleWidget.prototype.removeProduct = function (id) {

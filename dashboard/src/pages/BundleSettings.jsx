@@ -34,6 +34,7 @@ export default function BundleSettingsPage() {
     try {
       const payload = {
         trigger_threshold: s.trigger_threshold,
+        max_bundle_products: Number(s.max_bundle_products) || 5,
         discount_type: s.discount_type,
         tiers: s.tiers,
         value_rules: s.value_rules,
@@ -83,6 +84,20 @@ export default function BundleSettingsPage() {
                   max={5}
                   value={s.trigger_threshold}
                   onChange={(v) => set({ trigger_threshold: v })}
+                  output
+                />
+                <Divider />
+                <Text as="p" tone="subdued" variant="bodySm">
+                  Maximum products in a bundle. As the shopper keeps browsing, only their{' '}
+                  <b>{s.max_bundle_products ?? 5}</b> most-recently-viewed products stay in the bundle —
+                  the oldest drop off, so it never grows out of hand.
+                </Text>
+                <RangeSlider
+                  label={`Keep the last ${s.max_bundle_products ?? 5} viewed products`}
+                  min={3}
+                  max={20}
+                  value={s.max_bundle_products ?? 5}
+                  onChange={(v) => set({ max_bundle_products: v })}
                   output
                 />
                 <Divider />

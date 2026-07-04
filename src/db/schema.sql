@@ -173,6 +173,7 @@ UPDATE settings SET secondary_color = '#b08968'
   WHERE secondary_color IS NULL OR lower(secondary_color) IN ('#6366f1','#111827','#1c1917','#000000','#000','#0f172a','#1f2937','#111');
 
 ALTER TABLE settings ADD COLUMN IF NOT EXISTS stealth_mode BOOLEAN DEFAULT false;
+ALTER TABLE settings ADD COLUMN IF NOT EXISTS max_bundle_products INT DEFAULT 5;
 
 -- ═════════════════════════════════════════════════════════════
 -- STEALTH MODE — anonymous 3-layer analytics (Visitor → Session → Event).

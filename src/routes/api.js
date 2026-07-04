@@ -6,7 +6,7 @@ import { discountRateLimit, publicReadRateLimit } from '../middleware/rateLimit.
 import { validateShopParam, requireInstalledShop } from '../middleware/validateShop.js';
 import { requireInstalledSession } from '../middleware/sessionToken.js';
 import { generateBundleDiscount, generateWelcomeDiscount } from '../services/discountService.js';
-import { saveLead, createShopifyCustomer, setCustomerId, getLeads, getLeadStats } from '../services/leadsService.js';
+import { saveLead, updateLeadProducts, createShopifyCustomer, setCustomerId, getLeads, getLeadStats } from '../services/leadsService.js';
 import { getSettings, saveSettings, publicSettings } from '../services/settingsService.js';
 import { getAnalytics, resolveRange, recordEvent } from '../services/analyticsService.js';
 import { recordBatch, listVisitors, getVisitor, getIntelligence } from '../services/visitorService.js';
@@ -112,6 +112,28 @@ router.post('/track', publicCors, publicReadRateLimit, validateShopParam, async 
     });
   } catch (err) {
     // swallow — tracking must never break a shopper's page
+  }
+  res.json({ ok: true });
+});
+
+// Keep a captured lead's browsed products in sync as the shopper keeps browsing.
+// Fire-and-forget beacon; only updates a lead matching (email + session).
+router.post('/lead/sync', publicCors, publicReadRateLimit, validateShopParam, async (req, res) => {
+  try {
+    const body = req.body || {};
+    const email = String(body.email || '').trim().slice(0, 320);
+    const sessionId = String(body.sessionId || '').slice(0, 64);
+    const items = (Array.isArray(body.items) ? body.items : []).slice(0, 50);
+    if (email && sessionId && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      const productIds = items.map((it) => it.productId).filter(Boolean);
+      const productTitles = items.map((it) => String(it.title || '').slice(0, 200)).filter(Boolean);
+      const productDetails = items
+        .filter((it) => it.title)
+        .map((it) => ({ title: String(it.title).slice(0, 200), image: String(it.image || '').slice(0, 500), url: String(it.url || '').slice(0, 500) }));
+      await updateLeadProducts(req.shop, { email, sessionId, productIds, productTitles, productDetails });
+    }
+  } catch (err) {
+    // swallow — must never break a shopper's page
   }
   res.json({ ok: true });
 });

@@ -32,6 +32,20 @@ export async function saveLead(shop, { email, name, sessionId, productIds, produ
   return rows[0];
 }
 
+// Keep an existing lead's browsed products fresh as the shopper keeps browsing
+// after the pop-up. Scoped to the original browsing session so a lead can only
+// be updated by the visitor who created it. No PII is changed here.
+export async function updateLeadProducts(shop, { email, sessionId, productIds, productTitles, productDetails }) {
+  if (!email || !sessionId) return 0;
+  const { rowCount } = await query(
+    `UPDATE leads
+        SET product_ids = $4, product_titles = $5, product_details = $6, updated_at = now()
+      WHERE shop_domain = $1 AND lower(email) = lower($2) AND session_id = $3`,
+    [shop, email, sessionId, JSON.stringify(productIds || []), JSON.stringify(productTitles || []), JSON.stringify(productDetails || [])]
+  );
+  return rowCount;
+}
+
 export async function setCustomerId(shop, email, customerId) {
   await query(
     'UPDATE leads SET shopify_customer_id = $3 WHERE shop_domain = $1 AND email = $2',
