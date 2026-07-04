@@ -23,6 +23,12 @@ function clampInt(v, lo, hi) {
   const n = parseInt(v, 10);
   return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : null;
 }
+// Prices arrive from Shopify's product.js in CENTS (e.g. 4299 = €42.99). We keep
+// cents in the DB for precision and only convert to a decimal currency amount
+// when handing values to the dashboard, which formats them as money.
+function toEuros(cents) {
+  return Math.round(Number(cents) || 0) / 100;
+}
 
 /**
  * Records a batch of events for one visitor+session. Upserts the visitor and
@@ -131,7 +137,7 @@ export async function listVisitors(shop, { limit = 50, offset = 0 } = {}) {
       lastSeen: r.last_seen,
       sessions: Number(r.session_count) || 0,
       viewedProducts: Number(r.distinct_products) || 0,
-      potentialValue: Math.round(Number(r.potential_value) || 0),
+      potentialValue: toEuros(r.potential_value),
       purchased: r.purchased,
       email: r.email || null,
       customerId: r.customer_id || null,
@@ -167,7 +173,7 @@ export async function getVisitor(shop, visitorId) {
       type: e.event_type,
       productId: e.product_id,
       title: e.product_title,
-      price: e.price ? Math.round(Number(e.price)) : null,
+      price: e.price ? toEuros(e.price) : null,
       at: e.created_at,
     });
   }
@@ -182,7 +188,7 @@ export async function getVisitor(shop, visitorId) {
   for (const e of events) {
     if (e.event_type === 'product_view' && e.product_id) distinct.set(e.product_id, Math.round(Number(e.price) || 0));
   }
-  const potentialValue = [...distinct.values()].sort((a, b) => b - a).slice(0, MAX_BUNDLE_PRODUCTS)
+  const potentialValueCents = [...distinct.values()].sort((a, b) => b - a).slice(0, MAX_BUNDLE_PRODUCTS)
     .reduce((s, p) => s + p, 0);
 
   return {
@@ -192,7 +198,7 @@ export async function getVisitor(shop, visitorId) {
     totalSessions: Number(v.session_count) || sessions.length,
     totalProductsViewed: Number(v.view_count) || 0,
     distinctProducts: distinct.size,
-    potentialValue,
+    potentialValue: toEuros(potentialValueCents),
     purchased: v.purchased,
     email: v.email || null,
     customerId: v.customer_id || null,
@@ -239,21 +245,22 @@ export async function getPotential(shop, { since, until }, settings = {}) {
   const potentialOrders = Math.round(expectedOrders);
   const potentialRevenue = Math.round(expectedOrders * avgBundleValue);
 
-  // A separate baseline: average value of a single-product session.
+  // AOV uplift baseline: the average price of a single product. A bundle order
+  // (avg bundle value) vs a normal single-item order is the AOV increase.
   const { rows: baseRows } = await query(
-    `WITH per AS (
-       SELECT DISTINCT session_id, product_id, price
-         FROM visitor_events
-        WHERE shop_domain = $1 AND event_type = 'product_view'
-          AND product_id IS NOT NULL AND created_at BETWEEN $2 AND $3
-     ),
-     sess AS (SELECT session_id, COUNT(*) AS products, SUM(price) AS val FROM per GROUP BY session_id)
-     SELECT COALESCE(AVG(val),0) AS avg_all FROM sess`,
+    `SELECT COALESCE(AVG(price), 0) AS avg_single
+       FROM (
+         SELECT DISTINCT session_id, product_id, price
+           FROM visitor_events
+          WHERE shop_domain = $1 AND event_type = 'product_view'
+            AND product_id IS NOT NULL AND price > 0
+            AND created_at BETWEEN $2 AND $3
+       ) d`,
     [shop, since, until]
   );
-  const avgSessionValue = Math.round(Number(baseRows[0]?.avg_all) || 0);
-  const aovIncrease = avgSessionValue > 0
-    ? Math.round(((avgBundleValue - avgSessionValue) / avgSessionValue) * 1000) / 10
+  const avgSingleValue = Math.round(Number(baseRows[0]?.avg_single) || 0); // cents
+  const aovIncrease = avgSingleValue > 0
+    ? Math.round(((avgBundleValue - avgSingleValue) / avgSingleValue) * 1000) / 10
     : 0;
   const bundleIntentRate = totalSessions > 0 ? Math.round((intent / totalSessions) * 1000) / 10 : 0;
 
@@ -263,8 +270,8 @@ export async function getPotential(shop, { since, until }, settings = {}) {
     bundleIntentSessions: intent,
     bundleIntentRate,           // % of sessions that browsed ≥ 2 products
     potentialBundleOrders: potentialOrders,
-    potentialBundleRevenue: potentialRevenue,
-    averageBundleValue: avgBundleValue,
+    potentialBundleRevenue: toEuros(potentialRevenue),
+    averageBundleValue: toEuros(avgBundleValue),
     potentialAovIncrease: Math.max(0, aovIncrease),
   };
 }
