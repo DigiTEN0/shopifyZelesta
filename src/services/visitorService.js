@@ -126,9 +126,23 @@ export async function listVisitors(shop, { limit = 50, offset = 0 } = {}) {
       LIMIT $2 OFFSET $3`,
     [shop, lim, off, MAX_BUNDLE_PRODUCTS]
   );
-  const { rows: totalRows } = await query('SELECT COUNT(*)::int AS n FROM visitors WHERE shop_domain = $1', [shop]);
+  const { rows: sumRows } = await query(
+    `SELECT COUNT(*)::int AS visitors,
+            COALESCE(SUM(session_count), 0)::int AS sessions,
+            COALESCE(SUM(view_count), 0)::int AS views,
+            COUNT(*) FILTER (WHERE purchased)::int AS buyers
+       FROM visitors WHERE shop_domain = $1`,
+    [shop]
+  );
+  const s = sumRows[0] || {};
   return {
-    total: totalRows[0]?.n || 0,
+    total: s.visitors || 0,
+    summary: {
+      visitors: s.visitors || 0,
+      sessions: s.sessions || 0,
+      views: s.views || 0,
+      buyers: s.buyers || 0,
+    },
     visitors: rows.map((r) => ({
       id: r.id,
       firstSeen: r.first_seen,

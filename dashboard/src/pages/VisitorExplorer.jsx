@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import {
-  Page, Layout, Card, BlockStack, InlineStack, Text, Select, Button, Box, Badge,
+  Page, Card, BlockStack, InlineStack, Text, Select, Box, Badge,
   SkeletonBodyText, InlineGrid, Divider, Banner, Modal, Spinner,
 } from '@shopify/polaris';
 import { api } from '../lib/api.js';
@@ -72,6 +72,8 @@ export default function VisitorExplorerPage() {
     }
   };
 
+  const summary = visitors?.summary || { visitors: 0, sessions: 0, views: 0, buyers: 0 };
+
   return (
     <Page
       title="Visitor Explorer"
@@ -93,108 +95,119 @@ export default function VisitorExplorerPage() {
           </Banner>
         )}
 
-        <Layout>
-          {/* Visitor table */}
-          <Layout.Section>
-            <Card padding="0">
-              <Box padding="400"><Text as="h2" variant="headingMd">Visitors</Text></Box>
-              <Divider />
-              {loading || !visitors ? (
-                <Box padding="400"><SkeletonBodyText lines={8} /></Box>
-              ) : visitors.visitors.length === 0 ? (
-                <Box padding="400">
-                  <Text as="p" tone="subdued">No visitors tracked yet. Turn on Stealth Mode and traffic will start appearing here.</Text>
-                </Box>
-              ) : (
-                <BlockStack gap="0">
-                  <Box padding="300" background="bg-surface-secondary">
-                    <InlineStack gap="200" wrap={false}>
-                      <div style={{ flex: 2 }}><Text as="span" variant="bodySm" tone="subdued">Visitor</Text></div>
-                      <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Sessions</Text></div>
-                      <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Viewed</Text></div>
-                      <div style={{ width: 110, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Browsed value</Text></div>
-                      <div style={{ width: 90, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Purchased</Text></div>
+        {/* Summary tiles — plain, factual counts */}
+        <Card>
+          {loading || !visitors ? (
+            <SkeletonBodyText lines={2} />
+          ) : (
+            <InlineGrid columns={{ xs: 2, sm: 4 }} gap="400">
+              <Stat label="Visitors" value={fmt(summary.visitors)} />
+              <Stat label="Sessions" value={fmt(summary.sessions)} />
+              <Stat label="Products viewed" value={fmt(summary.views)} />
+              <Stat label="Buyers" value={fmt(summary.buyers)} tone={summary.buyers ? 'success' : undefined} />
+            </InlineGrid>
+          )}
+        </Card>
+
+        {/* Visitors table — full width */}
+        <Card padding="0">
+          <Box padding="400"><Text as="h2" variant="headingMd">Visitors</Text></Box>
+          <Divider />
+          {loading || !visitors ? (
+            <Box padding="400"><SkeletonBodyText lines={6} /></Box>
+          ) : visitors.visitors.length === 0 ? (
+            <Box padding="500">
+              <BlockStack gap="100" inlineAlign="center">
+                <Text as="p" variant="bodyMd" fontWeight="medium">No visitors tracked yet</Text>
+                <Text as="p" tone="subdued" variant="bodySm">Turn on Stealth Mode and browsing traffic will start appearing here.</Text>
+              </BlockStack>
+            </Box>
+          ) : (
+            <BlockStack gap="0">
+              <Box padding="300" background="bg-surface-secondary">
+                <InlineStack gap="200" wrap={false}>
+                  <div style={{ flex: 2 }}><Text as="span" variant="bodySm" tone="subdued">Visitor</Text></div>
+                  <div style={{ width: 80, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Sessions</Text></div>
+                  <div style={{ width: 80, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Viewed</Text></div>
+                  <div style={{ width: 120, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Browsed value</Text></div>
+                  <div style={{ width: 100, textAlign: 'right' }}><Text as="span" variant="bodySm" tone="subdued">Purchased</Text></div>
+                </InlineStack>
+              </Box>
+              {visitors.visitors.map((v) => (
+                <div key={v.id} style={{ cursor: 'pointer' }} onClick={() => openVisitor(v.id)}>
+                  <Box padding="300" borderColor="border" borderBlockEndWidth="025">
+                    <InlineStack gap="200" wrap={false} blockAlign="center">
+                      <div style={{ flex: 2, minWidth: 0 }}>
+                        <Text as="span" variant="bodyMd" fontWeight="medium" truncate>{v.id}</Text>
+                        <div><Text as="span" variant="bodySm" tone="subdued">last seen {shortDate(v.lastSeen)}</Text></div>
+                      </div>
+                      <div style={{ width: 80, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.sessions}</Text></div>
+                      <div style={{ width: 80, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.viewedProducts}</Text></div>
+                      <div style={{ width: 120, textAlign: 'right' }}><Text as="span" variant="bodyMd" fontWeight="semibold">{money(v.potentialValue, currency)}</Text></div>
+                      <div style={{ width: 100, textAlign: 'right' }}>
+                        {v.purchased ? <Badge tone="success">Yes</Badge> : <Badge>No</Badge>}
+                      </div>
                     </InlineStack>
                   </Box>
-                  {visitors.visitors.map((v) => (
-                    <div key={v.id} style={{ cursor: 'pointer' }} onClick={() => openVisitor(v.id)}>
-                      <Box padding="300" borderColor="border" borderBlockEndWidth="025">
-                        <InlineStack gap="200" wrap={false} blockAlign="center">
-                          <div style={{ flex: 2, minWidth: 0 }}>
-                            <Text as="span" variant="bodyMd" fontWeight="medium" truncate>{v.id}</Text>
-                            <div><Text as="span" variant="bodySm" tone="subdued">last seen {shortDate(v.lastSeen)}</Text></div>
-                          </div>
-                          <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.sessions}</Text></div>
-                          <div style={{ width: 70, textAlign: 'right' }}><Text as="span" variant="bodyMd">{v.viewedProducts}</Text></div>
-                          <div style={{ width: 110, textAlign: 'right' }}><Text as="span" variant="bodyMd" fontWeight="semibold">{money(v.potentialValue, currency)}</Text></div>
-                          <div style={{ width: 90, textAlign: 'right' }}>
-                            {v.purchased ? <Badge tone="success">Yes</Badge> : <Badge>No</Badge>}
-                          </div>
-                        </InlineStack>
-                      </Box>
+                </div>
+              ))}
+            </BlockStack>
+          )}
+        </Card>
+
+        {/* Product intelligence — two balanced columns */}
+        <InlineGrid columns={{ xs: 1, md: 2 }} gap="400">
+          <Card>
+            <BlockStack gap="300">
+              <InlineStack align="space-between" blockAlign="center" gap="200" wrap={false}>
+                <Text as="h2" variant="headingMd">Most viewed products</Text>
+                <div style={{ minWidth: 130, flex: '0 0 auto' }}>
+                  <Select label="" labelHidden options={RANGE_OPTIONS} value={range} onChange={setRange} />
+                </div>
+              </InlineStack>
+              <Divider />
+              {!potential || potential.topProducts?.length === 0 ? (
+                <Text as="p" tone="subdued" variant="bodySm">No data yet.</Text>
+              ) : (
+                <BlockStack gap="200">
+                  {(potential?.topProducts || []).map((p, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
+                      <Text as="span" variant="bodySm" tone="subdued">{i + 1}.</Text>
+                      <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                           title={p.title || ''}>
+                        <Text as="span" variant="bodyMd">{p.title || '(untitled)'}</Text>
+                      </div>
+                      <div style={{ flex: '0 0 auto' }}><Badge>{`${p.views}×`}</Badge></div>
                     </div>
                   ))}
                 </BlockStack>
               )}
-            </Card>
-          </Layout.Section>
-
-          {/* Product intelligence */}
-          <Layout.Section variant="oneThird">
-            <BlockStack gap="400">
-              <Card>
-                <BlockStack gap="300">
-                  <InlineStack align="space-between" blockAlign="center" gap="200" wrap={false}>
-                    <Text as="h2" variant="headingMd">Most viewed products</Text>
-                    <div style={{ minWidth: 130, flex: '0 0 auto' }}>
-                      <Select label="" labelHidden options={RANGE_OPTIONS} value={range} onChange={setRange} />
-                    </div>
-                  </InlineStack>
-                  <Divider />
-                  {!potential || potential.topProducts?.length === 0 ? (
-                    <Text as="p" tone="subdued" variant="bodySm">No data yet.</Text>
-                  ) : (
-                    <BlockStack gap="200">
-                      {(potential?.topProducts || []).map((p, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
-                          <Text as="span" variant="bodySm" tone="subdued">{i + 1}.</Text>
-                          <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                               title={p.title || ''}>
-                            <Text as="span" variant="bodyMd">{p.title || '(untitled)'}</Text>
-                          </div>
-                          <div style={{ flex: '0 0 auto' }}><Badge>{`${p.views}×`}</Badge></div>
-                        </div>
-                      ))}
-                    </BlockStack>
-                  )}
-                </BlockStack>
-              </Card>
-
-              <Card>
-                <BlockStack gap="300">
-                  <Text as="h2" variant="headingMd">Viewed together</Text>
-                  <Text as="p" tone="subdued" variant="bodySm">Your best bundle candidates.</Text>
-                  <Divider />
-                  {!potential || potential.coViewed?.length === 0 ? (
-                    <Text as="p" tone="subdued" variant="bodySm">No data yet.</Text>
-                  ) : (
-                    <BlockStack gap="300">
-                      {(potential?.coViewed || []).map((c, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
-                          <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                               title={`${c.a || '?'} + ${c.b || '?'}`}>
-                            <Text as="span" variant="bodySm"><b>{c.a || '?'}</b> + <b>{c.b || '?'}</b></Text>
-                          </div>
-                          <div style={{ flex: '0 0 auto' }}><Badge tone="info">{`${c.together}×`}</Badge></div>
-                        </div>
-                      ))}
-                    </BlockStack>
-                  )}
-                </BlockStack>
-              </Card>
             </BlockStack>
-          </Layout.Section>
-        </Layout>
+          </Card>
+
+          <Card>
+            <BlockStack gap="300">
+              <Text as="h2" variant="headingMd">Viewed together</Text>
+              <Text as="p" tone="subdued" variant="bodySm">Your best bundle candidates.</Text>
+              <Divider />
+              {!potential || potential.coViewed?.length === 0 ? (
+                <Text as="p" tone="subdued" variant="bodySm">No data yet.</Text>
+              ) : (
+                <BlockStack gap="300">
+                  {(potential?.coViewed || []).map((c, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0 }}>
+                      <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                           title={`${c.a || '?'} + ${c.b || '?'}`}>
+                        <Text as="span" variant="bodySm"><b>{c.a || '?'}</b> + <b>{c.b || '?'}</b></Text>
+                      </div>
+                      <div style={{ flex: '0 0 auto' }}><Badge tone="info">{`${c.together}×`}</Badge></div>
+                    </div>
+                  ))}
+                </BlockStack>
+              )}
+            </BlockStack>
+          </Card>
+        </InlineGrid>
       </BlockStack>
 
       {/* Visitor detail modal */}
@@ -256,4 +269,9 @@ function Stat({ label, value, tone, small }) {
       <Text as="p" variant={small ? 'headingMd' : 'heading2xl'} tone={tone === 'success' ? 'success' : undefined}>{value}</Text>
     </BlockStack>
   );
+}
+
+// Thousands separator for the count tiles.
+function fmt(n) {
+  return new Intl.NumberFormat('en').format(Number(n) || 0);
 }
